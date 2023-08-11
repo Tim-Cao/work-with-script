@@ -1,0 +1,1 @@
+TESTRAY_INSTANCE = "https://testray.liferay.com"

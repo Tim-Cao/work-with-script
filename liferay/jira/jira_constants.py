@@ -1,0 +1,1 @@
+JIRA_INSTANCE = "https://liferay.atlassian.net"
