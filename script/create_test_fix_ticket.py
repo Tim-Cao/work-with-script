@@ -17,7 +17,7 @@ from liferay.testray.testray_constants import *
 from liferay.util.credentials import get_credentials
 
 
-def add_test_fix_ticket(jira_connection, component, case_name, case_error):
+def add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection):
     issue_dict = {
         'project': {'key': 'LPS'},
         'summary': 'Investigate failure in ' + case_name,
@@ -54,7 +54,7 @@ def get_case_result(auth, case_result_id):
 
     return json.loads(response.text)
 
-def get_relevant_jira_component(jira_connection, case_result):
+def get_relevant_jira_component(case_result, jira_connection):
     jira_components = get_project_components(jira_connection, get_credentials("PROJECT_KEY"))
 
     jira_component_names = [jira_component.name for jira_component in jira_components]
@@ -81,12 +81,8 @@ if __name__ == "__main__":
 
     jira_connection = get_jira_connection()
 
-    component = get_relevant_jira_component(jira_connection, case_result)
+    component = get_relevant_jira_component(case_result, jira_connection)
 
-    issue = add_test_fix_ticket(jira_connection, component, case_name, case_error)
+    ticket_number = add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection)
 
-    assign_to_me(jira_connection, issue)
-
-    add_label(issue)
-
-    print(JIRA_INSTANCE + "/browse/" + str(issue))
+    print(JIRA_INSTANCE + "/browse/" + str(ticket_number))
