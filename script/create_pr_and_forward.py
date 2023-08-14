@@ -35,13 +35,11 @@ def forward_pull_request(pull_request):
 if __name__ == "__main__":
     local_branch = input("Enter the local branch name: ")
 
-    jira_ticket_number = input("Enter the jira ticket number: ")
-
     local_repo = get_local_repo()
 
     push_branch_to_origin(local_repo, local_branch, local_branch)
 
-    pr = create_pr_to_team(jira_ticket_number, local_branch)
+    pr = create_pr_to_team(input("Enter the jira ticket number: "), local_branch)
 
     forward_pull_request(pr)
 

@@ -42,8 +42,6 @@ def create_pr_to_brianchan(github_connection,failure_pr):
     return brianchan_repo.create_pull(title=failure_pr.title, head=head,  base="master", body=body, maintainer_can_modify=True)
 
 if __name__ == "__main__":
-    pr_number = input("Enter the failure pull request number: ")
-
     local_repo = get_local_repo()
 
     delete_temp_branch(local_repo)
@@ -52,7 +50,7 @@ if __name__ == "__main__":
 
     team_repo = get_remote_repo(g, get_credentials("TEAM_REPO_NAME"))
 
-    failure_pr = get_pull_request(team_repo, pr_number)
+    failure_pr = get_pull_request(team_repo, input("Enter the failure pull request number: "))
 
     fetch_remote_branch_as_temp_branch(local_repo, failure_pr)
 
