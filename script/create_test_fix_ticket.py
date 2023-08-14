@@ -81,6 +81,10 @@ if __name__ == "__main__":
 
     component = get_relevant_jira_component(jira_connection, case_result)
 
-    ticket_number = add_test_fix_ticket(jira_connection, component, case_name, case_error)
+    issue = add_test_fix_ticket(jira_connection, component, case_name, case_error)
 
-    print(JIRA_INSTANCE + "/browse/" + str(ticket_number))
+    assign_to_me(jira_connection, issue)
+
+    add_label(issue)
+
+    print(JIRA_INSTANCE + "/browse/" + str(issue))
