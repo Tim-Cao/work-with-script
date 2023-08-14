@@ -1,42 +1,87 @@
 def generate_comment(type):
+    default = "Tomcat 9.0.75 + MySQL"
+
+    env = input(f"Enter the environments: [{default}]") or default
+
+    if input("Would you like to enter the commit id? [y/N]") in ["y", "yes", "Y"]:
+        commit_id = input("Enter the commit id: ")
+    else:
+        commit_id = ""
+
     match type:
         case "PID":
-            return "{color:#36b37e}*PASSED*{color} Manual Testing following the steps in the description.\n\n \
+            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
+                description = input("Enter the description: ")
+            else:
+                description = ""
+
+            return f"{{color:#36b37e}}*PASSED*{{color}} Manual Testing following the steps in the description.\n\n \
                     Fixed on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}.\n\n \
+                    {description}"
         case "FID":
-            return "{color:#ff5630}*FAILED*{color} Manual Testing following the steps in the description.\n\n \
+            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
+                description = input("Enter the description: ")
+            else:
+                description = ""
+
+            return f"{{color:#ff5630}}*FAILED*{{color}} Manual Testing following the steps in the description.\n\n \
                     Failed on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}. \n\n \
+                    {description}"
         case "NID":
-            return "{color:#36b37e}*No Longer Reproducible*{color} through Manual Testing following the steps in the description.\n\n \
+            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
+                description = input("Enter the description: ")
+            else:
+                description = ""
+
+            return f"{{color:#36b37e}}*No Longer Reproducible*{{color}} through Manual Testing following the steps in the description.\n\n \
                     No Longer Reproducible on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}.\n\n \
+                    {description}"
         case "PF":
-            return "{color:#36b37e}*PASSED*{color} Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
+            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
+                description = input("Enter the description: ")
+            else:
+                description = ""
+
+            return f"{{color:#36b37e}}*PASSED*{{color}} Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
                     Fixed on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}.\n\n \
+                    {description}"
         case "FF":
-            return "{color:#ff5630}*FAILED*{color} Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
+            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
+                description = input("Enter the description: ")
+            else:
+                description = ""
+
+            return f"{{color:#ff5630}}*FAILED*{{color}} Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
                     Failed on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}.\n\n \
+                    {description}"
         case "NF":
-            return "{color:#36b37e}*No Longer Reproducible*{color} through Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
+            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
+                description = input("Enter the description: ")
+            else:
+                description = ""
+
+            return f"{{color:#36b37e}}*No Longer Reproducible*{{color}} through Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
                     No Longer Reproducible on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}.\n\n \
+                    {description}"
         case "R":
-            return "(!) Reproduced on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+            return f"(!) Reproduced on:\n \
+                    {env}. Portal master GIT ID: {commit_id}."
         case "RU":
-            return "(!) Reproduced on:\n \
+            return f"(!) Reproduced on:\n \
                     Upgrade From: 7.4.13-DXP-U60.\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}."
         case "TV":
-            return "*Case 1:* Passed.\n \
+            return f"*Case 1:* Passed.\n \
                     *Case 2:* Passed.\n \
                     *Case 3:* Passed.\n\n \
                     *Tested on:*\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: ."
+                    {env}. Portal master GIT ID: {commit_id}."
         
 def generate_description(type):
     match type:
