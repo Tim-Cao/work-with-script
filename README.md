@@ -16,7 +16,7 @@
 
 	1. Sign in https://liferay.atlassian.net/
 
-	1. Access to https://id.atlassian.com/manage-profile/security/api-tokens
+	1. Click the cog icon > Atlassian account settings > Security > Create and manage API tokens
 
 	1. Create API Token
 
