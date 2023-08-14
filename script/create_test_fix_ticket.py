@@ -69,11 +69,9 @@ def get_relevant_jira_component(jira_connection, case_result):
     return components[0]
 
 if __name__ == "__main__":
-    case_result_id = input("Enter the case result id: ")
-
     testray_connection = get_testray_connection()
 
-    case_result = get_case_result(testray_connection, case_result_id)
+    case_result = get_case_result(testray_connection, input("Enter the case result id: "))
 
     case_name = get_case_name(case_result)
 
