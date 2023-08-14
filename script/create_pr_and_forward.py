@@ -4,9 +4,6 @@ import os
 import sys
 import time
 
-from git import Repo
-from github import Github
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
 from liferay.git.git_util import *
