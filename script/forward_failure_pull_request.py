@@ -13,11 +13,11 @@ from liferay.jira.jira_constants import *
 from liferay.util.credentials import get_credentials
 
 
-def add_comments_in_failure_pr(pull_request, new_pr_link):
+def add_comments_in_failure_pr(new_pr_link, pull_request):
     pull_request.create_issue_comment("See " + new_pr_link)
     pull_request.create_issue_comment("ci:close")
 
-def add_comments_in_new_pr(pull_request, failure_pr_link):
+def add_comments_in_new_pr(failure_pr_link, pull_request):
     time.sleep(3)
 
     comments = "In order to not clog up ci resources, I'm sending the PR directly. Failure cases are unrelated to changes in this PR.\n\nSee "  + failure_pr_link
@@ -25,7 +25,7 @@ def add_comments_in_new_pr(pull_request, failure_pr_link):
     pull_request.create_issue_comment("ci:reopen")
     pull_request.create_issue_comment(comments)
 
-def create_pr_to_brianchan(github_connection,failure_pr):
+def create_pr_to_brianchan(failure_pr, github_connection):
     ticket_numbers = re.findall("[A-Z]+\-\d+", failure_pr.title)
 
     jira_links = ""
@@ -56,12 +56,12 @@ if __name__ == "__main__":
 
     push_branch_to_origin(local_repo, "temp_branch", failure_pr.head.ref)
 
-    new_pr = create_pr_to_brianchan(g, failure_pr)
+    new_pr = create_pr_to_brianchan(failure_pr, g)
 
     delete_temp_branch(local_repo)
 
-    add_comments_in_new_pr(new_pr, failure_pr.html_url)
+    add_comments_in_new_pr(failure_pr.html_url, new_pr)
 
-    add_comments_in_failure_pr(failure_pr, new_pr.html_url)
+    add_comments_in_failure_pr(new_pr.html_url, failure_pr)
 
     print(new_pr.html_url)
