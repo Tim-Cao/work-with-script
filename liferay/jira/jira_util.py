@@ -1,3 +1,8 @@
+def add_label(issue):
+    if input("Would you like to add label to issue? [y/N]") in ["y", "yes", "Y"]:
+        issue.fields.labels.append(input("Enter the label: "))
+        issue.update(fields={"labels": issue.fields.labels})
+
 def assign_to_me(jira_connection, issue):
     if input("Would you like to assign the issue to self? [y/N]") in ["y", "yes", "Y"]:
         issue.update(fields={'assignee': {'accountId': jira_connection.current_user()}})
