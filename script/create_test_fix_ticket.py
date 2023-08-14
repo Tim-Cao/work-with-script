@@ -6,7 +6,6 @@ import sys
 
 import requests
 from jsonpath_ng.ext import parse
-from requests.auth import HTTPBasicAuth
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
