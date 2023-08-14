@@ -1,3 +1,7 @@
+def assign_to_me(jira_connection, issue):
+    if input("Would you like to assign the issue to self? [y/N]") in ["y", "yes", "Y"]:
+        issue.update(fields={'assignee': {'accountId': jira_connection.current_user()}})
+
 def generate_comment(type):
     default = "Tomcat 9.0.75 + MySQL"
 
