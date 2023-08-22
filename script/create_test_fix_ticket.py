@@ -17,8 +17,8 @@ from liferay.testray.testray_constants import *
 from liferay.util.credentials import get_credentials
 
 
-def add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection):
-    match get_credentials("PROJECT_KEY"):
+def add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection, project_key):
+    match project_key:
         case "LPS":
             issue_dict = {
                 'project': {'key': 'LPS'},
@@ -88,11 +88,11 @@ def get_case_result(auth, case_result_id):
 
     return json.loads(response.text)
 
-def get_relevant_jira_component(case_result, jira_connection):
-    if get_credentials("PROJECT_KEY") == "COMMERCE":
+def get_relevant_jira_component(case_result, jira_connection, project_key):
+    if project_key == "COMMERCE":
         return
 
-    jira_components = get_project_components(jira_connection, get_credentials("PROJECT_KEY"))
+    jira_components = get_project_components(jira_connection, project_key)
 
     jira_component_names = [jira_component.name for jira_component in jira_components]
 
@@ -101,7 +101,7 @@ def get_relevant_jira_component(case_result, jira_connection):
     components = [n for n in jira_component_names if testray_component_name in n]
 
     if len(components) == 0:
-            match get_credentials("PROJECT_KEY"):
+            match project_key:
                 case "LPS":
                     components = ['Testing > Portal']
 
@@ -128,9 +128,13 @@ if __name__ == "__main__":
 
     jira_connection = get_jira_connection()
 
-    component = get_relevant_jira_component(case_result, jira_connection)
+    default_project_key = get_credentials("PROJECT_KEY")
 
-    issue = add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection)
+    project_key = input(f"Enter the project key [Default: {default_project_key}] (Available: LPS, LRQA, LRAC and COMMERCE): ") or default_project_key
+
+    component = get_relevant_jira_component(case_result, jira_connection, project_key)
+
+    issue = add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection, project_key)
 
     assign_to_me(jira_connection, issue)
 
