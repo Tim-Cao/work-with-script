@@ -18,17 +18,51 @@ from liferay.util.credentials import get_credentials
 
 
 def add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection):
-    issue_dict = {
-        'project': {'key': 'LPS'},
-        'summary': 'Investigate failure in ' + case_name,
-        'description': '*Error Message*\n\n{code:java}' + case_error + \
-                        '{code}\n\n*Affect Tests*\n[' + case_name + '|' + \
-                        TESTRAY_INSTANCE + '/home/-/testray/case_results/' + \
-                        case_result_id + ']',
-        'components': [{'name': component}],
-        'issuetype': {'name': 'Testing'},
-        'customfield_10383': {'value': 'Analysis'}
-    }
+    match get_credentials("PROJECT_KEY"):
+        case "LPS":
+            issue_dict = {
+                'project': {'key': 'LPS'},
+                'summary': 'Investigate failure in ' + case_name,
+                'description': '*Error Message*\n\n{code:java}' + case_error + \
+                                '{code}\n\n*Affect Tests*\n[' + case_name + '|' + \
+                                TESTRAY_INSTANCE + '/home/-/testray/case_results/' + \
+                                case_result_id + ']',
+                'components': [{'name': component}],
+                'issuetype': {'name': 'Testing'},
+                'customfield_10383': {'value': 'Analysis'}
+            }
+        case "LRQA":
+            issue_dict = {
+                'project': {'key': 'LRQA'},
+                'summary': 'Investigate failure in ' + case_name,
+                'description': '*Error Message*\n\n{code:java}' + case_error + \
+                                '{code}\n\n*Affect Tests*\n[' + case_name + '|' + \
+                                TESTRAY_INSTANCE + '/home/-/testray/case_results/' + \
+                                case_result_id + ']',
+                'components': [{'name': component}],
+                'issuetype': {'name': 'Test Analysis'},
+            }
+        case "LRAC":
+            issue_dict = {
+                'project': {'key': 'LRAC'},
+                'summary': 'Investigate failure in ' + case_name,
+                'description': '*Error Message*\n\n{code:java}' + case_error + \
+                                '{code}\n\n*Affect Tests*\n[' + case_name + '|' + \
+                                TESTRAY_INSTANCE + '/home/-/testray/case_results/' + \
+                                case_result_id + ']',
+                'components': [{'name': component}],
+                'issuetype': {'name': 'Testing'},
+            }
+        case "COMMERCE":
+            issue_dict = {
+                'project': {'key': 'COMMERCE'},
+                'summary': 'Investigate failure in ' + case_name,
+                'description': '*Error Message*\n\n{code:java}' + case_error + \
+                                '{code}\n\n*Affect Tests*\n[' + case_name + '|' + \
+                                TESTRAY_INSTANCE + '/home/-/testray/case_results/' + \
+                                case_result_id + ']',
+                'issuetype': {'name': 'Testing'},
+            }
 
     return jira_connection.create_issue(fields=issue_dict)
 
@@ -55,6 +89,9 @@ def get_case_result(auth, case_result_id):
     return json.loads(response.text)
 
 def get_relevant_jira_component(case_result, jira_connection):
+    if get_credentials("PROJECT_KEY") == "COMMERCE":
+        return
+
     jira_components = get_project_components(jira_connection, get_credentials("PROJECT_KEY"))
 
     jira_component_names = [jira_component.name for jira_component in jira_components]
@@ -64,9 +101,19 @@ def get_relevant_jira_component(case_result, jira_connection):
     components = [n for n in jira_component_names if testray_component_name in n]
 
     if len(components) == 0:
-        components = ['Testing > Portal']
+            match get_credentials("PROJECT_KEY"):
+                case "LPS":
+                    components = ['Testing > Portal']
+
+                case "LRQA":
+                    components = ['Portal']
+
+                case "LRAC":
+                    components = ['Test Infrastructure']
 
     return components[0]
+
+
 
 if __name__ == "__main__":
     case_result_id = input("Enter the case result id: ")
