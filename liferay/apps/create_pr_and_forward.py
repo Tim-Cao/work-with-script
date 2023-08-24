@@ -1,10 +1,8 @@
-# Script to create PR and forward
-
 import os
 import sys
 import time
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 from liferay.git.git_util import *
 from liferay.git.github_connection import *
@@ -32,15 +30,13 @@ def forward_pull_request(pull_request):
 
     pull_request.create_issue_comment("ci:forward")
 
-if __name__ == "__main__":
-    local_branch = input("Enter the local branch name: ")
-
+def main(local_branch, jira_ticket_number):
     local_repo = get_local_repo()
 
     push_branch_to_origin(local_repo, local_branch, local_branch)
 
-    pr = create_pr_to_team(input("Enter the jira ticket number: "), local_branch)
+    pr = create_pr_to_team(jira_ticket_number, local_branch)
 
     forward_pull_request(pr)
 
-    print(pr.html_url)
+    return pr.html_url

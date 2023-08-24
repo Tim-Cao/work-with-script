@@ -1,11 +1,9 @@
-# Script to manual forward failure pull request to brianchan repo
-
 import os
 import re
 import sys
 import time
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
 from liferay.git.git_util import *
 from liferay.git.github_connection import *
@@ -41,7 +39,7 @@ def create_pr_to_brianchan(failure_pr, github_connection):
 
     return brianchan_repo.create_pull(title=failure_pr.title, head=head,  base="master", body=body, maintainer_can_modify=True)
 
-if __name__ == "__main__":
+def main(pull_request_number):
     local_repo = get_local_repo()
 
     delete_temp_branch(local_repo)
@@ -50,7 +48,7 @@ if __name__ == "__main__":
 
     team_repo = get_remote_repo(g, get_credentials("TEAM_REPO_NAME"))
 
-    failure_pr = get_pull_request(team_repo, input("Enter the failure pull request number: "))
+    failure_pr = get_pull_request(team_repo, pull_request_number)
 
     fetch_remote_branch_as_temp_branch(local_repo, failure_pr)
 
@@ -64,4 +62,4 @@ if __name__ == "__main__":
 
     add_comments_in_failure_pr(new_pr.html_url, failure_pr)
 
-    print(new_pr.html_url)
+    return new_pr.html_url

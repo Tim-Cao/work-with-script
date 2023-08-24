@@ -1,79 +1,39 @@
-def add_label(issue):
-    if input("Would you like to add label to issue? [y/N]") in ["y", "yes", "Y"]:
-        issue.fields.labels.append(input("Enter the label: "))
-        issue.update(fields={"labels": issue.fields.labels})
+def add_label(issue, label):
+    issue.fields.labels.append(label)
+    issue.update(fields={"labels": issue.fields.labels})
 
-def assign_to_me(jira_connection, issue):
-    if input("Would you like to assign the issue to self? [y/N]") in ["y", "yes", "Y"]:
+def assign_to_me(assigned, jira_connection, issue):
+    if assigned is True:
         issue.update(fields={'assignee': {'accountId': jira_connection.current_user()}})
 
-def generate_comment(type):
-    default = "Tomcat 9.0.75 + MySQL"
-
-    env = input(f"Enter the environments: [{default}]") or default
-
-    if input("Would you like to enter the commit id? [y/N]") in ["y", "yes", "Y"]:
-        commit_id = input("Enter the commit id: ")
-    else:
-        commit_id = ""
-
+def generate_comment(commit_id, description, env, type):
     match type:
         case "PID":
-            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
-                description = input("Enter the description: ")
-            else:
-                description = ""
-
             return f"{{color:#36b37e}}*PASSED*{{color}} Manual Testing following the steps in the description.\n\n \
                     Fixed on:\n \
                     {env}. Portal master GIT ID: {commit_id}.\n\n \
                     {description}"
         case "FID":
-            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
-                description = input("Enter the description: ")
-            else:
-                description = ""
-
             return f"{{color:#ff5630}}*FAILED*{{color}} Manual Testing following the steps in the description.\n\n \
                     Failed on:\n \
                     {env}. Portal master GIT ID: {commit_id}. \n\n \
                     {description}"
         case "NID":
-            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
-                description = input("Enter the description: ")
-            else:
-                description = ""
-
             return f"{{color:#36b37e}}*No Longer Reproducible*{{color}} through Manual Testing following the steps in the description.\n\n \
                     No Longer Reproducible on:\n \
                     {env}. Portal master GIT ID: {commit_id}.\n\n \
                     {description}"
         case "PF":
-            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
-                description = input("Enter the description: ")
-            else:
-                description = ""
-
             return f"{{color:#36b37e}}*PASSED*{{color}} Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
                     Fixed on:\n \
                     {env}. Portal master GIT ID: {commit_id}.\n\n \
                     {description}"
         case "FF":
-            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
-                description = input("Enter the description: ")
-            else:
-                description = ""
-
             return f"{{color:#ff5630}}*FAILED*{{color}} Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
                     Failed on:\n \
                     {env}. Portal master GIT ID: {commit_id}.\n\n \
                     {description}"
         case "NF":
-            if input("Would you like to enter the description? [y/N]") in ["y", "yes", "Y"]:
-                description = input("Enter the description: ")
-            else:
-                description = ""
-
             return f"{{color:#36b37e}}*No Longer Reproducible*{{color}} through Manual Testing using the following steps:\n\n#  \n#  \n#  \n\n \
                     No Longer Reproducible on:\n \
                     {env}. Portal master GIT ID: {commit_id}.\n\n \
