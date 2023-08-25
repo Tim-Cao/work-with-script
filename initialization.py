@@ -18,3 +18,6 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install',
 
 subprocess.check_call([sys.executable, '-m', 'pip', 'install',
 'GitPython'])
+
+subprocess.check_call([sys.executable, '-m', 'pip', 'install',
+'textual'])
