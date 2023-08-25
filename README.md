@@ -40,34 +40,30 @@
 
  1. Add a `credentials-ext.properties` file under the root directory to overwrite the `credentials.properties`
 
+## Launch the app
+
+1. Run the following command at the root directory of local repository
+
+		python3 script_app.py
+
 ## Features
 
-1. Create a pull request then forward
+1. Create a pull request and forward
 
-	1. Go to the `script` directory
-
-        	python3 create_pr_and_forward.py
+	![create_pr_and_forward](https://github.com/Tim-Cao/work-with-script/assets/52661397/6abf61fc-5182-4079-97cd-d4f2aa8d3f98)
 
 1. Forward a failure pull request to BrianChan
 
-	1. Go to the `script` directory
-
-        	python3 forward_failure_pull_request.py
+	![forward_failure_pull_request](https://github.com/Tim-Cao/work-with-script/assets/52661397/c8228c98-5480-4ed0-9cac-f8842a5350a7)
 
 1. Create a test fix ticket based on a given case result
 
-	1. Go to the `script` directory
-
-        	python3 create_test_fix_ticket.py
+	![create_test_fix_ticket](https://github.com/Tim-Cao/work-with-script/assets/52661397/6bd5dba6-5dc4-4003-80a9-8bf29ab3a9e3)
 
 1. Write a comments template to a given jira ticket
 
-	1. Go to the `script` directory
-
-        	python3 write_comments.py
+	![write_comments](https://github.com/Tim-Cao/work-with-script/assets/52661397/64b6ef06-9967-4ac6-8b58-290c7af7f97b)
 
 1. Write a description template to a given jira ticket
 
-	1. Go to the `script` directory
-
-        	python3 write_description.py
+	![write_description](https://github.com/Tim-Cao/work-with-script/assets/52661397/714b4812-fdb2-4f61-9aeb-b7c024ea996b)
