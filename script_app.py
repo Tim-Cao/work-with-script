@@ -6,7 +6,9 @@ from textual.binding import Binding
 from textual.containers import *
 from textual.widgets import *
 
-sys.path.append(os.path.dirname(__file__))
+root = os.path.dirname(__file__)
+
+sys.path.append(root)
 
 from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
                           forward_failure_pull_request, write_comments,
@@ -14,96 +16,101 @@ from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
 
 
 class ScriptApp(App):
-
-    CSS = """
-        TabPane {
-            align: center middle;
-            background: rgb(64, 81, 181) 20%;
-            border: dashed;
-        }
-    """
-
     BINDINGS = [
-        Binding(key="ctrl+q", action="quit", description="Quit"),
-        Binding(key="shift+insert", action="paste", description="Paste")
+        Binding("ctrl+q", "quit", "Quit"),
+        Binding("shift+insert", "paste", "Paste"),
+        Binding("ctrl+u", "delete_left_all", "Delete all to the left")
     ]
+
+    CSS_PATH = root + "/liferay/src/css/main.css"
 
     TITLE = "Working with Script"
 
     def compose(self) -> ComposeResult:
         yield Header()
+        with Horizontal():
+            yield ListView(
+                ListItem(Static("Forward Failure PR", classes="nav-item"), id="nav-1"),
+                ListItem(Static("Create PR And Forward", classes="nav-item"), id="nav-2"),
+                ListItem(Static("Create TF Ticket", classes="nav-item"), id="nav-3"),
+                ListItem(Static("Write Comments", classes="nav-item"), id="nav-4"),
+                ListItem(Static("Write Description", classes="nav-item"), id="nav-5")
+            )
+            with ContentSwitcher(initial="nav-1"):
+                with Vertical(id="nav-1"):
+                    yield Label("Enter the failure Pull Request Number: ")
+                    yield Input(id='failure-pull-request-number')
+                    yield Static()
+                    yield Button("Submit", variant="primary", id='button-1')
+                with Vertical(id="nav-2"):
+                    yield Label("Local Branch Name: ")
+                    yield Input(id='local-branch')
+                    yield Label("Jira Ticket Number: ")
+                    yield Input(id='jira-ticket-number-2')
+                    yield Static()
+                    yield Button("Submit", variant="primary", id='button-2')
+                with Vertical(id="nav-3"):
+                    PROJECT_KEY = [
+                        ("LPS", "LPS"),
+                        ("LRQA", "LRQA"),
+                        ("LRAC", "LRAC"),
+                        ("COMMERCE", "COMMERCE")
+                    ]
 
-        with TabbedContent():
-            with TabPane("Forward Failure PR", id="tab-1"):
-                yield Label("Enter the failure Pull Request Number: ")
-                yield Input(id='failure-pull-request-number')
-                yield Static()
-                yield Button("Submit", variant="primary", id='button-1')
-            with TabPane("Create PR And Forward", id="tab-2"):
-                yield Label("Local Branch Name: ")
-                yield Input(id='local-branch')
-                yield Label("Jira Ticket Number: ")
-                yield Input(id='jira-ticket-number-2')
-                yield Static()
-                yield Button("Submit", variant="primary", id='button-2')
-            with TabPane("Create TF Ticket", id="tab-3"):
-                PROJECT_KEY = [
-                    ("LPS", "LPS"),
-                    ("LRQA", "LRQA"),
-                    ("LRAC", "LRAC"),
-                    ("COMMERCE", "COMMERCE")
-                ]
+                    yield Label("Enter the Case Result Id: ")
+                    yield Input(id='case-result-id')
+                    yield Label("Select the Project Key: ")
+                    yield Select(PROJECT_KEY, id='project-key', value="LPS")
+                    yield Static()
+                    with Horizontal(id='switch-container'):
+                        yield Switch(id='assign-to-me', value=False)
+                        yield Static("Assign to me (Optional)", id='assign-to-me-label')
+                    yield Label("Add label (Optional)")
+                    yield Input(id='add-label')
+                    yield Static()
+                    yield Button("Submit", variant="primary", id='button-3')
+                with Vertical(id="nav-4"):
+                    COMMENTS_TYPE = [
+                        ("PASSED Manual Testing following the steps in the description.", "PID"),
+                        ("FAILED Manual Testing following the steps in the description.", "FID"),
+                        ("No Longer Reproducible through Manual Testing following the steps in the description.", "NID"),
+                        ("PASSED Manual Testing using the following steps:", "PF"),
+                        ("FAILED Manual Testing using the following steps:", "FF"),
+                        ("No Longer Reproducible through Manual Testing using the following steps:", "NF"),
+                        ("Reproduced on:", "R"),
+                        ("Reproduced on: Upgrade From:", "RU"),
+                        ("Test Validation", "TV")
+                    ]
 
-                yield Label("Enter the Case Result Id: ")
-                yield Input(id='case-result-id')
-                yield Label("Select the Project Key: ")
-                yield Select(PROJECT_KEY, id='project-key', value="LPS")
-                yield Label("Assign to me (Optional)")
-                yield Checkbox(id='assign-to-me')
-                yield Label("Add label (Optional)")
-                yield Input(id='add-label')
-                yield Static()
-                yield Button("Submit", variant="primary", id='button-3')
-            with TabPane("Write Comments", id="tab-4"):
-                COMMENTS_TYPE = [
-                    ("PASSED Manual Testing following the steps in the description.", "PID"),
-                    ("FAILED Manual Testing following the steps in the description.", "FID"),
-                    ("No Longer Reproducible through Manual Testing following the steps in the description.", "NID"),
-                    ("PASSED Manual Testing using the following steps:", "PF"),
-                    ("FAILED Manual Testing using the following steps:", "FF"),
-                    ("No Longer Reproducible through Manual Testing using the following steps:", "NF"),
-                    ("Reproduced on:", "R"),
-                    ("Reproduced on: Upgrade From:", "RU"),
-                    ("Test Validation", "TV")
-                ]
+                    yield Label("Jira Ticket Number: ")
+                    yield Input(id='jira-ticket-number-4')
+                    yield Label("Select the Comments Type: ")
+                    yield Select(COMMENTS_TYPE, id="comments-type")
+                    yield Label("Enter the environment: (e.g., Tomcat 9.0.75 + MySQL)")
+                    yield Input(id='env', value="Tomcat 9.0.75 + MySQL")
+                    yield Label("Enter the commit id: (Optional)")
+                    yield Input(id='commit-id')
+                    yield Label("Enter the description: (Optional)")
+                    yield Input(id='description')
+                    yield Static()
+                    yield Button("Submit", variant="primary", id='button-4')
+                with Vertical(id="nav-5"):
+                    DESCRIPTION_TYPE = [
+                        ("Steps to reproduce", "STR"),
+                        ("Test Cases", "TC")
+                    ]
 
-                yield Label("Jira Ticket Number: ")
-                yield Input(id='jira-ticket-number-4')
-                yield Label("Select the Comments Type: ")
-                yield Select(COMMENTS_TYPE, id="comments-type")
-                yield Label("Enter the environment: (e.g., Tomcat 9.0.75 + MySQL)")
-                yield Input(id='env', value="Tomcat 9.0.75 + MySQL")
-                yield Label("Enter the commit id: (Optional)")
-                yield Input(id='commit-id')
-                yield Label("Enter the description: (Optional)")
-                yield Input(id='description')
-                yield Static()
-                yield Button("Submit", variant="primary", id='button-4')
-            with TabPane("Write Description", id="tab-5"):
-                DESCRIPTION_TYPE = [
-                    ("Steps to reproduce", "STR"),
-                    ("Test Cases", "TC")
-                ]
-
-                yield Label("Jira Ticket Number: ")
-                yield Input(id='jira-ticket-number-5')
-                yield Label("Select the Description Type: ")
-                yield Select(DESCRIPTION_TYPE, id='description-type')
-                yield Static()
-                yield Button("Submit", variant="primary", id='button-5')
-
+                    yield Label("Jira Ticket Number: ")
+                    yield Input(id='jira-ticket-number-5')
+                    yield Label("Select the Description Type: ")
+                    yield Select(DESCRIPTION_TYPE, id='description-type')
+                    yield Static()
+                    yield Button("Submit", variant="primary", id='button-5')
         yield VerticalScroll(id="output")
         yield Footer()
+
+    def on_list_view_selected(self, event: ListView.Selected) -> None:
+        self.query_one(ContentSwitcher).current = event.item.id
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "button-1":

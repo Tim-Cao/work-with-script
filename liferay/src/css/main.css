@@ -1,0 +1,64 @@
+Button {
+    margin-left: 1;
+}
+
+Input {
+    margin-right: 1;
+}
+
+Label {
+    margin-left: 1;
+}
+
+ListView {
+    width: 30;
+}
+
+ListItem {
+    box-sizing: content-box;
+    content-align: center middle;
+    color: $text;
+    height: 1;
+    margin-left: 1;
+    margin-right: 2;
+    margin-top: 1;
+    margin-bottom: 1;
+    padding-top: 1;
+    padding-bottom: 1;
+}
+
+ListView > ListItem.--highlight {
+    background: $accent;
+    text-style: bold;
+}
+
+Switch {
+    border: blank;
+}
+
+Switch > .switch--slider {
+    background: $panel-lighten-2;
+    color: white;
+}
+
+Switch.-on > .switch--slider {
+    background: rgb(11,95,255);
+    color: white;
+}
+
+#assign-to-me-label {
+    height: 3;
+    content-align: left middle;
+    margin-left: 1;
+}
+
+.nav-item {
+    width: 30;
+    text-align: center;
+    padding-right: 2;
+}
+
+#switch-container {
+    margin-left: 1;
+    height: auto;
+}
