@@ -109,28 +109,6 @@ class ScriptApp(App):
         yield VerticalScroll(id="output")
         yield Footer()
 
-    def on_list_view_selected(self, event: ListView.Selected) -> None:
-        self.query_one(ContentSwitcher).current = event.item.id
-
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "button-1":
-            self.forward_failure_pull_request()
-        elif event.button.id == "button-2":
-            self.create_pr_and_forward()
-        elif event.button.id == "button-3":
-            self.create_test_fix_ticket()
-        elif event.button.id == "button-4":
-            self.write_comments()
-        elif event.button.id == "button-5":
-            self.write_description()
-
-    def forward_failure_pull_request(self) -> None:
-        failure_pull_request_number = self.query_one("#failure-pull-request-number").value
-
-        link = forward_failure_pull_request.main(failure_pull_request_number)
-
-        self.query_one(VerticalScroll).mount(Label(f"{link}"))
-
     def create_pr_and_forward(self) -> None:
         local_branch_name= self.query_one("#local-branch").value
         jira_ticket_number= self.query_one("#jira-ticket-number-2").value
@@ -146,6 +124,13 @@ class ScriptApp(App):
         project_key = self.query_one("#project-key").value
 
         link = create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
+
+        self.query_one(VerticalScroll).mount(Label(f"{link}"))
+
+    def forward_failure_pull_request(self) -> None:
+        failure_pull_request_number = self.query_one("#failure-pull-request-number").value
+
+        link = forward_failure_pull_request.main(failure_pull_request_number)
 
         self.query_one(VerticalScroll).mount(Label(f"{link}"))
 
@@ -168,6 +153,20 @@ class ScriptApp(App):
 
         self.query_one(VerticalScroll).mount(Label(f"{link}"))
 
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "button-1":
+            self.forward_failure_pull_request()
+        elif event.button.id == "button-2":
+            self.create_pr_and_forward()
+        elif event.button.id == "button-3":
+            self.create_test_fix_ticket()
+        elif event.button.id == "button-4":
+            self.write_comments()
+        elif event.button.id == "button-5":
+            self.write_description()
+
+    def on_list_view_selected(self, event: ListView.Selected) -> None:
+        self.query_one(ContentSwitcher).current = event.item.id
 
 app = ScriptApp()
 
