@@ -1,3 +1,5 @@
+import asyncio
+import contextlib
 import os
 import sys
 
@@ -135,10 +137,8 @@ class ScriptApp(App):
 
         self.query_one("#button-3").disabled = True
 
-        self.query_one(RichLog).clear()
-        self.query_one(RichLog).begin_capture_print()
-
-        create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
+        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
+            asyncio.create_task(create_test_fix_ticket.main(assigned, case_result_id, label, project_key))
 
         self.query_one("#button-3").disabled = False
         self.query_one("#assign-to-me").value = False

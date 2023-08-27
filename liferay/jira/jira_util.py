@@ -82,5 +82,5 @@ def generate_description(type):
                     Test Strategy: MEDIUM\n \
                     Can be covered by POSHI?: Yes\n\n#  \n#  \n# "
 
-def get_project_components(jira_connection, project_key):
-    return jira_connection.project_components(project_key)
+async def get_project_components(jira_connection, project_key):
+    return await jira_connection.project_components(project_key)

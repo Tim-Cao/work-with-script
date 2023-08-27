@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 import sys
@@ -66,18 +67,18 @@ def add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_c
 
     return jira_connection.create_issue(fields=issue_dict)
 
-def get_case_component(case_result):
-    jsonpath_expression = parse("$..testrayComponentName")
+async def get_case_component(case_result):
+    jsonpath_expression = await parse("$..testrayComponentName")
 
     return jsonpath_expression.find(case_result)[0].value
 
-def get_case_error(case_result):
-    jsonpath_expression = parse("$..errors")
+async def get_case_error(case_result):
+    jsonpath_expression = await parse("$..errors")
 
     return jsonpath_expression.find(case_result)[0].value
 
-def get_case_name(case_result):
-    jsonpath_expression = parse("$..testrayCaseName")
+async def get_case_name(case_result):
+    jsonpath_expression = await parse("$..testrayCaseName")
 
     return jsonpath_expression.find(case_result)[0].value
 
@@ -90,17 +91,17 @@ def get_case_result(auth, case_result_id):
 
     return json.loads(response.text)
 
-def get_relevant_jira_component(case_result, jira_connection, project_key):
+async def get_relevant_jira_component(case_result, jira_connection, project_key):
     if project_key == "COMMERCE":
         return
 
     print("Matching the Jira component...")
 
-    jira_components = get_project_components(jira_connection, project_key)
+    jira_components = asyncio.create_task(get_project_components(jira_connection, project_key))
 
     jira_component_names = [jira_component.name for jira_component in jira_components]
 
-    testray_component_name = get_case_component(case_result)
+    testray_component_name = asyncio.create_task(get_case_component(case_result))
 
     components = [n for n in jira_component_names if testray_component_name in n]
 
@@ -117,14 +118,14 @@ def get_relevant_jira_component(case_result, jira_connection, project_key):
 
     return components[0]
 
-def main(assigned, case_result_id, label, project_key):
+async def main(assigned, case_result_id, label, project_key):
     testray_connection = get_testray_connection()
 
     case_result = get_case_result(testray_connection, case_result_id)
 
-    case_name = get_case_name(case_result)
+    case_name = asyncio.create_task(get_case_name(case_result))
 
-    case_error = get_case_error(case_result)
+    case_error = asyncio.create_task(get_case_error(case_result))
 
     jira_connection = get_jira_connection()
 
