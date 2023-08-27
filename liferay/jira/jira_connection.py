@@ -10,4 +10,6 @@ from liferay.util.credentials import get_credentials
 
 
 def get_jira_connection():
+    print("Jira authorizing...")
+
     return JIRA(JIRA_INSTANCE, basic_auth=(get_credentials("JIRA_USER_NAME"), get_credentials("JIRA_TOKEN")))

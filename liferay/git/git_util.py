@@ -19,6 +19,8 @@ def fetch_remote_branch_as_temp_branch(local_repo,pull_request):
     except Exception:
         pass
 
+    print("Fetching the branch...")
+
     local_repo.remote(name=str(pull_request.head.user.login)).fetch("refs/heads/" + str(pull_request.head.ref) + ":refs/heads/" + "temp_branch")
 
 def get_local_repo():
@@ -31,4 +33,6 @@ def get_remote_repo(github_connection, repo_name):
     return github_connection.get_repo(repo_name)
 
 def push_branch_to_origin(local_repo, local_branch, remote_branch):
+    print("Pushing to origin...")
+
     local_repo.remote(name="origin").push("refs/heads/" + local_branch + ":refs/heads/" + remote_branch, force=True)

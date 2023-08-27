@@ -13,6 +13,8 @@ def main(commit_id, description, env, ticket_number, type):
 
     comment_template = generate_comment(commit_id, description, env, type)
 
+    print("Writing comments...")
+
     comment_id = jira_connection.add_comment(ticket_number, comment_template)
 
-    return JIRA_INSTANCE + "/browse/" + ticket_number + "?focusedCommentId=" + str(comment_id)
+    print(JIRA_INSTANCE + "/browse/" + ticket_number + "?focusedCommentId=" + str(comment_id))

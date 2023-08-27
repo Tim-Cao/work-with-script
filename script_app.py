@@ -1,6 +1,8 @@
+import contextlib
 import os
 import sys
 
+from textual import work
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import *
@@ -13,7 +15,6 @@ sys.path.append(root)
 from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
                           forward_failure_pull_request, write_comments,
                           write_description)
-
 
 class ScriptApp(App):
     BINDINGS = [
@@ -28,28 +29,28 @@ class ScriptApp(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        with Horizontal():
+        with Horizontal(id='main-content'):
             yield ListView(
                 ListItem(Static("Forward Failure PR", classes="nav-item"), id="nav-1"),
-                ListItem(Static("Create PR And Forward", classes="nav-item"), id="nav-2"),
+                ListItem(Static("Create PR and Forward", classes="nav-item"), id="nav-2"),
                 ListItem(Static("Create TF Ticket", classes="nav-item"), id="nav-3"),
                 ListItem(Static("Write Comments", classes="nav-item"), id="nav-4"),
                 ListItem(Static("Write Description", classes="nav-item"), id="nav-5")
             )
             with ContentSwitcher(initial="nav-1"):
-                with Vertical(id="nav-1"):
-                    yield Label("Enter the failure Pull Request Number: ")
+                with VerticalScroll(id="nav-1"):
+                    yield Label("Enter the failure pull request number: ")
                     yield Input(id='failure-pull-request-number')
                     yield Static()
                     yield Button("Submit", variant="primary", id='button-1')
-                with Vertical(id="nav-2"):
-                    yield Label("Local Branch Name: ")
+                with VerticalScroll(id="nav-2"):
+                    yield Label("Enter the local branch name: ")
                     yield Input(id='local-branch')
-                    yield Label("Jira Ticket Number: ")
+                    yield Label("Enter the Jira ticket number: ")
                     yield Input(id='jira-ticket-number-2')
                     yield Static()
                     yield Button("Submit", variant="primary", id='button-2')
-                with Vertical(id="nav-3"):
+                with VerticalScroll(id="nav-3"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
                         ("LRQA", "LRQA"),
@@ -57,9 +58,9 @@ class ScriptApp(App):
                         ("COMMERCE", "COMMERCE")
                     ]
 
-                    yield Label("Enter the Case Result Id: ")
+                    yield Label("Enter the case result id: ")
                     yield Input(id='case-result-id')
-                    yield Label("Select the Project Key: ")
+                    yield Label("Select the project key: ")
                     yield Select(PROJECT_KEY, id='project-key', value="LPS")
                     yield Static()
                     with Horizontal(id='switch-container'):
@@ -69,7 +70,7 @@ class ScriptApp(App):
                     yield Input(id='add-label')
                     yield Static()
                     yield Button("Submit", variant="primary", id='button-3')
-                with Vertical(id="nav-4"):
+                with VerticalScroll(id="nav-4"):
                     COMMENTS_TYPE = [
                         ("PASSED Manual Testing following the steps in the description.", "PID"),
                         ("FAILED Manual Testing following the steps in the description.", "FID"),
@@ -82,9 +83,9 @@ class ScriptApp(App):
                         ("Test Validation", "TV")
                     ]
 
-                    yield Label("Jira Ticket Number: ")
+                    yield Label("Enter the Jira ticket number: ")
                     yield Input(id='jira-ticket-number-4')
-                    yield Label("Select the Comments Type: ")
+                    yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
                     yield Label("Enter the environment: (e.g., Tomcat 9.0.75 + MySQL)")
                     yield Input(id='env', value="Tomcat 9.0.75 + MySQL")
@@ -94,46 +95,66 @@ class ScriptApp(App):
                     yield Input(id='description')
                     yield Static()
                     yield Button("Submit", variant="primary", id='button-4')
-                with Vertical(id="nav-5"):
+                with VerticalScroll(id="nav-5"):
                     DESCRIPTION_TYPE = [
                         ("Steps to reproduce", "STR"),
                         ("Test Cases", "TC")
                     ]
 
-                    yield Label("Jira Ticket Number: ")
+                    yield Label("Enter the Jira ticket number: ")
                     yield Input(id='jira-ticket-number-5')
-                    yield Label("Select the Description Type: ")
+                    yield Label("Select the description type: ")
                     yield Select(DESCRIPTION_TYPE, id='description-type')
                     yield Static()
                     yield Button("Submit", variant="primary", id='button-5')
-        yield VerticalScroll(id="output")
+        yield RichLog(highlight=True, markup=True)
         yield Footer()
 
+    @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
         local_branch_name= self.query_one("#local-branch").value
         jira_ticket_number= self.query_one("#jira-ticket-number-2").value
 
-        link = create_pr_and_forward.main(local_branch_name, jira_ticket_number)
+        self.query_one("#button-2").disabled = True
 
-        self.query_one(VerticalScroll).mount(Label(f"{link}"))
+        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
+            create_pr_and_forward.main(local_branch_name, jira_ticket_number)
 
+        self.query_one("#button-2").disabled = False
+        self.query_one("#local-branch").value = ""
+        self.query_one("#jira-ticket-number-2").value = ""
+
+    @work(exclusive=True, thread=True)
     def create_test_fix_ticket(self) -> None:
         assigned = self.query_one("#assign-to-me").value
         case_result_id = self.query_one("#case-result-id").value
         label = self.query_one("#add-label").value
         project_key = self.query_one("#project-key").value
 
-        link = create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
+        self.query_one("#button-3").disabled = True
 
-        self.query_one(VerticalScroll).mount(Label(f"{link}"))
+        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
+            create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
 
+        self.query_one("#button-3").disabled = False
+        self.query_one("#assign-to-me").value = False
+        self.query_one("#case-result-id").value = ""
+        self.query_one("#add-label").value = ""
+        self.query_one("#project-key").value = "LPS"
+
+    @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
         failure_pull_request_number = self.query_one("#failure-pull-request-number").value
 
-        link = forward_failure_pull_request.main(failure_pull_request_number)
+        self.query_one("#button-1").disabled = True
 
-        self.query_one(VerticalScroll).mount(Label(f"{link}"))
+        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
+            forward_failure_pull_request.main(failure_pull_request_number)
 
+        self.query_one("#button-1").disabled = False
+        self.query_one("#failure-pull-request-number").value = ""
+
+    @work(exclusive=True, thread=True)
     def write_comments(self) -> None:
         commit_id = self.query_one("#commit-id").value
         description = self.query_one("#description").value
@@ -141,17 +162,31 @@ class ScriptApp(App):
         ticket_number = self.query_one("#jira-ticket-number-4").value
         type = self.query_one("#comments-type").value
 
-        link = write_comments.main(commit_id, description, env, ticket_number, type)
+        self.query_one("#button-4").disabled = True
 
-        self.query_one(VerticalScroll).mount(Label(f"{link}"))
+        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
+            write_comments.main(commit_id, description, env, ticket_number, type)
 
+        self.query_one("#button-4").disabled = False
+        self.query_one("#commit-id").value = ""
+        self.query_one("#description").value = ""
+        self.query_one("#env").value = "Tomcat 9.0.75 + MySQL"
+        self.query_one("#jira-ticket-number-4").value = ""
+        self.query_one("#comments-type").value = ""
+
+    @work(exclusive=True, thread=True)
     def write_description(self) -> None:
         ticket_number = self.query_one("#jira-ticket-number-5").value
         type = self.query_one("#description-type").value
 
-        link = write_description.main(ticket_number, type)
+        self.query_one("#button-5").disabled = True
 
-        self.query_one(VerticalScroll).mount(Label(f"{link}"))
+        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
+            write_description.main(ticket_number, type)
+
+        self.query_one("#button-5").disabled = False
+        self.query_one("#jira-ticket-number-5").value = ""
+        self.query_one("#description-type").value = ""
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "button-1":
@@ -167,6 +202,16 @@ class ScriptApp(App):
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
+
+class Output:
+    def __init__(self, log: RichLog) -> None:
+        self.log = log
+        self.log.clear()
+
+    def write(self, text: str) -> None:
+        if text.strip():
+            app = self.log.app
+            app.call_from_thread(self.log.write, text)
 
 app = ScriptApp()
 
