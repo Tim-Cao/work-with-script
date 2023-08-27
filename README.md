@@ -50,20 +50,28 @@
 
 1. Create a pull request and forward
 
-	![create_pr_and_forward](https://github.com/Tim-Cao/work-with-script/assets/52661397/6abf61fc-5182-4079-97cd-d4f2aa8d3f98)
+	![create_pr_and_forward](https://github.com/Tim-Cao/work-with-script/assets/52661397/c5098644-371f-4f02-9cad-6db868dba901)
+
+	See pull request [styles](https://liferay.atlassian.net/wiki/spaces/QA/pages/2194800714/Script+to+manual+forward+PR+to+Brian#Styles)
 
 1. Forward a failure pull request to BrianChan
 
-	![forward_failure_pull_request](https://github.com/Tim-Cao/work-with-script/assets/52661397/c8228c98-5480-4ed0-9cac-f8842a5350a7)
+	![forward_failure_pull_request](https://github.com/Tim-Cao/work-with-script/assets/52661397/cb298653-f9ba-485a-982f-9a14d1dac260)
+
+	See pull request [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2421522433/Script+to+create+a+PR+with+only+Poshi+changes+to+team+repo+then+forward#Styles)
 
 1. Create a test fix ticket based on a given case result
 
-	![create_test_fix_ticket](https://github.com/Tim-Cao/work-with-script/assets/52661397/6bd5dba6-5dc4-4003-80a9-8bf29ab3a9e3)
+	![create_test_fix_ticket](https://github.com/Tim-Cao/work-with-script/assets/52661397/b69c0165-1a41-4625-a263-de77e5dba11e)
 
 1. Write a comments template to a given jira ticket
 
-	![write_comments](https://github.com/Tim-Cao/work-with-script/assets/52661397/64b6ef06-9967-4ac6-8b58-290c7af7f97b)
+	![write_comments](https://github.com/Tim-Cao/work-with-script/assets/52661397/21540135-1a63-4ddd-b873-3a79152438e5)
+
+	See comments [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2402025586/Ticket+description+and+comments+template+on+Jira+Software+Cloud#Comments)
 
 1. Write a description template to a given jira ticket
 
-	![write_description](https://github.com/Tim-Cao/work-with-script/assets/52661397/714b4812-fdb2-4f61-9aeb-b7c024ea996b)
+	![write_description](https://github.com/Tim-Cao/work-with-script/assets/52661397/78f01d51-9de6-4ed9-b9e8-d7fac2513a5e)
+
+	See description [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2402025586/Ticket+description+and+comments+template+on+Jira+Software+Cloud#Description)
