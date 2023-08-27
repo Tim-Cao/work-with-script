@@ -1,9 +1,14 @@
 def add_label(issue, label):
-    issue.fields.labels.append(label)
-    issue.update(fields={"labels": issue.fields.labels})
+    if (label and not(label.isspace())):
+        print("Adding label...")
+
+        issue.fields.labels.append(label)
+        issue.update(fields={"labels": issue.fields.labels})
 
 def assign_to_me(assigned, jira_connection, issue):
     if assigned is True:
+        print("Assigning...")
+
         issue.update(fields={'assignee': {'accountId': jira_connection.current_user()}})
 
 def generate_comment(commit_id, description, env, type):

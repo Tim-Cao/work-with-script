@@ -32,6 +32,12 @@ ListView > ListItem.--highlight {
     text-style: bold;
 }
 
+RichLog {
+    border: tall $background;
+    background: $boost;
+    overflow-y: auto;
+}
+
 Switch {
     border: blank;
 }
@@ -50,6 +56,10 @@ Switch.-on > .switch--slider {
     height: 3;
     content-align: left middle;
     margin-left: 1;
+}
+
+#main-content {
+    height: 2fr;
 }
 
 .nav-item {

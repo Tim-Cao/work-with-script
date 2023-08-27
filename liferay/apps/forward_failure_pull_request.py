@@ -24,6 +24,8 @@ def add_comments_in_new_pr(failure_pr_link, pull_request):
     pull_request.create_issue_comment(comments)
 
 def create_pr_to_brianchan(failure_pr, github_connection):
+    print("Creating the pull request...")
+
     ticket_numbers = re.findall("[A-Z]+\-\d+", failure_pr.title)
 
     jira_links = ""
@@ -58,8 +60,10 @@ def main(pull_request_number):
 
     delete_temp_branch(local_repo)
 
+    print("Writing comments...")
+
     add_comments_in_new_pr(failure_pr.html_url, new_pr)
 
     add_comments_in_failure_pr(new_pr.html_url, failure_pr)
 
-    return new_pr.html_url
+    print(new_pr.html_url)

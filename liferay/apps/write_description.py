@@ -15,6 +15,8 @@ def main(ticket_number, type):
 
     description_template = generate_description(type)
 
+    print("Writing description...")
+
     issue.update(description = description_template)
 
-    return JIRA_INSTANCE + "/browse/" + ticket_number
+    print(JIRA_INSTANCE + "/browse/" + ticket_number)

@@ -16,6 +16,8 @@ from liferay.util.credentials import get_credentials
 
 
 def add_test_fix_ticket(case_error, case_name, case_result_id, component, jira_connection, project_key):
+    print("Creating the Jira ticket...")
+
     match project_key:
         case "LPS":
             issue_dict = {
@@ -80,6 +82,8 @@ def get_case_name(case_result):
     return jsonpath_expression.find(case_result)[0].value
 
 def get_case_result(auth, case_result_id):
+    print("Getting the case result...")
+
     testray_url = TESTRAY_INSTANCE + "/home/-/testray/case_results/" + case_result_id + ".json"
 
     response = requests.request("GET", testray_url, auth=auth)
@@ -89,6 +93,8 @@ def get_case_result(auth, case_result_id):
 def get_relevant_jira_component(case_result, jira_connection, project_key):
     if project_key == "COMMERCE":
         return
+
+    print("Matching the Jira component...")
 
     jira_components = get_project_components(jira_connection, project_key)
 
@@ -111,8 +117,6 @@ def get_relevant_jira_component(case_result, jira_connection, project_key):
 
     return components[0]
 
-
-
 def main(assigned, case_result_id, label, project_key):
     testray_connection = get_testray_connection()
 
@@ -132,4 +136,4 @@ def main(assigned, case_result_id, label, project_key):
 
     add_label(issue, label)
 
-    return JIRA_INSTANCE + "/browse/" + str(issue)
+    print(JIRA_INSTANCE + "/browse/" + str(issue))
