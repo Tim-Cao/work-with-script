@@ -1,9 +1,8 @@
-import contextlib
 import os
 import sys
 
-from textual import work
-from textual.app import App, ComposeResult
+from textual import on, work
+from textual.app import App, ComposeResult, events
 from textual.binding import Binding
 from textual.containers import *
 from textual.widgets import *
@@ -15,6 +14,7 @@ sys.path.append(root)
 from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
                           forward_failure_pull_request, write_comments,
                           write_description)
+
 
 class ScriptApp(App):
     BINDINGS = [
@@ -107,7 +107,7 @@ class ScriptApp(App):
                     yield Select(DESCRIPTION_TYPE, id='description-type')
                     yield Static()
                     yield Button("Submit", variant="primary", id='button-5')
-        yield RichLog(highlight=True, markup=True)
+        yield Output(highlight=True, markup=True)
         yield Footer()
 
     @work(exclusive=True, thread=True)
@@ -117,8 +117,10 @@ class ScriptApp(App):
 
         self.query_one("#button-2").disabled = True
 
-        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
-            create_pr_and_forward.main(local_branch_name, jira_ticket_number)
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        create_pr_and_forward.main(local_branch_name, jira_ticket_number)
 
         self.query_one("#button-2").disabled = False
         self.query_one("#local-branch").value = ""
@@ -133,8 +135,10 @@ class ScriptApp(App):
 
         self.query_one("#button-3").disabled = True
 
-        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
-            create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
 
         self.query_one("#button-3").disabled = False
         self.query_one("#assign-to-me").value = False
@@ -148,8 +152,10 @@ class ScriptApp(App):
 
         self.query_one("#button-1").disabled = True
 
-        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
-            forward_failure_pull_request.main(failure_pull_request_number)
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        forward_failure_pull_request.main(failure_pull_request_number)
 
         self.query_one("#button-1").disabled = False
         self.query_one("#failure-pull-request-number").value = ""
@@ -164,8 +170,10 @@ class ScriptApp(App):
 
         self.query_one("#button-4").disabled = True
 
-        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
-            write_comments.main(commit_id, description, env, ticket_number, type)
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        write_comments.main(commit_id, description, env, ticket_number, type)
 
         self.query_one("#button-4").disabled = False
         self.query_one("#commit-id").value = ""
@@ -181,8 +189,10 @@ class ScriptApp(App):
 
         self.query_one("#button-5").disabled = True
 
-        with contextlib.redirect_stdout(Output(self.query_one(RichLog))):
-            write_description.main(ticket_number, type)
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        write_description.main(ticket_number, type)
 
         self.query_one("#button-5").disabled = False
         self.query_one("#jira-ticket-number-5").value = ""
@@ -203,15 +213,11 @@ class ScriptApp(App):
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
 
-class Output:
-    def __init__(self, log: RichLog) -> None:
-        self.log = log
-        self.log.clear()
-
-    def write(self, text: str) -> None:
-        if text.strip():
-            app = self.log.app
-            app.call_from_thread(self.log.write, text)
+class Output(RichLog):
+    @on(events.Print)
+    def on_print(self, event: events.Print) -> None:
+        if event.text.strip():
+            self.write(event.text)
 
 app = ScriptApp()
 
