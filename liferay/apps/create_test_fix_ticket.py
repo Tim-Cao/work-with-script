@@ -136,4 +136,6 @@ def main(assigned, case_result_id, label, project_key):
 
     add_label(issue, label)
 
+    print("Successful")
+
     print(JIRA_INSTANCE + "/browse/" + str(issue))

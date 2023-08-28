@@ -19,4 +19,6 @@ def main(ticket_number, type):
 
     issue.update(description = description_template)
 
+    print("Successful")
+
     print(JIRA_INSTANCE + "/browse/" + ticket_number)

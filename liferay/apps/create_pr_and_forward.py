@@ -26,7 +26,7 @@ def create_pr_to_team(github_connection, jira_ticket_number, local_branch):
     return team_repo.create_pull(title=title, head=head,  base=base, body=body, maintainer_can_modify=True)
 
 def forward_pull_request(pull_request):
-    print("Run ci:forward")
+    print("Run ci:forward...")
 
     time.sleep(3)
 
@@ -42,5 +42,7 @@ def main(local_branch, jira_ticket_number):
     pr = create_pr_to_team(g, jira_ticket_number, local_branch)
 
     forward_pull_request(pr)
+
+    print("Successful")
 
     print(pr.html_url)

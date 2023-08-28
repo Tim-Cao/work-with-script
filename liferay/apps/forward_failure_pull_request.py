@@ -66,4 +66,6 @@ def main(pull_request_number):
 
     add_comments_in_failure_pr(new_pr.html_url, failure_pr)
 
+    print("Successful")
+
     print(new_pr.html_url)
