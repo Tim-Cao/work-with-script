@@ -17,4 +17,6 @@ def main(commit_id, description, env, ticket_number, type):
 
     comment_id = jira_connection.add_comment(ticket_number, comment_template)
 
+    print("Successful")
+
     print(JIRA_INSTANCE + "/browse/" + ticket_number + "?focusedCommentId=" + str(comment_id))
