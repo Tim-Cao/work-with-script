@@ -18,7 +18,7 @@ from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
 
 class ScriptApp(App):
     BINDINGS = [
-        Binding("ctrl+q", "quit", "Quit"),
+        Binding("ctrl+c", "quit", "Quit"),
         Binding("shift+insert", "paste", "Paste"),
         Binding("ctrl+u", "delete_left_all", "Delete all to the left")
     ]
