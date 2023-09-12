@@ -1,5 +1,11 @@
 # Work with Script
 
+## Requirements
+
+1. Python
+
+1. python3-pip
+
 ## Installation
 
 1. Clone this repository to a local directory
@@ -38,13 +44,17 @@
 
 	1. Save generated token in your local file as you will not be able to see this again.
 
- 1. Add a `credentials-ext.properties` file under the root directory to overwrite the `credentials.properties`
-
 ## Launch the app
 
 1. Run the following command at the root directory of local repository
 
 		python3 script_app.py
+
+1. Generate a `credentials-ext.properties` file under the root directory by `ctrl + o` shortcuts
+
+	1. This file will open with vscode automatically. Please fill out the value of properties.
+
+	1. If you don't install vscode. Please open it manually.
 
 ## Features
 
