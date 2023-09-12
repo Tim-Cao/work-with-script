@@ -14,13 +14,15 @@ sys.path.append(root)
 from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
                           forward_failure_pull_request, write_comments,
                           write_description)
+from liferay.util import credentials
 
 
 class ScriptApp(App):
     BINDINGS = [
         Binding("ctrl+c", "quit", "Quit"),
         Binding("shift+insert", "paste", "Paste"),
-        Binding("ctrl+u", "delete_left_all", "Delete all to the left")
+        Binding("ctrl+u", "delete_left_all", "Delete all to the left"),
+        Binding("ctrl+o", "open_credentials", "Open credentials-ext")
     ]
 
     CSS_PATH = root + "/liferay/src/css/main.css"
@@ -109,6 +111,13 @@ class ScriptApp(App):
                     yield Button("Submit", variant="primary", id='button-5')
         yield Output(highlight=True, markup=True)
         yield Footer()
+
+    @work(exclusive=True, thread=True)
+    def action_open_credentials(self) -> None:
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        credentials.open_credentials()
 
     @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
