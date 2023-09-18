@@ -64,9 +64,9 @@ def generate_description(type):
                     (/) *Expected Results:*\n\n \
                     (x) *Actual Results:*\n\n \
                     (!) Reproduced on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal master GIT ID: .\n\n \
+                    Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n \
                     (/) Cannot be Reproduced on:\n \
-                    Tomcat 9.0.75 + MySQL. Portal 7.4.13-DXP-U89."
+                    Tomcat 9.0.80 + MySQL. Portal 7.4.13-DXP-U94."
         case "TC":
             return "h3. *Test Cases*\n\n \
                     *Case 1:*\n \

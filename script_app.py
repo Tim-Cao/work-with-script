@@ -89,8 +89,8 @@ class ScriptApp(App):
                     yield Input(id='jira-ticket-number-4')
                     yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
-                    yield Label("Enter the environment: (e.g., Tomcat 9.0.75 + MySQL)")
-                    yield Input(id='env', value="Tomcat 9.0.75 + MySQL")
+                    yield Label("Enter the environment: (e.g., Tomcat 9.0.80 + MySQL)")
+                    yield Input(id='env', value="Tomcat 9.0.80 + MySQL")
                     yield Label("Enter the commit id: (Optional)")
                     yield Input(id='commit-id')
                     yield Label("Enter the description: (Optional)")
@@ -187,7 +187,7 @@ class ScriptApp(App):
         self.query_one("#button-4").disabled = False
         self.query_one("#commit-id").value = ""
         self.query_one("#description").value = ""
-        self.query_one("#env").value = "Tomcat 9.0.75 + MySQL"
+        self.query_one("#env").value = "Tomcat 9.0.80 + MySQL"
         self.query_one("#jira-ticket-number-4").value = ""
         self.query_one("#comments-type").value = ""
 
