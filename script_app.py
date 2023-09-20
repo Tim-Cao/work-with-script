@@ -15,6 +15,7 @@ from liferay.apps import (
     create_pr_and_forward,
     create_test_fix_ticket,
     forward_failure_pull_request,
+    trigger_gauntlet,
     write_comments,
     write_description,
 )
@@ -44,6 +45,7 @@ class ScriptApp(App):
                 ListItem(Static("Create TF Ticket", classes="nav-item"), id="nav-3"),
                 ListItem(Static("Write Comments", classes="nav-item"), id="nav-4"),
                 ListItem(Static("Write Description", classes="nav-item"), id="nav-5"),
+                ListItem(Static("Trigger Gauntlet", classes="nav-item"), id="nav-6"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
@@ -127,6 +129,16 @@ class ScriptApp(App):
                     yield Select(DESCRIPTION_TYPE, id="description-type")
                     yield Static()
                     yield Button("Submit", variant="primary", id="button-5")
+                with VerticalScroll(id="nav-6"):
+                    yield Label("Enter the legacy repo path: ")
+                    yield Input(
+                        id="legacy-repo-path",
+                        value=credentials.get_credentials("LOCAL_REPO_PATH"),
+                    )
+                    yield Label("Enter the target branch: ")
+                    yield Input(id="target-branch", value="7.3.x")
+                    yield Static()
+                    yield Button("Submit", variant="primary", id="button-6")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
@@ -190,6 +202,24 @@ class ScriptApp(App):
         self.query_one("#failure-pull-request-number").value = ""
 
     @work(exclusive=True, thread=True)
+    def trigger_gauntlet(self) -> None:
+        legacy_local_path = self.query_one("#legacy-repo-path").value
+        target_branch = self.query_one("#target-branch").value
+
+        self.query_one("#button-6").disabled = True
+
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        trigger_gauntlet.main(legacy_local_path, target_branch)
+
+        self.query_one("#button-6").disabled = False
+        self.query_one("#legacy-repo-path").value = credentials.get_credentials(
+            "LOCAL_REPO_PATH"
+        )
+        self.query_one("#target-branch").value = "7.3.x"
+
+    @work(exclusive=True, thread=True)
     def write_comments(self) -> None:
         commit_id = self.query_one("#commit-id").value
         description = self.query_one("#description").value
@@ -238,6 +268,8 @@ class ScriptApp(App):
             self.write_comments()
         elif event.button.id == "button-5":
             self.write_description()
+        elif event.button.id == "button-6":
+            self.trigger_gauntlet()
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
