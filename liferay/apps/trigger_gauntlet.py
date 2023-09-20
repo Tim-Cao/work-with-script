@@ -2,7 +2,7 @@ import os
 import sys
 from datetime import date
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 
 from liferay.git.git_util import *
 from liferay.git.github_connection import *
@@ -18,15 +18,16 @@ def create_gauntlet_ticket(target_branch):
     today = date.today()
 
     issue_dict = {
-        'project': {'key': 'LRQA'},
-        'summary': f'{target_branch} Gauntlet {today} Daily',
-        'components': [{'name': 'Gauntlet Testing'}],
-        'issuetype': {'name': 'Gauntlet Testing'},
+        "project": {"key": "LRQA"},
+        "summary": f"{target_branch} Gauntlet {today} Daily",
+        "components": [{"name": "Gauntlet Testing"}],
+        "issuetype": {"name": "Gauntlet Testing"},
     }
 
     print("Creating the Jira ticket...")
 
     return jira_connection.create_issue(fields=issue_dict)
+
 
 def create_testing_branch(local_repo, target_branch):
     clean_working_tree(local_repo)
@@ -43,18 +44,24 @@ def create_testing_branch(local_repo, target_branch):
 
     checkout("temp_branch", local_repo)
 
+
 def create_gaunlet_pr(local_repo, remote_branch, target_branch, ticket_number):
     g = get_github_connection()
 
-    remote_repo = get_remote_repo(g, f'{get_credentials("GITHUB_USER_NAME")}/liferay-portal-ee')
+    remote_repo = get_remote_repo(
+        g, f'{get_credentials("GITHUB_USER_NAME")}/liferay-portal-ee'
+    )
 
     push_branch_to_origin(local_repo, "temp_branch", remote_branch)
 
-    body= JIRA_INSTANCE + "/browse/" + ticket_number
+    body = JIRA_INSTANCE + "/browse/" + ticket_number
     head = get_credentials("GITHUB_USER_NAME") + ":" + remote_branch
-    title = ticket_number + ' | ' + target_branch
+    title = ticket_number + " | " + target_branch
 
-    return remote_repo.create_pull(title=title,body=body,head=head,base=target_branch)
+    return remote_repo.create_pull(
+        title=title, body=body, head=head, base=target_branch
+    )
+
 
 def make_changes_for_gauntlet_test(commit_message, file_name, repo):
     print("Making changes for gauntlet test...")
@@ -63,26 +70,35 @@ def make_changes_for_gauntlet_test(commit_message, file_name, repo):
     repo.index.add([file_name])
     repo.index.commit(commit_message)
 
+
 def paste_pr_to_ticket(gauntlet_ticket, pr):
-    gauntlet_ticket.update(description = pr.html_url)
+    gauntlet_ticket.update(description=pr.html_url)
+
 
 def run_gauntlet(pr):
     print("Run ci:test:gauntlet-bucket")
 
     pr.create_issue_comment("ci:test:gauntlet-bucket")
 
+
 def main(legacy_repo_path, target_branch):
     gauntlet_ticket = create_gauntlet_ticket(target_branch)
 
-    remote_branch = f'{target_branch}-qa-{gauntlet_ticket.key[-5:]}'
+    remote_branch = f"{target_branch}-qa-{gauntlet_ticket.key[-5:]}"
 
     local_repo = Repo(legacy_repo_path)
 
     create_testing_branch(local_repo, target_branch)
 
-    make_changes_for_gauntlet_test(f'{gauntlet_ticket.key} TEMP for gauntlet testing', os.path.join(legacy_repo_path, "temp.text"), local_repo)
+    make_changes_for_gauntlet_test(
+        f"{gauntlet_ticket.key} TEMP for gauntlet testing",
+        os.path.join(legacy_repo_path, "temp.text"),
+        local_repo,
+    )
 
-    pr = create_gaunlet_pr(local_repo, remote_branch, target_branch, gauntlet_ticket.key)
+    pr = create_gaunlet_pr(
+        local_repo, remote_branch, target_branch, gauntlet_ticket.key
+    )
 
     run_gauntlet(pr)
 
