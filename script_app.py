@@ -11,9 +11,13 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
-                          forward_failure_pull_request, write_comments,
-                          write_description)
+from liferay.apps import (
+    create_pr_and_forward,
+    create_test_fix_ticket,
+    forward_failure_pull_request,
+    write_comments,
+    write_description,
+)
 from liferay.util import credentials
 
 
@@ -22,7 +26,7 @@ class ScriptApp(App):
         Binding("ctrl+c", "quit", "Quit"),
         Binding("shift+insert", "paste", "Paste"),
         Binding("ctrl+u", "delete_left_all", "Delete all to the left"),
-        Binding("ctrl+o", "open_credentials", "Open credentials-ext")
+        Binding("ctrl+o", "open_credentials", "Open credentials-ext"),
     ]
 
     CSS_PATH = root + "/liferay/src/css/main.css"
@@ -31,84 +35,98 @@ class ScriptApp(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        with Horizontal(id='main-content'):
+        with Horizontal(id="main-content"):
             yield ListView(
                 ListItem(Static("Forward Failure PR", classes="nav-item"), id="nav-1"),
-                ListItem(Static("Create PR and Forward", classes="nav-item"), id="nav-2"),
+                ListItem(
+                    Static("Create PR and Forward", classes="nav-item"), id="nav-2"
+                ),
                 ListItem(Static("Create TF Ticket", classes="nav-item"), id="nav-3"),
                 ListItem(Static("Write Comments", classes="nav-item"), id="nav-4"),
-                ListItem(Static("Write Description", classes="nav-item"), id="nav-5")
+                ListItem(Static("Write Description", classes="nav-item"), id="nav-5"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
                     yield Label("Enter the failure pull request number: ")
-                    yield Input(id='failure-pull-request-number')
+                    yield Input(id="failure-pull-request-number")
                     yield Static()
-                    yield Button("Submit", variant="primary", id='button-1')
+                    yield Button("Submit", variant="primary", id="button-1")
                 with VerticalScroll(id="nav-2"):
                     yield Label("Enter the local branch name: ")
-                    yield Input(id='local-branch')
+                    yield Input(id="local-branch")
                     yield Label("Enter the Jira ticket number: ")
-                    yield Input(id='jira-ticket-number-2')
+                    yield Input(id="jira-ticket-number-2")
                     yield Static()
-                    yield Button("Submit", variant="primary", id='button-2')
+                    yield Button("Submit", variant="primary", id="button-2")
                 with VerticalScroll(id="nav-3"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
                         ("LRQA", "LRQA"),
                         ("LRAC", "LRAC"),
-                        ("COMMERCE", "COMMERCE")
+                        ("COMMERCE", "COMMERCE"),
                     ]
 
                     yield Label("Enter the case result id: ")
-                    yield Input(id='case-result-id')
+                    yield Input(id="case-result-id")
                     yield Label("Select the project key: ")
-                    yield Select(PROJECT_KEY, id='project-key', value="LPS")
+                    yield Select(PROJECT_KEY, id="project-key", value="LPS")
                     yield Static()
-                    with Horizontal(id='switch-container'):
-                        yield Switch(id='assign-to-me', value=False)
-                        yield Static("Assign to me (Optional)", id='assign-to-me-label')
+                    with Horizontal(id="switch-container"):
+                        yield Switch(id="assign-to-me", value=False)
+                        yield Static("Assign to me (Optional)", id="assign-to-me-label")
                     yield Label("Add label (Optional)")
-                    yield Input(id='add-label')
+                    yield Input(id="add-label")
                     yield Static()
-                    yield Button("Submit", variant="primary", id='button-3')
+                    yield Button("Submit", variant="primary", id="button-3")
                 with VerticalScroll(id="nav-4"):
                     COMMENTS_TYPE = [
-                        ("PASSED Manual Testing following the steps in the description.", "PID"),
-                        ("FAILED Manual Testing following the steps in the description.", "FID"),
-                        ("No Longer Reproducible through Manual Testing following the steps in the description.", "NID"),
+                        (
+                            "PASSED Manual Testing following the steps in the description.",
+                            "PID",
+                        ),
+                        (
+                            "FAILED Manual Testing following the steps in the description.",
+                            "FID",
+                        ),
+                        (
+                            "No Longer Reproducible through Manual Testing following the steps in the description.",
+                            "NID",
+                        ),
                         ("PASSED Manual Testing using the following steps:", "PF"),
                         ("FAILED Manual Testing using the following steps:", "FF"),
-                        ("No Longer Reproducible through Manual Testing using the following steps:", "NF"),
+                        (
+                            "No Longer Reproducible through Manual Testing using the following steps:",
+                            "NF",
+                        ),
                         ("Reproduced on:", "R"),
                         ("Reproduced on: Upgrade From:", "RU"),
-                        ("Test Validation", "TV")
+                        ("Test Validation", "TV"),
                     ]
 
                     yield Label("Enter the Jira ticket number: ")
-                    yield Input(id='jira-ticket-number-4')
+                    yield Input(id="jira-ticket-number-4")
                     yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
                     yield Label("Enter the environment: (e.g., Tomcat 9.0.80 + MySQL)")
-                    yield Input(id='env', value="Tomcat 9.0.80 + MySQL")
+                    yield Input(id="env", value="Tomcat 9.0.80 + MySQL")
                     yield Label("Enter the commit id: (Optional)")
-                    yield Input(id='commit-id')
+                    yield Input(id="commit-id")
                     yield Label("Enter the description: (Optional)")
-                    yield Input(id='description')
+                    yield Input(id="description")
                     yield Static()
-                    yield Button("Submit", variant="primary", id='button-4')
+                    yield Button("Submit", variant="primary", id="button-4")
                 with VerticalScroll(id="nav-5"):
                     DESCRIPTION_TYPE = [
                         ("Steps to reproduce", "STR"),
-                        ("Test Cases", "TC")
+                        ("Test Cases", "TC"),
                     ]
 
                     yield Label("Enter the Jira ticket number: ")
-                    yield Input(id='jira-ticket-number-5')
+                    yield Input(id="jira-ticket-number-5")
                     yield Label("Select the description type: ")
-                    yield Select(DESCRIPTION_TYPE, id='description-type')
+                    yield Select(DESCRIPTION_TYPE, id="description-type")
                     yield Static()
-                    yield Button("Submit", variant="primary", id='button-5')
+                    yield Button("Submit", variant="primary", id="button-5")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
@@ -121,8 +139,8 @@ class ScriptApp(App):
 
     @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
-        local_branch_name= self.query_one("#local-branch").value
-        jira_ticket_number= self.query_one("#jira-ticket-number-2").value
+        local_branch_name = self.query_one("#local-branch").value
+        jira_ticket_number = self.query_one("#jira-ticket-number-2").value
 
         self.query_one("#button-2").disabled = True
 
@@ -157,7 +175,9 @@ class ScriptApp(App):
 
     @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
-        failure_pull_request_number = self.query_one("#failure-pull-request-number").value
+        failure_pull_request_number = self.query_one(
+            "#failure-pull-request-number"
+        ).value
 
         self.query_one("#button-1").disabled = True
 
@@ -222,11 +242,13 @@ class ScriptApp(App):
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
 
+
 class Output(RichLog):
     @on(events.Print)
     def on_print(self, event: events.Print) -> None:
         if event.text.strip():
             self.write(event.text)
+
 
 app = ScriptApp()
 

@@ -1,15 +1,17 @@
 def add_label(issue, label):
-    if (label and not(label.isspace())):
+    if label and not (label.isspace()):
         print("Adding label...")
 
         issue.fields.labels.append(label)
         issue.update(fields={"labels": issue.fields.labels})
 
+
 def assign_to_me(assigned, jira_connection, issue):
     if assigned is True:
         print("Assigning...")
 
-        issue.update(fields={'assignee': {'accountId': jira_connection.current_user()}})
+        issue.update(fields={"assignee": {"accountId": jira_connection.current_user()}})
+
 
 def generate_comment(commit_id, description, env, type):
     match type:
@@ -56,7 +58,8 @@ def generate_comment(commit_id, description, env, type):
                     *Case 3:* Passed.\n\n \
                     *Tested on:*\n \
                     {env}. Portal master GIT ID: {commit_id}."
-        
+
+
 def generate_description(type):
     match type:
         case "STR":
@@ -81,6 +84,7 @@ def generate_description(type):
                     The user cannot login without entering password.\n \
                     Test Strategy: MEDIUM\n \
                     Can be covered by POSHI?: Yes\n\n#  \n#  \n# "
+
 
 def get_project_components(jira_connection, project_key):
     return jira_connection.project_components(project_key)

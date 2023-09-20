@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 
 from liferay.jira.jira_connection import get_jira_connection
 from liferay.jira.jira_constants import *
@@ -19,4 +19,10 @@ def main(commit_id, description, env, ticket_number, type):
 
     print("Successful")
 
-    print(JIRA_INSTANCE + "/browse/" + ticket_number + "?focusedCommentId=" + str(comment_id))
+    print(
+        JIRA_INSTANCE
+        + "/browse/"
+        + ticket_number
+        + "?focusedCommentId="
+        + str(comment_id)
+    )
