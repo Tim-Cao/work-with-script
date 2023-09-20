@@ -8,6 +8,20 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 from liferay.util.credentials import get_credentials
 
 
+def checkout(local_branch, local_repo):
+    local_repo.heads[local_branch].checkout()
+
+
+def clean_working_tree(local_repo):
+    local_repo.head.reset(working_tree=True)
+
+
+def create_branch(local_branch, local_repo):
+    print(f"Creating branch {local_branch}...")
+
+    return local_repo.create_head(local_branch)
+
+
 def delete_temp_branch(local_repo):
     try:
         local_repo.delete_head("temp_branch", force=True)
@@ -48,3 +62,9 @@ def push_branch_to_origin(local_repo, local_branch, remote_branch):
     local_repo.remote(name="origin").push(
         "refs/heads/" + local_branch + ":refs/heads/" + remote_branch, force=True
     )
+
+
+def update_local_branch(local_repo, target_branch):
+    print("Pulling from upstream...")
+
+    local_repo.remotes["upstream"].pull(target_branch)
