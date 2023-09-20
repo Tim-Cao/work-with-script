@@ -3,7 +3,7 @@ import re
 import sys
 import time
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 
 from liferay.git.git_util import *
 from liferay.git.github_connection import *
@@ -15,13 +15,18 @@ def add_comments_in_failure_pr(new_pr_link, pull_request):
     pull_request.create_issue_comment("See " + new_pr_link)
     pull_request.create_issue_comment("ci:close")
 
+
 def add_comments_in_new_pr(failure_pr_link, pull_request):
     time.sleep(3)
 
-    comments = "In order to not clog up ci resources, I'm sending the PR directly. Failure cases are unrelated to changes in this PR.\n\nSee "  + failure_pr_link
+    comments = (
+        "In order to not clog up ci resources, I'm sending the PR directly. Failure cases are unrelated to changes in this PR.\n\nSee "
+        + failure_pr_link
+    )
 
     pull_request.create_issue_comment("ci:reopen")
     pull_request.create_issue_comment(comments)
+
 
 def create_pr_to_brianchan(failure_pr, github_connection):
     print("Creating the pull request...")
@@ -37,9 +42,18 @@ def create_pr_to_brianchan(failure_pr, github_connection):
 
     body = jira_links + "\n" + "@" + str(failure_pr.user.login)
 
-    brianchan_repo = get_remote_repo(github_connection,"brianchandotcom/liferay-portal")
+    brianchan_repo = get_remote_repo(
+        github_connection, "brianchandotcom/liferay-portal"
+    )
 
-    return brianchan_repo.create_pull(title=failure_pr.title, head=head,  base="master", body=body, maintainer_can_modify=True)
+    return brianchan_repo.create_pull(
+        title=failure_pr.title,
+        head=head,
+        base="master",
+        body=body,
+        maintainer_can_modify=True,
+    )
+
 
 def main(pull_request_number):
     local_repo = get_local_repo()

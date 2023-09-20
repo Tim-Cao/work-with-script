@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 
 from liferay.jira.jira_connection import get_jira_connection
 from liferay.jira.jira_constants import *
@@ -17,7 +17,7 @@ def main(ticket_number, type):
 
     print("Writing description...")
 
-    issue.update(description = description_template)
+    issue.update(description=description_template)
 
     print("Successful")
 
