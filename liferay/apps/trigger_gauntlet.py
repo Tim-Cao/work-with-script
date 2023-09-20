@@ -1,82 +1,106 @@
 import os
-import pathlib
-import git
-
+import sys
 from datetime import date
-from github import Github
-from jira import JIRA
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+
+from liferay.git.git_util import *
+from liferay.git.github_connection import *
+from liferay.jira.jira_connection import get_jira_connection
+from liferay.jira.jira_constants import *
+from liferay.jira.jira_util import *
+from liferay.util.credentials import get_credentials
 
 
-# Create issue for gauntlet testing
-user = 'email'
-apikey = 'API Token'
-server = 'https://liferay.atlassian.net/'
+def create_gauntlet_ticket(target_branch):
+    jira_connection = get_jira_connection()
 
-options = {
- 'server': server
-}
-jira_connection = JIRA(options, basic_auth=(user,apikey))
+    today = date.today()
 
-today = date.today()
-issue_dict = {
-    'project': {'key': 'LRQA'},
-    'summary': '7.3.x Gauntlet ' + str(today) + ' Daily',
-    'description': 'Detailed ticket description.',
-    'components': [{'name': 'Gauntlet Testing'}],
-    'issuetype': {'name': 'Gauntlet Testing'},
-}
+    issue_dict = {
+        'project': {'key': 'LRQA'},
+        'summary': f'{target_branch} Gauntlet {today} Daily',
+        'components': [{'name': 'Gauntlet Testing'}],
+        'issuetype': {'name': 'Gauntlet Testing'},
+    }
 
-new_issue = jira_connection.create_issue(fields=issue_dict)
+    print("Creating the Jira ticket...")
 
-print("Create issue successfully ")
+    return jira_connection.create_issue(fields=issue_dict)
 
-# Update local branch
-local_dir = '/home/liferay/project/liferay-portal-ee-7.3.x/'
-repo = git.Repo(local_dir)
-origin = repo.remote(name='origin')
-origin.pull('7.3.x')
+def update_local_branch(repo, target_branch):
+    repo.remotes['upstream'].pull(target_branch)
 
-# Create a new branch for testing
-#existing_branch = repo.heads['7.3.x']
-#existing_branch.checkout(b='7.3.x-qa-test')
-new_branch = repo.create_head('7.3.x-qa-' + new_issue.key[-5:])
-new_branch.checkout()
+def clean_working_tree(repo):
+    repo.head.reset(working_tree=True)
 
-print("Update local branch successfully")
+def checkout(local_branch, repo):
+    repo.heads[local_branch].checkout()
 
-# Add and Commit a empty file
-repo_dir = os.path.join(local_dir)
-file_name = os.path.join(repo_dir, "temp.temp")
-open(file_name, "wb").close()
-repo.index.add([file_name])
-repo.index.commit(f'{new_issue.key} TEMP for gauntlet testing')
-origin.push(new_branch)
+def create_branch(branch_name, repo):
+    repo.create_head(branch_name)
 
-print("Add and Commit a empty file successfully")
+def make_changes_on_local_repo(commit_message, file_name, repo):
+    print("Making changes on local repo...")
 
-# Create a pull request for gauntlet testing
-#access_token = (pathlib.Path().home() / ".github_access_token").read_text()
-access_token = 'github-personal-access-token'
-repo_name = 'liferay-portal-ee'
-user_name = 'username'
+    open(file_name, "w").close()
+    repo.index.add([file_name])
+    repo.index.commit(commit_message)
 
-g = Github(access_token)
+def create_gaunlet_pr(remote_repo, target_branch, testing_branch, ticket_number):
+    body= JIRA_INSTANCE + "/browse/" + ticket_number
+    head = get_credentials("GITHUB_USER_NAME") + ":" + testing_branch
+    title = ticket_number + ' | ' + target_branch
 
-repo = g.get_user(user_name).get_repo(repo_name)
+    return remote_repo.create_pull(title=title,body=body,head=head,base=target_branch)
 
-base_branch = '7.3.x'
-body= server + "/browse/" + new_issue.key
-branch_name = new_branch
-head = user_name + ":" + '7.3.x-qa-' + new_issue.key[-5:]
-title = new_issue.key + ' | ' + '7.3.x'
+def run_gauntlet(pr):
+    print("Run ci:test:gauntlet-bucket")
 
-pull_request = repo.create_pull(title=title,body=body,head=head,base=base_branch)
+    pr.create_issue_comment("ci:test:gauntlet-bucket")
 
-pull_request.create_issue_comment("ci:test:gauntlet-bucket")
+def paste_pr_to_ticket(gauntlet_ticket, pr):
+    gauntlet_ticket.update(description = pr.html_url)
 
-print("Create a pull request for gauntlet testing successfully")
+def main(legacy_repo_path, target_branch):
+    gauntlet_ticket = create_gauntlet_ticket(target_branch)
 
-# Update the description of Gauntlet ticket
-new_issue.update(description = pull_request.html_url)
+    testing_branch = f'{target_branch}-qa-{gauntlet_ticket.key[-5:]}'
 
-print("Update ticket successfully")
+    local_repo = Repo(legacy_repo_path)
+
+    print("Pulling from upstream...")
+
+    clean_working_tree(local_repo)
+
+    checkout(target_branch, local_repo)
+
+    clean_working_tree(local_repo)
+
+    delete_temp_branch(local_repo)
+
+    update_local_branch(local_repo, target_branch)
+
+    print(f"Creating testing branch...")
+
+    create_branch("temp_branch", local_repo)
+
+    checkout("temp_branch", local_repo)
+
+    make_changes_on_local_repo(f'{gauntlet_ticket.key} TEMP for gauntlet testing', os.path.join(legacy_repo_path, "temp.text"), local_repo)
+
+    g = get_github_connection()
+
+    remote_repo = get_remote_repo(g, f'{get_credentials("GITHUB_USER_NAME")}/liferay-portal-ee')
+
+    push_branch_to_origin(local_repo, "temp_branch", testing_branch)
+
+    pr = create_gaunlet_pr(remote_repo, target_branch, testing_branch, gauntlet_ticket.key)
+
+    run_gauntlet(pr)
+
+    paste_pr_to_ticket(gauntlet_ticket, pr)
+
+    print(JIRA_INSTANCE + "/browse/" + str(gauntlet_ticket))
+
+    print(pr.html_url)
