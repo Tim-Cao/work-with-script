@@ -85,3 +85,7 @@
 	![write_description](https://github.com/Tim-Cao/work-with-script/assets/52661397/78f01d51-9de6-4ed9-b9e8-d7fac2513a5e)
 
 	See description [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2402025586/Ticket+description+and+comments+template+on+Jira+Software+Cloud#Description)
+
+1. Trigger gauntlet test suite on ci
+
+	![Trigger_Gauntlet](https://github.com/Tim-Cao/work-with-script/assets/52661397/1c6cae50-005e-4463-aecb-9fe295513284)
