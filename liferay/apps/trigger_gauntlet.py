@@ -21,9 +21,9 @@ def create_gaunlet_pr(local_repo, remote_branch, target_branch, ticket_number):
 
     push_branch_to_origin(local_repo, "temp_branch", remote_branch)
 
-    body = JIRA_INSTANCE + "/browse/" + ticket_number
-    head = get_credentials("GITHUB_USER_NAME") + ":" + remote_branch
-    title = ticket_number + " | " + target_branch
+    body = f"{JIRA_INSTANCE}/browse/{ticket_number}"
+    head = f'{get_credentials("GITHUB_USER_NAME")}:{remote_branch}'
+    title = f"{ticket_number} | {target_branch}"
 
     return remote_repo.create_pull(
         title=title, body=body, head=head, base=target_branch
@@ -106,6 +106,6 @@ def main(legacy_repo_path, target_branch):
 
     print("Successful")
 
-    print(JIRA_INSTANCE + "/browse/" + str(gauntlet_ticket))
+    print(f"{JIRA_INSTANCE}/browse/{gauntlet_ticket.key}")
 
     print(pr.html_url)

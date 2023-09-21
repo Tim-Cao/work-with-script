@@ -38,7 +38,7 @@ def create_pr_to_brianchan(failure_pr, github_connection):
     for ticket_number in ticket_numbers:
         jira_links += JIRA_INSTANCE + "/browse/" + str(ticket_number) + "\n"
 
-    head = get_credentials("GITHUB_USER_NAME") + ":" + str(failure_pr.head.ref)
+    head = f'{get_credentials("GITHUB_USER_NAME")}:{failure_pr.head.ref}'
 
     body = jira_links + "\n" + "@" + str(failure_pr.user.login)
 

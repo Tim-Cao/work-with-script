@@ -19,10 +19,4 @@ def main(commit_id, description, env, ticket_number, type):
 
     print("Successful")
 
-    print(
-        JIRA_INSTANCE
-        + "/browse/"
-        + ticket_number
-        + "?focusedCommentId="
-        + str(comment_id)
-    )
+    print(f"{JIRA_INSTANCE}/browse/{ticket_number}?focusedCommentId={comment_id}")

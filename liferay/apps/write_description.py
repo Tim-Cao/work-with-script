@@ -21,4 +21,4 @@ def main(ticket_number, type):
 
     print("Successful")
 
-    print(JIRA_INSTANCE + "/browse/" + ticket_number)
+    print(f"{JIRA_INSTANCE}/browse/{ticket_number}")
