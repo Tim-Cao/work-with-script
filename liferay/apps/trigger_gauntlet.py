@@ -12,6 +12,24 @@ from liferay.jira.jira_util import *
 from liferay.util.credentials import get_credentials
 
 
+def create_gaunlet_pr(local_repo, remote_branch, target_branch, ticket_number):
+    g = get_github_connection()
+
+    remote_repo = get_remote_repo(
+        g, f'{get_credentials("GITHUB_USER_NAME")}/liferay-portal-ee'
+    )
+
+    push_branch_to_origin(local_repo, "temp_branch", remote_branch)
+
+    body = JIRA_INSTANCE + "/browse/" + ticket_number
+    head = get_credentials("GITHUB_USER_NAME") + ":" + remote_branch
+    title = ticket_number + " | " + target_branch
+
+    return remote_repo.create_pull(
+        title=title, body=body, head=head, base=target_branch
+    )
+
+
 def create_gauntlet_ticket(target_branch):
     jira_connection = get_jira_connection()
 
@@ -43,24 +61,6 @@ def create_testing_branch(local_repo, target_branch):
     create_branch("temp_branch", local_repo)
 
     checkout("temp_branch", local_repo)
-
-
-def create_gaunlet_pr(local_repo, remote_branch, target_branch, ticket_number):
-    g = get_github_connection()
-
-    remote_repo = get_remote_repo(
-        g, f'{get_credentials("GITHUB_USER_NAME")}/liferay-portal-ee'
-    )
-
-    push_branch_to_origin(local_repo, "temp_branch", remote_branch)
-
-    body = JIRA_INSTANCE + "/browse/" + ticket_number
-    head = get_credentials("GITHUB_USER_NAME") + ":" + remote_branch
-    title = ticket_number + " | " + target_branch
-
-    return remote_repo.create_pull(
-        title=title, body=body, head=head, base=target_branch
-    )
 
 
 def make_changes_for_gauntlet_test(commit_message, file_name, repo):
