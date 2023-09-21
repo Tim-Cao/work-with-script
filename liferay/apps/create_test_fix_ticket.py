@@ -110,7 +110,7 @@ def get_case_result(auth, case_result_id):
     print("Getting the case result...")
 
     testray_url = (
-        TESTRAY_INSTANCE + "/home/-/testray/case_results/" + case_result_id + ".json"
+        f"{TESTRAY_INSTANCE}/home/-/testray/case_results/{case_result_id}.json"
     )
 
     response = requests.request("GET", testray_url, auth=auth)
@@ -169,4 +169,4 @@ def main(assigned, case_result_id, label, project_key):
 
     print("Successful")
 
-    print(JIRA_INSTANCE + "/browse/" + str(issue))
+    print(f"{JIRA_INSTANCE}/browse/{issue.key}")

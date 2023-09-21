@@ -15,9 +15,9 @@ def create_pr_to_team(github_connection, jira_ticket_number, local_branch):
 
     base = "master"
 
-    title = jira_ticket_number + " | " + base
+    title = f"{jira_ticket_number} | {base}"
 
-    head = get_credentials("GITHUB_USER_NAME") + ":" + local_branch
+    head = f'{get_credentials("GITHUB_USER_NAME")}:{local_branch}'
 
     body = (
         JIRA_INSTANCE
