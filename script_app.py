@@ -133,7 +133,7 @@ class ScriptApp(App):
                     yield Label("Enter the legacy repo path: ")
                     yield Input(
                         id="legacy-repo-path",
-                        value=credentials.get_credentials("LOCAL_REPO_PATH"),
+                        value=credentials.get_credentials("LEGACY_REPO_PATH"),
                     )
                     yield Label("Enter the target branch: ")
                     yield Input(id="target-branch", value="7.3.x")
@@ -215,7 +215,7 @@ class ScriptApp(App):
 
         self.query_one("#button-6").disabled = False
         self.query_one("#legacy-repo-path").value = credentials.get_credentials(
-            "LOCAL_REPO_PATH"
+            "LEGACY_REPO_PATH"
         )
         self.query_one("#target-branch").value = "7.3.x"
 
