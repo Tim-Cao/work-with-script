@@ -44,17 +44,25 @@
 
 	1. Save generated token in your local file as you will not be able to see this again.
 
+## Upgrade dependencies
+
+1. Run the following command at the root directory of local repository
+
+		python3 upgrade.py
+
 ## Launch the app
 
 1. Run the following command at the root directory of local repository
 
 		python3 script_app.py
 
-1. Generate a `credentials-ext.properties` file under the root directory by `ctrl + o` shortcuts
+1. Generate a `credentials-ext.properties` file under the root directory by `ctrl + o` shortcuts in app
 
 	1. This file will open with vscode automatically. Please fill out the value of properties.
 
 	1. If you don't install vscode. Please open it manually.
+
+	1. For more information about required properties of each feature, please see **Features** section
 
 ## Features
 
@@ -64,28 +72,40 @@
 
 	See pull request [styles](https://liferay.atlassian.net/wiki/spaces/QA/pages/2194800714/Script+to+manual+forward+PR+to+Brian#Styles)
 
+	Required properties: `GITHUB_REVIEWER_NAME`, `GITHUB_USER_NAME`, `GITHUB_TOKEN`, `LOCAL_REPO_PATH`, `TEAM_REPO_NAME`
+
 1. Forward a failure pull request to BrianChan
 
 	![forward_failure_pull_request](https://github.com/Tim-Cao/work-with-script/assets/52661397/cb298653-f9ba-485a-982f-9a14d1dac260)
 
 	See pull request [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2421522433/Script+to+create+a+PR+with+only+Poshi+changes+to+team+repo+then+forward#Styles)
 
+	Required properties: `GITHUB_USER_NAME`, `GITHUB_TOKEN`, `LOCAL_REPO_PATH`, `TEAM_REPO_NAME`
+
 1. Create a test fix ticket based on a given case result
 
 	![create_test_fix_ticket](https://github.com/Tim-Cao/work-with-script/assets/52661397/b69c0165-1a41-4625-a263-de77e5dba11e)
 
+	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`, `TESTRAY_USER_NAME`, `TESTRAY_PASSWORD`
+
 1. Write a comments template to a given jira ticket
 
-	![write_comments](https://github.com/Tim-Cao/work-with-script/assets/52661397/21540135-1a63-4ddd-b873-3a79152438e5)
+	![write_comments](https://github.com/Tim-Cao/work-with-script/assets/52661397/19596826-52ab-4b4f-8e53-7a3c0ecdb580)
 
 	See comments [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2402025586/Ticket+description+and+comments+template+on+Jira+Software+Cloud#Comments)
 
+	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`
+
 1. Write a description template to a given jira ticket
 
-	![write_description](https://github.com/Tim-Cao/work-with-script/assets/52661397/78f01d51-9de6-4ed9-b9e8-d7fac2513a5e)
+	![write_description](https://github.com/Tim-Cao/work-with-script/assets/52661397/1ed9938f-2f09-4052-a328-762d4c7915c4)
 
 	See description [styles](https://liferay.atlassian.net/wiki/spaces/~292455967/pages/2402025586/Ticket+description+and+comments+template+on+Jira+Software+Cloud#Description)
+
+	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`
 
 1. Trigger gauntlet test suite on ci
 
 	![Trigger_Gauntlet](https://github.com/Tim-Cao/work-with-script/assets/52661397/1c6cae50-005e-4463-aecb-9fe295513284)
+
+	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`, `LEGACY_REPO_PATH`, `GITHUB_USER_NAME`, `GITHUB_TOKEN`
