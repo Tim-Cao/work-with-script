@@ -52,6 +52,18 @@ Switch.-on > .switch--slider {
     color: white;
 }
 
+TextArea {
+    height: 20;
+}
+
+.unselected {
+    display: none;
+}
+
+.unselected.visible {
+    display: block;
+}
+
 #assign-to-me-label {
     height: 3;
     content-align: left middle;

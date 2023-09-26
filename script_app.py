@@ -11,14 +11,11 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.apps import (
-    create_pr_and_forward,
-    create_test_fix_ticket,
-    forward_failure_pull_request,
-    trigger_gauntlet,
-    write_comments,
-    write_description,
-)
+from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
+                          forward_failure_pull_request, trigger_gauntlet,
+                          write_comments, write_description)
+from liferay.jira.jira_constants import *
+from liferay.jira.jira_util import *
 from liferay.util import credentials
 
 
@@ -109,12 +106,12 @@ class ScriptApp(App):
                     yield Input(id="jira-ticket-number-4")
                     yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
-                    yield Label("Enter the environment: (e.g., Tomcat 9.0.80 + MySQL)")
-                    yield Input(id="env", value="Tomcat 9.0.80 + MySQL")
-                    yield Label("Enter the commit id: (Optional)")
-                    yield Input(id="commit-id")
-                    yield Label("Enter the description: (Optional)")
-                    yield Input(id="description")
+                    yield Label(
+                        "Enter the comments: ",
+                        classes="unselected",
+                        id="comments-label",
+                    )
+                    yield TextArea(classes="unselected", id="comments")
                     yield Static()
                     yield Button("Submit", variant="primary", id="button-4")
                 with VerticalScroll(id="nav-5"):
@@ -127,6 +124,12 @@ class ScriptApp(App):
                     yield Input(id="jira-ticket-number-5")
                     yield Label("Select the description type: ")
                     yield Select(DESCRIPTION_TYPE, id="description-type")
+                    yield Label(
+                        "Enter the description: ",
+                        classes="unselected",
+                        id="description-label",
+                    )
+                    yield TextArea(classes="unselected", id="description")
                     yield Static()
                     yield Button("Submit", variant="primary", id="button-5")
                 with VerticalScroll(id="nav-6"):
@@ -221,41 +224,39 @@ class ScriptApp(App):
 
     @work(exclusive=True, thread=True)
     def write_comments(self) -> None:
-        commit_id = self.query_one("#commit-id").value
-        description = self.query_one("#description").value
-        env = self.query_one("#env").value
         ticket_number = self.query_one("#jira-ticket-number-4").value
-        type = self.query_one("#comments-type").value
+        comments = self.query_one("#comments").text
 
         self.query_one("#button-4").disabled = True
 
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        write_comments.main(commit_id, description, env, ticket_number, type)
+        write_comments.main(comments, ticket_number)
 
         self.query_one("#button-4").disabled = False
-        self.query_one("#commit-id").value = ""
-        self.query_one("#description").value = ""
-        self.query_one("#env").value = "Tomcat 9.0.80 + MySQL"
         self.query_one("#jira-ticket-number-4").value = ""
-        self.query_one("#comments-type").value = ""
+        self.query_one("#comments-type").value = None
+        self.query_one("#comments").remove_class("visible")
+        self.query_one("#comments").remove_class("visible")
 
     @work(exclusive=True, thread=True)
     def write_description(self) -> None:
         ticket_number = self.query_one("#jira-ticket-number-5").value
-        type = self.query_one("#description-type").value
+        description = self.query_one("#description").text
 
         self.query_one("#button-5").disabled = True
 
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        write_description.main(ticket_number, type)
+        write_description.main(description, ticket_number)
 
         self.query_one("#button-5").disabled = False
         self.query_one("#jira-ticket-number-5").value = ""
-        self.query_one("#description-type").value = ""
+        self.query_one("#description-type").value = None
+        self.query_one("#description").remove_class("visible")
+        self.query_one("#description-label").remove_class("visible")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "button-1":
@@ -273,6 +274,33 @@ class ScriptApp(App):
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        if event.select.id == "description-type":
+            try:
+                description = generate_description(
+                    self.query_one("#description-type").value
+                )
+
+                self.query_one("#description").load_text(description)
+            except:
+                pass
+
+            self.query_one("#description").set_class(event.value != None, "visible")
+            self.query_one("#description-label").set_class(
+                event.value != None, "visible"
+            )
+
+        elif event.select.id == "comments-type":
+            try:
+                comment = generate_comment(self.query_one("#comments-type").value)
+
+                self.query_one("#comments").load_text(comment)
+            except:
+                pass
+
+            self.query_one("#comments").set_class(event.value != None, "visible")
+            self.query_one("#comments-label").set_class(event.value != None, "visible")
 
 
 class Output(RichLog):

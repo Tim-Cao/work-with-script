@@ -8,16 +8,14 @@ from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 
 
-def main(ticket_number, type):
+def main(description, ticket_number):
     jira_connection = get_jira_connection()
 
     issue = jira_connection.issue(ticket_number)
 
-    description_template = generate_description(type)
-
     print("Writing description...")
 
-    issue.update(description=description_template)
+    issue.update(description=description)
 
     print("Successful")
 
