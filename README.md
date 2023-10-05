@@ -2,7 +2,7 @@
 
 ## Requirements
 
-1. Python 3.10 or above
+1. Python 3.8 or above
 
 1. python3-pip
 
