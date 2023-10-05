@@ -19,71 +19,70 @@ def add_test_fix_ticket(
 ):
     print("Creating the Jira ticket...")
 
-    match project_key:
-        case "LPS":
-            issue_dict = {
-                "project": {"key": "LPS"},
-                "summary": "Investigate failure in " + case_name,
-                "description": "*Error Message*\n\n{code:java}"
-                + case_error
-                + "{code}\n\n*Affect Tests*\n["
-                + case_name
-                + "|"
-                + TESTRAY_INSTANCE
-                + "/home/-/testray/case_results/"
-                + case_result_id
-                + "]",
-                "components": [{"name": component}],
-                "issuetype": {"name": "Testing"},
-                "customfield_10383": {"value": "Analysis"},
-            }
-        case "LRQA":
-            issue_dict = {
-                "project": {"key": "LRQA"},
-                "summary": "Investigate failure in " + case_name,
-                "description": "*Error Message*\n\n{code:java}"
-                + case_error
-                + "{code}\n\n*Affect Tests*\n["
-                + case_name
-                + "|"
-                + TESTRAY_INSTANCE
-                + "/home/-/testray/case_results/"
-                + case_result_id
-                + "]",
-                "components": [{"name": component}],
-                "issuetype": {"name": "Test Analysis"},
-            }
-        case "LRAC":
-            issue_dict = {
-                "project": {"key": "LRAC"},
-                "summary": "Investigate failure in " + case_name,
-                "description": "*Error Message*\n\n{code:java}"
-                + case_error
-                + "{code}\n\n*Affect Tests*\n["
-                + case_name
-                + "|"
-                + TESTRAY_INSTANCE
-                + "/home/-/testray/case_results/"
-                + case_result_id
-                + "]",
-                "components": [{"name": component}],
-                "issuetype": {"name": "Testing"},
-            }
-        case "COMMERCE":
-            issue_dict = {
-                "project": {"key": "COMMERCE"},
-                "summary": "Investigate failure in " + case_name,
-                "description": "*Error Message*\n\n{code:java}"
-                + case_error
-                + "{code}\n\n*Affect Tests*\n["
-                + case_name
-                + "|"
-                + TESTRAY_INSTANCE
-                + "/home/-/testray/case_results/"
-                + case_result_id
-                + "]",
-                "issuetype": {"name": "Testing"},
-            }
+    if project_key == "LPS":
+        issue_dict = {
+            "project": {"key": "LPS"},
+            "summary": "Investigate failure in " + case_name,
+            "description": "*Error Message*\n\n{code:java}"
+            + case_error
+            + "{code}\n\n*Affect Tests*\n["
+            + case_name
+            + "|"
+            + TESTRAY_INSTANCE
+            + "/home/-/testray/case_results/"
+            + case_result_id
+            + "]",
+            "components": [{"name": component}],
+            "issuetype": {"name": "Testing"},
+            "customfield_10383": {"value": "Analysis"},
+        }
+    elif project_key == "LRQA":
+        issue_dict = {
+            "project": {"key": "LRQA"},
+            "summary": "Investigate failure in " + case_name,
+            "description": "*Error Message*\n\n{code:java}"
+            + case_error
+            + "{code}\n\n*Affect Tests*\n["
+            + case_name
+            + "|"
+            + TESTRAY_INSTANCE
+            + "/home/-/testray/case_results/"
+            + case_result_id
+            + "]",
+            "components": [{"name": component}],
+            "issuetype": {"name": "Test Analysis"},
+        }
+    elif project_key == "LRAC":
+        issue_dict = {
+            "project": {"key": "LRAC"},
+            "summary": "Investigate failure in " + case_name,
+            "description": "*Error Message*\n\n{code:java}"
+            + case_error
+            + "{code}\n\n*Affect Tests*\n["
+            + case_name
+            + "|"
+            + TESTRAY_INSTANCE
+            + "/home/-/testray/case_results/"
+            + case_result_id
+            + "]",
+            "components": [{"name": component}],
+            "issuetype": {"name": "Testing"},
+        }
+    elif project_key == "COMMERCE":
+        issue_dict = {
+            "project": {"key": "COMMERCE"},
+            "summary": "Investigate failure in " + case_name,
+            "description": "*Error Message*\n\n{code:java}"
+            + case_error
+            + "{code}\n\n*Affect Tests*\n["
+            + case_name
+            + "|"
+            + TESTRAY_INSTANCE
+            + "/home/-/testray/case_results/"
+            + case_result_id
+            + "]",
+            "issuetype": {"name": "Testing"},
+        }
 
     return jira_connection.create_issue(fields=issue_dict)
 
@@ -133,15 +132,14 @@ def get_relevant_jira_component(case_result, jira_connection, project_key):
     components = [n for n in jira_component_names if testray_component_name in n]
 
     if len(components) == 0:
-        match project_key:
-            case "LPS":
-                components = ["Testing > Portal"]
+        if project_key == "LPS":
+            components = ["Testing > Portal"]
 
-            case "LRQA":
-                components = ["Portal"]
+        elif project_key == "LRQA":
+            components = ["Portal"]
 
-            case "LRAC":
-                components = ["Test Infrastructure"]
+        elif project_key == "LRAC":
+            components = ["Test Infrastructure"]
 
     return components[0]
 
