@@ -14,58 +14,57 @@ def assign_to_me(assigned, jira_connection, issue):
 
 
 def generate_comment(type):
-    match type:
-        case "PID":
+        if (type == "PID"):
             return (
                 "{color:#36b37e}*PASSED*{color} Manual Testing following the steps in the description.\n\n"
                 + "Fixed on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
             )
-        case "FID":
+        elif (type == "FID"):
             return (
                 "{color:#ff5630}*FAILED*{color} Manual Testing following the steps in the description.\n\n"
                 + "Failed on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
             )
-        case "NID":
+        elif (type == "NID"):
             return (
                 "{color:#36b37e}*No Longer Reproducible*{color} through Manual Testing following the steps in the description.\n\n"
                 + "No Longer Reproducible on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
             )
-        case "PF":
+        elif (type == "PF"):
             return (
                 "{color:#36b37e}*PASSED*{color} Manual Testing using the following steps:\n"
                 + "# \n# \n# \n\n"
                 + "Fixed on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
             )
-        case "FF":
+        elif (type == "FF"):
             return (
                 "{color:#ff5630}*FAILED*{color} Manual Testing using the following steps:\n"
                 + "# \n# \n# \n\n"
                 + "Failed on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
             )
-        case "NF":
+        elif (type == "NF"):
             return (
                 "{color:#36b37e}*No Longer Reproducible*{color} through Manual Testing using the following steps:\n"
                 + "# \n# \n# \n\n"
                 + "No Longer Reproducible on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
             )
-        case "R":
+        elif (type == "R"):
             return (
                 "(!) Reproduced on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: ."
             )
-        case "RU":
+        elif (type == "RU"):
             return (
                 "(!) Reproduced on:\n"
                 + "Upgrade From: 7.4.13-DXP-U60.\n"
                 + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: ."
             )
-        case "TV":
+        elif (type == "TV"):
             return (
                 "*Case 1:* Passed.\n"
                 + "*Case 2:* Passed.\n"
@@ -76,8 +75,7 @@ def generate_comment(type):
 
 
 def generate_description(type):
-    match type:
-        case "STR":
+    if (type == "STR"):
             return (
                 "(on) *Steps to reproduce:*\n"
                 + "# \n# \n# \n# \n# \n\n"
@@ -88,7 +86,7 @@ def generate_description(type):
                 + "(/) Cannot be Reproduced on:\n"
                 + "Tomcat 9.0.80 + MySQL. Portal 7.4.13-DXP-U94."
             )
-        case "TC":
+    elif (type == "TC"):
             return (
                 "h3.*Test Cases*\n"
                 + "*Case 1:*\n"

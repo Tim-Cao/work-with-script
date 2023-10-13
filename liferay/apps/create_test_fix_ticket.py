@@ -19,8 +19,7 @@ def add_test_fix_ticket(
 ):
     print("Creating the Jira ticket...")
 
-    match project_key:
-        case "LPS":
+    if (project_key == "LPS"):
             issue_dict = {
                 "project": {"key": "LPS"},
                 "summary": "Investigate failure in " + case_name,
@@ -37,7 +36,7 @@ def add_test_fix_ticket(
                 "issuetype": {"name": "Testing"},
                 "customfield_10383": {"value": "Analysis"},
             }
-        case "LRQA":
+    elif (project_key == "LRQA"):
             issue_dict = {
                 "project": {"key": "LRQA"},
                 "summary": "Investigate failure in " + case_name,
@@ -53,7 +52,7 @@ def add_test_fix_ticket(
                 "components": [{"name": component}],
                 "issuetype": {"name": "Test Analysis"},
             }
-        case "LRAC":
+    if (project_key == "LRAC"):
             issue_dict = {
                 "project": {"key": "LRAC"},
                 "summary": "Investigate failure in " + case_name,
@@ -69,7 +68,7 @@ def add_test_fix_ticket(
                 "components": [{"name": component}],
                 "issuetype": {"name": "Testing"},
             }
-        case "COMMERCE":
+    elif (project_key == "COMMERCE"):
             issue_dict = {
                 "project": {"key": "COMMERCE"},
                 "summary": "Investigate failure in " + case_name,
@@ -133,14 +132,11 @@ def get_relevant_jira_component(case_result, jira_connection, project_key):
     components = [n for n in jira_component_names if testray_component_name in n]
 
     if len(components) == 0:
-        match project_key:
-            case "LPS":
+        if( project_key == "LPS"):
                 components = ["Testing > Portal"]
-
-            case "LRQA":
+        elif( project_key == "LPS"):
                 components = ["Portal"]
-
-            case "LRAC":
+        elif( project_key == "LPS"):
                 components = ["Test Infrastructure"]
 
     return components[0]
