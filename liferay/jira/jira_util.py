@@ -111,3 +111,13 @@ def generate_description(type):
 
 def get_project_components(jira_connection, project_key):
     return jira_connection.project_components(project_key)
+
+bug_description_template = '''(on) *Steps to reproduce:*
+# \n# \n# \n# \n# \n
+(/) *Expected Results:*\n\n
+(x) *Actual Results:*\n\n
+(!) Reproduced on:
+Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n
+(/) Cannot be Reproduced on:
+Tomcat 9.0.80 + MySQL. Portal 7.4.13-DXP-U94.
+'''
