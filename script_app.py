@@ -11,10 +11,10 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.apps import (create_pr_and_forward, create_test_fix_ticket,
-                          create_automation_ticket, forward_failure_pull_request, 
-                          trigger_gauntlet, write_comments,
-                          write_description)
+from liferay.apps import (create_automation_ticket, create_bug_ticket,
+                          create_pr_and_forward, create_test_fix_ticket,
+                          forward_failure_pull_request, trigger_gauntlet,
+                          write_comments, write_description)
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
@@ -45,6 +45,7 @@ class ScriptApp(App):
                 ListItem(Static("Write Description", classes="nav-item"), id="nav-5"),
                 ListItem(Static("Trigger Gauntlet", classes="nav-item"), id="nav-6"),
                 ListItem(Static("Create Automation Ticket", classes="nav-item"), id="nav-7"),
+                ListItem(Static("Create Bug Ticket", classes="nav-item"), id="nav-8"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
@@ -172,6 +173,38 @@ class ScriptApp(App):
                     yield Input(id="add-automation-label")
                     yield Static()
                     yield Button("Submit", variant="primary", id="button-7")
+                with VerticalScroll(id="nav-8"):
+                    COMPONENT = [
+                        ("Calendar", "Calendar"),
+                        ("Data Engine", "Data Engine"),
+                        ("Forms", "Forms"),
+                        ("Notifications Framework", "Notifications Framework"),
+                        ("Objects", "Objects"),
+                        ("Workflow", "Workflow"),
+                        ("Workflow > Metrics", "Workflow > Metrics")
+                    ]
+
+                    BUG_TYPE = [
+                        ("Default", "Default"),
+                        ("Regression Bug", "Regression Bug")
+                    ]
+
+                    yield Label("Enter the bug ticket summary: ")
+                    yield Input(id="bug-ticket-summary")
+                    yield Label("Select the component key: ")
+                    yield Select(COMPONENT, id="component-key", value="Objects")
+                    yield Label("Select the bug type key: ")
+                    yield Select(BUG_TYPE, id="bug-type-key", value="Default")
+                    yield Label(
+                        "Enter the Bug Description: ",
+                        id="bug-description-label",
+                    )
+                    yield TextArea(id="bug-description", text=bug_description_template)
+                    yield Static()
+                    yield Label("Add label (Optional)")
+                    yield Input(id="add-bug-label")
+                    yield Static()
+                    yield Button("Submit", variant="primary", id="button-8")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
@@ -240,6 +273,23 @@ class ScriptApp(App):
         self.query_one("#case-result-id").value = ""
         self.query_one("#add-label").value = ""
         self.query_one("#project-key").value = "LPS"
+
+    @work(exclusive=True, thread=True)
+    def create_bug_ticket(self) -> None:
+        bug_type = self.query_one("#bug-type-key").value
+        component = self.query_one("#component-key").value
+        description = self.query_one("#bug-description").text
+        label = self.query_one("#add-bug-label").value
+        project_key = "LPS"
+        summary = self.query_one("#bug-ticket-summary").value
+
+        create_bug_ticket.main(bug_type,component,description,label,project_key,summary)
+
+        self.query_one("#add-bug-label").value = ""
+        self.query_one("#bug-ticket-summary").value = ""
+        self.query_one("#bug-type-key").value = ""
+        self.query_one("#button-8").disabled = False
+        self.query_one("#component-key").value = ""
 
     @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
@@ -326,6 +376,8 @@ class ScriptApp(App):
             self.trigger_gauntlet()
         elif event.button.id == "button-7":
             self.create_automation_ticket()
+        elif event.button.id == "button-8":
+            self.create_bug_ticket()
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
