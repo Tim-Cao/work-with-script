@@ -72,7 +72,27 @@ def generate_comment(type):
 
 
 def generate_description(type):
-    if type == "STR":
+    if type == "Default":
+        return (
+            "(on) *Steps to reproduce:*\n"
+            + "# \n# \n# \n# \n# \n\n"
+            + "(/) *Expected Results:*\n\n\n"
+            + "(x) *Actual Results:*\n\n\n"
+            + "(!) Reproduced on:\n"
+            + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
+        )
+    elif type == "Regression Bug":
+        return (
+            "(on) *Steps to reproduce:*\n"
+            + "# \n# \n# \n# \n# \n\n"
+            + "(/) *Expected Results:*\n\n\n"
+            + "(x) *Actual Results:*\n\n\n"
+            + "(!) Reproduced on:\n"
+            + "Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n\n"
+            + "(/) Cannot be Reproduced on:\n"
+            + "Tomcat 9.0.80 + MySQL. Portal 7.4.13-DXP-U94."
+        )
+    elif type == "STR":
         return (
             "(on) *Steps to reproduce:*\n"
             + "# \n# \n# \n# \n# \n\n"
@@ -106,13 +126,3 @@ def generate_description(type):
 
 def get_project_components(jira_connection, project_key):
     return jira_connection.project_components(project_key)
-
-bug_description_template = '''(on) *Steps to reproduce:*
-# \n# \n# \n# \n# \n
-(/) *Expected Results:*\n\n
-(x) *Actual Results:*\n\n
-(!) Reproduced on:
-Tomcat 9.0.80 + MySQL. Portal master GIT ID: .\n
-(/) Cannot be Reproduced on:
-Tomcat 9.0.80 + MySQL. Portal 7.4.13-DXP-U94.
-'''
