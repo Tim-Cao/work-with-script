@@ -11,10 +11,9 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.apps import (create_automation_ticket, create_bug_ticket,
-                          create_pr_and_forward, create_test_fix_ticket,
-                          forward_failure_pull_request, trigger_gauntlet,
-                          write_comments, write_description)
+from liferay.apps import (create_issue, create_pr_and_forward,
+                          create_test_fix_ticket, forward_failure_pull_request,
+                          trigger_gauntlet, write_comments, write_description)
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
@@ -44,8 +43,7 @@ class ScriptApp(App):
                 ListItem(Static("Write Comments", classes="nav-item"), id="nav-4"),
                 ListItem(Static("Write Description", classes="nav-item"), id="nav-5"),
                 ListItem(Static("Trigger Gauntlet", classes="nav-item"), id="nav-6"),
-                ListItem(Static("Create Automation Ticket", classes="nav-item"), id="nav-7"),
-                ListItem(Static("Create Bug Ticket", classes="nav-item"), id="nav-8"),
+                ListItem(Static("Create Issue", classes="nav-item"), id="nav-7"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
@@ -71,11 +69,15 @@ class ScriptApp(App):
                     yield Label("Enter the case result id: ")
                     yield Input(id="case-result-id")
                     yield Label("Select the project key: ")
-                    yield Select(PROJECT_KEY, id="project-key", value="LPS")
+                    yield Select(PROJECT_KEY, id="project-key-1", value="LPS")
                     yield Static()
                     with Horizontal(id="switch-container"):
                         yield Switch(id="assign-to-me", value=False)
-                        yield Static("Assign to me (Optional)", id="assign-to-me-label")
+                        yield Static(
+                            "Assign to me (Optional)",
+                            id="assign-to-me-label",
+                            classes="assign-to-me",
+                        )
                     yield Label("Add label (Optional)")
                     yield Input(id="add-label")
                     yield Static()
@@ -146,65 +148,68 @@ class ScriptApp(App):
                     yield Static()
                     yield Button("Submit", variant="primary", id="button-6")
                 with VerticalScroll(id="nav-7"):
-                    PRIORITY = [
-                        ("5", "5"),
-                        ("4", "4"),
-                        ("3", "3"),
+                    PROJECT_KEY = [
+                        ("LPS", "LPS"),
+                        ("LRQA", "LRQA"),
+                        ("LRAC", "LRAC"),
+                        ("COMMERCE", "COMMERCE"),
                     ]
 
-                    yield Label("Enter the story ticket id: ")
-                    yield Input(id="story-ticket-id")
-                    yield Label("Enter the test description: ")
-                    yield Input(id="test-description")
-                    yield Label("Enter the test file and name: ")
-                    yield Input(id="test-file-and-name")
-                    yield Label("Select the priority key: ")
-                    yield Select(PRIORITY, id="priority-key", value="5")
-                    yield Label(
-                        "Enter the Test Scenario: ",
-                        id="test-scenario-label",
-                    )
-                    yield TextArea(id="test-scenario")
-                    yield Static()
-                    with Horizontal(id="switch-container"):
-                        yield Switch(id="assign-automation-to-me", value=False)
-                        yield Static("Assign to me (Optional)", id="assign-automation-to-me-label")
-                    yield Label("Add label (Optional)")
-                    yield Input(id="add-automation-label")
-                    yield Static()
-                    yield Button("Submit", variant="primary", id="button-7")
-                with VerticalScroll(id="nav-8"):
-                    COMPONENT = [
-                        ("Calendar", "Calendar"),
-                        ("Data Engine", "Data Engine"),
-                        ("Forms", "Forms"),
-                        ("Notifications Framework", "Notifications Framework"),
-                        ("Objects", "Objects"),
-                        ("Workflow", "Workflow"),
-                        ("Workflow > Metrics", "Workflow > Metrics")
+                    PRODUCT_TEAM = [
+                        ("Business Process Management Team", "bpm"),
+                    ]
+
+                    ISSUE_TYPE = [
+                        ("Bug", "Bug"),
+                        ("Task", "Task"),
+                        ("Testing", "Testing"),
                     ]
 
                     BUG_TYPE = [
                         ("Default", "Default"),
-                        ("Regression Bug", "Regression Bug")
+                        ("Regression Bug", "Regression Bug"),
                     ]
 
-                    yield Label("Enter the bug ticket summary: ")
-                    yield Input(id="bug-ticket-summary")
-                    yield Label("Select the component key: ")
-                    yield Select(COMPONENT, id="component-key", value="Objects")
-                    yield Label("Select the bug type key: ")
-                    yield Select(BUG_TYPE, id="bug-type-key", value="Default")
+                    yield Label("Project Key:", id="project-key-label-2")
+                    yield Select(PROJECT_KEY, id="project-key-2")
+                    yield Label("Issue Type:", id="issue-type-label")
+                    yield Select(ISSUE_TYPE, id="issue-type")
+                    yield Label("Bug Type:", id="bug-type-label", classes="unselected")
+                    yield Select(BUG_TYPE, id="bug-type", classes="unselected")
                     yield Label(
-                        "Enter the Bug Description: ",
-                        id="bug-description-label",
+                        "Product Team:", id="product-team-label", classes="unselected"
                     )
-                    yield TextArea(id="bug-description", text=bug_description_template)
+                    yield Select(PRODUCT_TEAM, id="product-team", classes="unselected")
+                    yield Label("Summary:", id="summary-label", classes="unselected")
+                    yield Input(id="summary", classes="unselected")
+                    yield Label(
+                        "Components:", id="components-label", classes="unselected"
+                    )
+                    yield Select([], id="components", classes="unselected")
+                    yield Label(
+                        "Affects versions:",
+                        id="affects-versions-label",
+                        classes="unselected",
+                    )
+                    yield Input(id="affects-versions", classes="unselected")
+                    yield Label(
+                        "Description:",
+                        id="issue-description-label",
+                        classes="unselected",
+                    )
+                    yield TextArea(id="issue-description", classes="unselected")
                     yield Static()
+                    with Horizontal(id="switch-container"):
+                        yield Switch(id="assign-to-me-2", value=False)
+                        yield Static(
+                            "Assign to me (Optional)",
+                            id="assign-to-me-label-2",
+                            classes="assign-to-me",
+                        )
                     yield Label("Add label (Optional)")
-                    yield Input(id="add-bug-label")
+                    yield Input(id="issue-label")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-8")
+                    yield Button("Submit", variant="primary", id="button-7")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
@@ -214,29 +219,6 @@ class ScriptApp(App):
         self.query_one(RichLog).begin_capture_print()
 
         credentials.open_credentials()
-
-    @work(exclusive=True, thread=True)
-    def create_automation_ticket(self) -> None:
-        component = "Objects"
-        project_key = "LPS"
-
-        assigned = self.query_one("#assign-automation-to-me").value
-        field_and_name = self.query_one("#test-file-and-name").value
-        label = self.query_one("#add-automation-label").value
-        priority = self.query_one("#priority-key").value
-        story_ticket = self.query_one("#story-ticket-id").value
-        test_description = self.query_one("#test-description").value
-        test_scenario = self.query_one("#test-scenario").text
-
-        create_automation_ticket.main(assigned, label, story_ticket, test_description, field_and_name, priority, test_scenario, component, project_key)
-
-        self.query_one("#button-7").disabled = False
-        self.query_one("#assign-to-me").value = False
-        self.query_one("#test-file-and-name").value = ""
-        self.query_one("#add-automation-label").value = ""
-        self.query_one("#priority-key").value = "5"
-        self.query_one("#test-description").value = ""
-        self.query_one("#test-scenario").load_text("")
 
     @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
@@ -259,7 +241,7 @@ class ScriptApp(App):
         assigned = self.query_one("#assign-to-me").value
         case_result_id = self.query_one("#case-result-id").value
         label = self.query_one("#add-label").value
-        project_key = self.query_one("#project-key").value
+        project_key = self.query_one("#project-key-1").value
 
         self.query_one("#button-3").disabled = True
 
@@ -272,24 +254,56 @@ class ScriptApp(App):
         self.query_one("#assign-to-me").value = False
         self.query_one("#case-result-id").value = ""
         self.query_one("#add-label").value = ""
-        self.query_one("#project-key").value = "LPS"
+        self.query_one("#project-key-1").value = "LPS"
 
     @work(exclusive=True, thread=True)
-    def create_bug_ticket(self) -> None:
-        bug_type = self.query_one("#bug-type-key").value
-        component = self.query_one("#component-key").value
-        description = self.query_one("#bug-description").text
-        label = self.query_one("#add-bug-label").value
-        project_key = "LPS"
-        summary = self.query_one("#bug-ticket-summary").value
+    def create_issue(self) -> None:
+        affects_versions = self.query_one("#affects-versions").value
+        assigned = self.query_one("#assign-to-me-2").value
+        bug_type = self.query_one("#bug-type").value
+        component = self.query_one("#components").value
+        description = self.query_one("#issue-description").text
+        issue_type = self.query_one("#issue-type").value
+        label = self.query_one("#issue-label").value
+        project_key = self.query_one("#project-key-2").value
+        summary = self.query_one("#summary").value
+        self.query_one("#button-7").disabled = True
 
-        create_bug_ticket.main(bug_type,component,description,label,project_key,summary)
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
 
-        self.query_one("#add-bug-label").value = ""
-        self.query_one("#bug-ticket-summary").value = ""
-        self.query_one("#bug-type-key").value = ""
-        self.query_one("#button-8").disabled = False
-        self.query_one("#component-key").value = ""
+        create_issue.main(
+            affects_versions,
+            assigned,
+            bug_type,
+            component,
+            description,
+            issue_type,
+            label,
+            project_key,
+            summary,
+        )
+
+        self.query_one("#assign-to-me-2").value = False
+        self.query_one("#bug-type").value = None
+        self.query_one("#issue-type").value = None
+        self.query_one("#issue-label").value = ""
+        self.query_one("#project-key-2").value = None
+        self.query_one("#button-7").disabled = False
+        self.query_one("#product-team").remove_class("visible")
+        self.query_one("#product-team-label").remove_class("visible")
+        self.query_one("#summary").remove_class("visible")
+        self.query_one("#summary-label").remove_class("visible")
+        self.query_one("#product-team").remove_class("visible")
+        self.query_one("#product-team-label").remove_class("visible")
+        self.query_one("#issue-type").remove_class("visible")
+        self.query_one("#issue-type-label").remove_class("visible")
+        self.query_one("#issue-description").remove_class("visible")
+        self.query_one("#issue-description-label").remove_class("visible")
+        self.query_one("#components").remove_class("visible")
+        self.query_one("#components-label").remove_class("visible")
+        self.query_one("#affects-versions").remove_class("visible")
+        self.query_one("#affects-versions-label").remove_class("visible")
 
     @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
@@ -375,9 +389,7 @@ class ScriptApp(App):
         elif event.button.id == "button-6":
             self.trigger_gauntlet()
         elif event.button.id == "button-7":
-            self.create_automation_ticket()
-        elif event.button.id == "button-8":
-            self.create_bug_ticket()
+            self.create_issue()
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
@@ -408,6 +420,77 @@ class ScriptApp(App):
 
             self.query_one("#comments").set_class(event.value != None, "visible")
             self.query_one("#comments-label").set_class(event.value != None, "visible")
+
+        elif event.select.id == "issue-type":
+            try:
+                comment = generate_comment(self.query_one("#issue-type").value)
+
+                self.query_one("#comments").load_text(comment)
+            except:
+                pass
+
+            self.query_one("#summary-label").set_class(event.value != None, "visible")
+            self.query_one("#summary").set_class(event.value != None, "visible")
+            self.query_one("#issue-description-label").set_class(
+                event.value != None, "visible"
+            )
+            self.query_one("#issue-description").set_class(
+                event.value != None, "visible"
+            )
+
+            self.query_one("#bug-type").set_class(event.value == "Bug", "visible")
+            self.query_one("#bug-type-label").set_class(event.value == "Bug", "visible")
+            self.query_one("#product-team").set_class(
+                event.value == "Testing", "visible"
+            )
+            self.query_one("#product-team-label").set_class(
+                event.value == "Testing", "visible"
+            )
+            self.query_one("#affects-versions").set_class(
+                event.value == "Bug", "visible"
+            )
+            self.query_one("#affects-versions-label").set_class(
+                event.value == "Bug", "visible"
+            )
+
+        elif event.select.id == "bug-type":
+            try:
+                description = generate_description(self.query_one("#bug-type").value)
+
+                self.query_one("#issue-description").load_text(description)
+            except:
+                pass
+
+            self.query_one("#summary").set_class(event.value != None, "visible")
+            self.query_one("#summary-label").set_class(event.value != None, "visible")
+            self.query_one("#issue-description-label").set_class(
+                event.value != None, "visible"
+            )
+            self.query_one("#issue-description").set_class(
+                event.value != None, "visible"
+            )
+        elif event.select.id == "product-team":
+            if self.query_one("#product-team").value == None:
+                self.query_one("#summary").value = ""
+                self.query_one("#issue-description").clear()
+            else:
+                self.query_one("#summary").value = get_properties(
+                    self.query_one("#product-team").value, "SUMMARY"
+                )
+                self.query_one("#issue-description").load_text(
+                    get_properties(self.query_one("#product-team").value, "DESCRIPTION")
+                )
+        elif event.select.id == "project-key-2":
+            components = get_components(
+                f'{self.query_one("#project-key-2").value}_COMPONENTS'
+            )
+
+            self.query_one("#components").set_options((eval(components)))
+
+            self.query_one("#components").set_class(event.value != None, "visible")
+            self.query_one("#components-label").set_class(
+                event.value != None, "visible"
+            )
 
 
 class Output(RichLog):
