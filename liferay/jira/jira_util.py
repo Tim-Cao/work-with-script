@@ -1,3 +1,26 @@
+import os
+
+from jproperties import Properties
+
+
+def get_properties(product_team, key):
+    configs = Properties()
+
+    try:
+        with open(
+            os.path.join(os.path.dirname(__file__), "dependencies/")
+            + "poshi_automation_"
+            + product_team
+            + ".properties",
+            "rb",
+        ) as config_file:
+            configs.load(config_file)
+
+        return configs.get(key).data
+    except:
+        pass
+
+
 def add_label(issue, label):
     if label and not (label.isspace()):
         print("Adding label...")
