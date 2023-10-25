@@ -238,7 +238,7 @@ class ScriptApp(App):
         self.query_one("#jira-ticket-number-4").value = ""
         self.query_one("#comments-type").value = None
         self.query_one("#comments").remove_class("visible")
-        self.query_one("#comments").remove_class("visible")
+        self.query_one("#comments-label").remove_class("visible")
 
     @work(exclusive=True, thread=True)
     def write_description(self) -> None:
