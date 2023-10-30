@@ -506,25 +506,26 @@ class ScriptApp(App):
                 )
 
                 self.query_one("#components").set_options((eval(components)))
-            else:
-                self.query_one("#issue-type").value = None
 
-            self.query_one("#components").set_class(event.value != None, "visible")
-            self.query_one("#components-label").set_class(
-                event.value != None, "visible"
-            )
-            self.query_one("#product-team").set_class(event.value != None, "visible")
-            self.query_one("#product-team-label").set_class(
-                event.value != None, "visible"
-            )
-            self.query_one("#summary").set_class(event.value != None, "visible")
-            self.query_one("#summary-label").set_class(event.value != None, "visible")
-            self.query_one("#issue-description").set_class(
-                event.value != None, "visible"
-            )
-            self.query_one("#issue-description-label").set_class(
-                event.value != None, "visible"
-            )
+                self.query_one("#components").set_class(event.value != None, "visible")
+                self.query_one("#components-label").set_class(
+                    event.value != None, "visible"
+                )
+            else:
+                self.query_one("#product-team").value = None
+                self.query_one("#summary").value = ""
+                self.query_one("#components").value = None
+                self.query_one("#issue-type").value = None
+                self.query_one("#issue-description").clear()
+
+                self.query_one("#components").remove_class("visible")
+                self.query_one("#components-label").remove_class("visible")
+                self.query_one("#product-team").remove_class("visible")
+                self.query_one("#product-team-label").remove_class("visible")
+                self.query_one("#summary").remove_class("visible")
+                self.query_one("#summary-label").remove_class("visible")
+                self.query_one("#issue-description").remove_class("visible")
+                self.query_one("#issue-description-label").remove_class("visible")
 
 
 class Output(RichLog):
