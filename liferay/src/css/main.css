@@ -64,7 +64,7 @@ TextArea {
     display: block;
 }
 
-#assign-to-me-label {
+.assign-to-me {
     height: 3;
     content-align: left middle;
     margin-left: 1;
