@@ -1,6 +1,7 @@
 import os
 import sys
 
+from jira.exceptions import JIRAError
 from textual import on, work
 from textual.app import App, ComposeResult, events
 from textual.binding import Binding
@@ -287,38 +288,41 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        create_issue.main(
-            affects_versions,
-            assigned,
-            bug_type,
-            component,
-            description,
-            issue_type,
-            label,
-            project_key,
-            summary,
-        )
+        try:
+            create_issue.main(
+                affects_versions,
+                assigned,
+                bug_type,
+                component,
+                description,
+                issue_type,
+                label,
+                project_key,
+                summary,
+            )
 
-        self.query_one("#assign-to-me-2").value = False
-        self.query_one("#bug-type").value = None
-        self.query_one("#issue-type").value = None
-        self.query_one("#issue-label").value = ""
-        self.query_one("#project-key-2").value = None
-        self.query_one("#button-7").disabled = False
-        self.query_one("#product-team").remove_class("visible")
-        self.query_one("#product-team-label").remove_class("visible")
-        self.query_one("#summary").remove_class("visible")
-        self.query_one("#summary-label").remove_class("visible")
-        self.query_one("#product-team").remove_class("visible")
-        self.query_one("#product-team-label").remove_class("visible")
-        self.query_one("#issue-type").remove_class("visible")
-        self.query_one("#issue-type-label").remove_class("visible")
-        self.query_one("#issue-description").remove_class("visible")
-        self.query_one("#issue-description-label").remove_class("visible")
-        self.query_one("#components").remove_class("visible")
-        self.query_one("#components-label").remove_class("visible")
-        self.query_one("#affects-versions").remove_class("visible")
-        self.query_one("#affects-versions-label").remove_class("visible")
+            self.query_one("#assign-to-me-2").value = False
+            self.query_one("#bug-type").value = None
+            self.query_one("#issue-type").value = None
+            self.query_one("#issue-label").value = ""
+            self.query_one("#project-key-2").value = None
+            self.query_one("#button-7").disabled = False
+            self.query_one("#product-team").remove_class("visible")
+            self.query_one("#product-team-label").remove_class("visible")
+            self.query_one("#summary").remove_class("visible")
+            self.query_one("#summary-label").remove_class("visible")
+            self.query_one("#product-team").remove_class("visible")
+            self.query_one("#product-team-label").remove_class("visible")
+            self.query_one("#issue-type").remove_class("visible")
+            self.query_one("#issue-type-label").remove_class("visible")
+            self.query_one("#issue-description").remove_class("visible")
+            self.query_one("#issue-description-label").remove_class("visible")
+            self.query_one("#components").remove_class("visible")
+            self.query_one("#components-label").remove_class("visible")
+            self.query_one("#affects-versions").remove_class("visible")
+            self.query_one("#affects-versions-label").remove_class("visible")
+        except JIRAError:
+            print("Please sync components")
 
     @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
@@ -496,14 +500,29 @@ class ScriptApp(App):
                     get_properties(self.query_one("#product-team").value, "DESCRIPTION")
                 )
         elif event.select.id == "project-key-2":
-            components = get_components(
-                f'{self.query_one("#project-key-2").value}_COMPONENTS'
-            )
+            if self.query_one("#project-key-2").value != None:
+                components = get_components(
+                    f'{self.query_one("#project-key-2").value}_COMPONENTS'
+                )
 
-            self.query_one("#components").set_options((eval(components)))
+                self.query_one("#components").set_options((eval(components)))
+            else:
+                self.query_one("#issue-type").value = None
 
             self.query_one("#components").set_class(event.value != None, "visible")
             self.query_one("#components-label").set_class(
+                event.value != None, "visible"
+            )
+            self.query_one("#product-team").set_class(event.value != None, "visible")
+            self.query_one("#product-team-label").set_class(
+                event.value != None, "visible"
+            )
+            self.query_one("#summary").set_class(event.value != None, "visible")
+            self.query_one("#summary-label").set_class(event.value != None, "visible")
+            self.query_one("#issue-description").set_class(
+                event.value != None, "visible"
+            )
+            self.query_one("#issue-description-label").set_class(
                 event.value != None, "visible"
             )
 
