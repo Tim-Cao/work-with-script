@@ -2,9 +2,8 @@ import os
 import sys
 
 from jproperties import Properties
-from jsonpath_ng.ext import parse
 
-root = sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "../../"))
 
 from liferay.jira.jira_connection import get_jira_connection
 from liferay.jira.jira_constants import *
@@ -44,11 +43,16 @@ def sync_project_components(jira_connection, project_key):
     ) as project_components:
         jira_components.store(project_components, encoding="utf-8")
 
-    print(f"Updated the project {project_key} components successfully...")
 
-
-if __name__ == "__main__":
+def main():
     jira_connection = get_jira_connection()
+
+    open(
+        os.path.join(
+            os.path.dirname(__file__), "dependencies/jira_components.properties"
+        ),
+        "w",
+    )
 
     sync_project_components(jira_connection, "COMMERCE")
 
@@ -57,3 +61,5 @@ if __name__ == "__main__":
     sync_project_components(jira_connection, "LRQA")
 
     sync_project_components(jira_connection, "LRAC")
+
+    print("Successfully...")

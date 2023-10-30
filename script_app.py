@@ -11,9 +11,16 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.apps import (create_issue, create_pr_and_forward,
-                          create_test_fix_ticket, forward_failure_pull_request,
-                          trigger_gauntlet, write_comments, write_description)
+from liferay.apps import (
+    create_issue,
+    create_pr_and_forward,
+    create_test_fix_ticket,
+    forward_failure_pull_request,
+    trigger_gauntlet,
+    write_comments,
+    write_description,
+)
+from liferay.jira import jira_components_sync
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
@@ -21,10 +28,11 @@ from liferay.util import credentials
 
 class ScriptApp(App):
     BINDINGS = [
-        Binding("ctrl+c", "quit", "Quit"),
         Binding("shift+insert", "paste", "Paste"),
-        Binding("ctrl+u", "delete_left_all", "Delete all to the left"),
-        Binding("ctrl+o", "open_credentials", "Open credentials-ext"),
+        Binding("ctrl+u", "delete_left_all", "Delete left"),
+        Binding("ctrl+o", "open_credentials", "Credentials"),
+        Binding("ctrl+s", "sync_components", "Sync components"),
+        Binding("ctrl+c", "quit", "Quit"),
     ]
 
     CSS_PATH = root + "/liferay/src/css/main.css"
@@ -219,6 +227,13 @@ class ScriptApp(App):
         self.query_one(RichLog).begin_capture_print()
 
         credentials.open_credentials()
+
+    @work(exclusive=True, thread=True)
+    def action_sync_components(self) -> None:
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        jira_components_sync.main()
 
     @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
