@@ -1,16 +1,34 @@
+import os
 import subprocess
 import sys
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "jproperties"])
+root = os.path.dirname(__file__)
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
+sys.path.append(root)
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "jira"])
+from liferay.jira import jira_components_sync
+from liferay.util import credentials
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "jsonpath-ng"])
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "PyGithub"])
+def install_modules():
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "jproperties"])
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "GitPython"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
 
-subprocess.check_call([sys.executable, "-m", "pip", "install", "textual"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "jira"])
+
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "jsonpath-ng"])
+
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "PyGithub"])
+
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "GitPython"])
+
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "textual"])
+
+
+if __name__ == "__main__":
+    install_modules()
+
+    credentials.generate_credentials()
+
+    jira_components_sync.main()
