@@ -14,7 +14,7 @@
 
 ## Configuration
 
-1. Run the following command at the root directory of local repository
+1. Run the following command at the root directory of local repository, it will generate a `credentials-ext.properties`
 
 		python3 initialization.py
 
@@ -44,6 +44,10 @@
 
 	1. Save generated token in your local file as you will not be able to see this again.
 
+1. Please fill out the value of properties in the `credentials-ext.properties`
+
+	1. For required properties of each feature, please see [Features](#Features) section
+
 ## Upgrade dependencies
 
 1. Run the following command at the root directory of local repository
@@ -56,13 +60,19 @@
 
 		python3 script_app.py
 
-1. Generate a `credentials-ext.properties` file under the root directory by `ctrl + o` shortcuts in app
+## Open the credentials-ext.properties
 
-	1. This file will open with vscode automatically. Please fill out the value of properties.
+1. Execute `ctrl + o` shortcuts in app
+
+	1. This file will open with vscode automatically.
 
 	1. If you don't install vscode. Please open it manually.
 
-	1. For more information about required properties of each feature, please see **Features** section
+## See more shortcuts
+
+1. Execute `ctrl + b` shortcuts in app
+
+	1. All shortcuts details will appear on a sidebar.
 
 ## Features
 
