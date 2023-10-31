@@ -1,6 +1,8 @@
+import json
 import os
 import sys
 
+from git.exc import GitCommandError
 from jira.exceptions import JIRAError
 from textual import on, work
 from textual.app import App, ComposeResult, events
@@ -304,11 +306,16 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        create_pr_and_forward.main(local_branch_name, jira_ticket_number)
+        try:
+            create_pr_and_forward.main(local_branch_name, jira_ticket_number)
 
-        self.query_one("#button-2").disabled = False
-        self.query_one("#local-branch").value = ""
-        self.query_one("#jira-ticket-number-2").value = ""
+            self.query_one("#button-2").disabled = False
+            self.query_one("#local-branch").value = ""
+            self.query_one("#jira-ticket-number-2").value = ""
+        except (JIRAError, GitCommandError):
+            print("Please check your credentials in credentials-ext.properties")
+        finally:
+            self.query_one("#button-2").disabled = False
 
     @work(exclusive=True, thread=True)
     def create_test_fix_ticket(self) -> None:
@@ -322,13 +329,18 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
+        try:
+            create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
 
-        self.query_one("#button-3").disabled = False
-        self.query_one("#assign-to-me").value = False
-        self.query_one("#case-result-id").value = ""
-        self.query_one("#add-label").value = ""
-        self.query_one("#project-key-1").value = "LPS"
+            self.query_one("#button-3").disabled = False
+            self.query_one("#assign-to-me").value = False
+            self.query_one("#case-result-id").value = ""
+            self.query_one("#add-label").value = ""
+            self.query_one("#project-key-1").value = "LPS"
+        except (JIRAError, json.decoder.JSONDecodeError):
+            print("Please check your credentials in credentials-ext.properties")
+        finally:
+            self.query_one("#button-3").disabled = False
 
     @work(exclusive=True, thread=True)
     def create_issue(self) -> None:
@@ -381,7 +393,9 @@ class ScriptApp(App):
             self.query_one("#affects-versions").remove_class("visible")
             self.query_one("#affects-versions-label").remove_class("visible")
         except JIRAError:
-            print("Please sync components")
+            print("Please sync Jira project components")
+        finally:
+            self.query_one("#button-7").disabled = False
 
     @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
@@ -394,10 +408,15 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        forward_failure_pull_request.main(failure_pull_request_number)
+        try:
+            forward_failure_pull_request.main(failure_pull_request_number)
 
-        self.query_one("#button-1").disabled = False
-        self.query_one("#failure-pull-request-number").value = ""
+            self.query_one("#failure-pull-request-number").value = ""
+
+        except GitCommandError:
+            print("Please check your credentials in credentials-ext.properties")
+        finally:
+            self.query_one("#button-1").disabled = False
 
     @work(exclusive=True, thread=True)
     def trigger_gauntlet(self) -> None:
@@ -409,13 +428,18 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        trigger_gauntlet.main(legacy_local_path, target_branch)
+        try:
+            trigger_gauntlet.main(legacy_local_path, target_branch)
 
-        self.query_one("#button-6").disabled = False
-        self.query_one("#legacy-repo-path").value = credentials.get_credentials(
-            "LEGACY_REPO_PATH"
-        )
-        self.query_one("#target-branch").value = "7.3.x"
+            self.query_one("#button-6").disabled = False
+            self.query_one("#legacy-repo-path").value = credentials.get_credentials(
+                "LEGACY_REPO_PATH"
+            )
+            self.query_one("#target-branch").value = "7.3.x"
+        except (JIRAError, GitCommandError):
+            print("Please check your credentials in credentials-ext.properties")
+        finally:
+            self.query_one("#button-6").disabled = False
 
     @work(exclusive=True, thread=True)
     def write_comments(self) -> None:
@@ -427,13 +451,18 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        write_comments.main(comments, ticket_number)
+        try:
+            write_comments.main(comments, ticket_number)
 
-        self.query_one("#button-4").disabled = False
-        self.query_one("#jira-ticket-number-4").value = ""
-        self.query_one("#comments-type").value = None
-        self.query_one("#comments").remove_class("visible")
-        self.query_one("#comments-label").remove_class("visible")
+            self.query_one("#button-4").disabled = False
+            self.query_one("#jira-ticket-number-4").value = ""
+            self.query_one("#comments-type").value = None
+            self.query_one("#comments").remove_class("visible")
+            self.query_one("#comments-label").remove_class("visible")
+        except JIRAError:
+            print("Please check your credentials in credentials-ext.properties")
+        finally:
+            self.query_one("#button-4").disabled = False
 
     @work(exclusive=True, thread=True)
     def write_description(self) -> None:
@@ -445,13 +474,18 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        write_description.main(description, ticket_number)
+        try:
+            write_description.main(description, ticket_number)
 
-        self.query_one("#button-5").disabled = False
-        self.query_one("#jira-ticket-number-5").value = ""
-        self.query_one("#description-type").value = None
-        self.query_one("#description").remove_class("visible")
-        self.query_one("#description-label").remove_class("visible")
+            self.query_one("#button-5").disabled = False
+            self.query_one("#jira-ticket-number-5").value = ""
+            self.query_one("#description-type").value = None
+            self.query_one("#description").remove_class("visible")
+            self.query_one("#description-label").remove_class("visible")
+        except JIRAError:
+            print("Please check your credentials in credentials-ext.properties")
+        finally:
+            self.query_one("#button-5").disabled = False
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "button-1":
