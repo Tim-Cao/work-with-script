@@ -1,4 +1,4 @@
-Button {
+Submit {
     margin-left: 1;
 }
 
@@ -38,6 +38,47 @@ RichLog {
     overflow-y: auto;
 }
 
+Sidebar {
+    width: 40;
+    background: $panel;
+    transition: offset 500ms in_out_cubic;
+    layer: overlay;
+    dock: left;
+}
+
+Sidebar:focus-within {
+    offset: 0 0 !important;
+}
+
+Sidebar.-hidden {
+    offset-x: -100%;
+}
+
+Sidebar Container {
+    background: $boost;
+    color: $text;
+    height: 1fr;
+    border-right: vkey $background;
+}
+
+Sidebar Markdown {
+    margin: 0 1;
+
+}
+
+Sidebar Sidebar_Title {
+    background: $boost;
+    color: $secondary;
+    padding: 2 4;
+    border-right: vkey $background;
+    text-align: center;
+    text-style: bold;
+}
+
+Sidebar.action {
+    layer: above;
+}
+
 Switch {
     border: blank;
 }
@@ -74,7 +115,7 @@ TextArea {
     height: 2fr;
 }
 
-.nav-item {
+Nav_Item {
     width: 30;
     text-align: center;
     padding-right: 2;
