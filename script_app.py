@@ -6,6 +6,7 @@ from textual import on, work
 from textual.app import App, ComposeResult, events
 from textual.binding import Binding
 from textual.containers import *
+from textual.reactive import reactive
 from textual.widgets import *
 
 root = os.path.dirname(__file__)
@@ -26,47 +27,91 @@ from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
 
+DETAILS = """
+- **CTRL + O**
+
+Open the `credentials-ext.properties`
+
+- **CTRL + S**
+
+Sync the Jira project components
+
+- **CTRL + U**
+
+Delete text to the left of the cursor
+
+- **SHIFT + INSERT**
+
+Paste text from the clipboard
+"""
+
+
+class Sidebar(Container):
+    def compose(self) -> ComposeResult:
+        yield Sidebar_Title("Shortcuts Details")
+        yield Container(Markdown(DETAILS))
+
+
+class Sidebar_Title(Static):
+    pass
+
+
+class Nav_Item(Static):
+    pass
+
+
+class Submit(Button):
+    def __init__(self, id: str | None = None, disabled: bool = False) -> None:
+        super().__init__(
+            label="Submit",
+            variant="primary",
+            id=id,
+            disabled=disabled,
+        )
+
 
 class ScriptApp(App):
     BINDINGS = [
-        Binding("shift+insert", "paste", "Paste"),
-        Binding("ctrl+u", "delete_left_all", "Delete left"),
-        Binding("ctrl+o", "open_credentials", "Credentials"),
-        Binding("ctrl+s", "sync_components", "Sync components"),
         Binding("ctrl+c", "quit", "Quit"),
+        Binding("ctrl+b", "toggle_sidebar", "More Shortcuts"),
+        Binding("shift+insert", "paste", show=False),
+        Binding("ctrl+u", "delete_left_all", show=False),
+        Binding("ctrl+o", "open_credentials", show=False),
+        Binding("ctrl+s", "sync_components", show=False),
     ]
 
     CSS_PATH = root + "/liferay/src/css/main.css"
 
     TITLE = "Working with Script"
 
+    show_sidebar = reactive(False)
+
     def compose(self) -> ComposeResult:
+        yield Sidebar(classes="-hidden")
         yield Header()
         with Horizontal(id="main-content"):
             yield ListView(
-                ListItem(Static("Forward Failure PR", classes="nav-item"), id="nav-1"),
-                ListItem(
-                    Static("Create PR and Forward", classes="nav-item"), id="nav-2"
-                ),
-                ListItem(Static("Create TF Ticket", classes="nav-item"), id="nav-3"),
-                ListItem(Static("Write Comments", classes="nav-item"), id="nav-4"),
-                ListItem(Static("Write Description", classes="nav-item"), id="nav-5"),
-                ListItem(Static("Trigger Gauntlet", classes="nav-item"), id="nav-6"),
-                ListItem(Static("Create Issue", classes="nav-item"), id="nav-7"),
+                ListItem(Nav_Item("Forward Failure PR"), id="nav-1"),
+                ListItem(Nav_Item("Create PR and Forward"), id="nav-2"),
+                ListItem(Nav_Item("Create TF Ticket"), id="nav-3"),
+                ListItem(Nav_Item("Write Comments"), id="nav-4"),
+                ListItem(Nav_Item("Write Description"), id="nav-5"),
+                ListItem(Nav_Item("Trigger Gauntlet"), id="nav-6"),
+                ListItem(Nav_Item("Create Issue"), id="nav-7"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
                     yield Label("Enter the failure pull request number: ")
                     yield Input(id="failure-pull-request-number")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-1")
+                    yield Submit(id="button-1")
                 with VerticalScroll(id="nav-2"):
                     yield Label("Enter the local branch name: ")
                     yield Input(id="local-branch")
                     yield Label("Enter the Jira ticket number: ")
                     yield Input(id="jira-ticket-number-2")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-2")
+                    yield Submit(id="button-2")
                 with VerticalScroll(id="nav-3"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
@@ -90,7 +135,7 @@ class ScriptApp(App):
                     yield Label("Add label (Optional)")
                     yield Input(id="add-label")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-3")
+                    yield Submit(id="button-3")
                 with VerticalScroll(id="nav-4"):
                     COMMENTS_TYPE = [
                         (
@@ -127,7 +172,7 @@ class ScriptApp(App):
                     )
                     yield TextArea(classes="unselected", id="comments")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-4")
+                    yield Submit(id="button-4")
                 with VerticalScroll(id="nav-5"):
                     DESCRIPTION_TYPE = [
                         ("Steps to reproduce", "STR"),
@@ -145,7 +190,7 @@ class ScriptApp(App):
                     )
                     yield TextArea(classes="unselected", id="description")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-5")
+                    yield Submit(id="button-5")
                 with VerticalScroll(id="nav-6"):
                     yield Label("Enter the legacy repo path: ")
                     yield Input(
@@ -155,7 +200,7 @@ class ScriptApp(App):
                     yield Label("Enter the target branch: ")
                     yield Input(id="target-branch", value="7.3.x")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-6")
+                    yield Submit(id="button-6")
                 with VerticalScroll(id="nav-7"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
@@ -218,7 +263,7 @@ class ScriptApp(App):
                     yield Label("Add label (Optional)")
                     yield Input(id="issue-label")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-7")
+                    yield Submit(id="button-7")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
@@ -235,6 +280,17 @@ class ScriptApp(App):
         self.query_one(RichLog).begin_capture_print()
 
         jira_components_sync.main()
+
+    @work(exclusive=True, thread=True)
+    def action_toggle_sidebar(self) -> None:
+        sidebar = self.query_one(Sidebar)
+        self.set_focus(None)
+        if sidebar.has_class("-hidden"):
+            sidebar.remove_class("-hidden")
+        else:
+            if sidebar.query("*:focus"):
+                self.screen.set_focus(None)
+            sidebar.add_class("-hidden")
 
     @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
