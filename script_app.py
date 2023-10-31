@@ -245,7 +245,9 @@ class ScriptApp(App):
                         id="affects-versions-label",
                         classes="unselected",
                     )
-                    yield Input(id="affects-versions", classes="unselected")
+                    yield Input(
+                        id="affects-versions", classes="unselected", value="Master"
+                    )
                     yield Label(
                         "Description:",
                         id="issue-description-label",
@@ -357,6 +359,7 @@ class ScriptApp(App):
                 summary,
             )
 
+            self.query_one("#affects-versions").value = "Master"
             self.query_one("#assign-to-me-2").value = False
             self.query_one("#bug-type").value = None
             self.query_one("#issue-type").value = None
