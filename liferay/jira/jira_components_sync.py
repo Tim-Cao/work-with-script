@@ -47,6 +47,9 @@ def sync_project_components(jira_connection, project_key):
 def main():
     jira_connection = get_jira_connection()
 
+    if not os.path.exists(os.path.join(os.path.dirname(__file__), "dependencies/")):
+        os.mkdir(os.path.join(os.path.dirname(__file__), "dependencies/"))
+
     open(
         os.path.join(
             os.path.dirname(__file__), "dependencies/jira_components.properties"
