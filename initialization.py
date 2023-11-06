@@ -6,7 +6,6 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.jira import jira_components_sync
 from liferay.util import credentials
 
 
@@ -30,5 +29,3 @@ if __name__ == "__main__":
     install_modules()
 
     credentials.generate_credentials()
-
-    jira_components_sync.main()
