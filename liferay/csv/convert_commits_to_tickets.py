@@ -39,8 +39,6 @@ def main(base, head, repo_name):
                 continue
             elif "POSHI" in commit.commit.message.strip().replace("\n", " "):
                 continue
-            elif "ISSD" in commit.commit.message.strip().replace("\n", " "):
-                continue
             elif "artifact:ignore" in commit.commit.message.strip().replace("\n", " "):
                 continue
 
@@ -60,8 +58,6 @@ def main(base, head, repo_name):
             elif "LRCI" in commit.commit.message.strip().replace("\n", " "):
                 break
             elif "POSHI" in commit.commit.message.strip().replace("\n", " "):
-                break
-            elif "ISSD" in commit.commit.message.strip().replace("\n", " "):
                 break
             elif "artifact:ignore" in commit.commit.message.strip().replace("\n", " "):
                 break
