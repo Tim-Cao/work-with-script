@@ -28,29 +28,51 @@ def main(base, head, repo_name):
     commits = repo.get_commits(head)
 
     for commit in commits:
-        if "LRQA" in commit.commit.message.strip().replace("\n", " "):
-            continue
-        elif "LRAC" in commit.commit.message.strip().replace("\n", " "):
-            continue
-        elif "LRP" in commit.commit.message.strip().replace("\n", " "):
-            continue
-        elif "LRCI" in commit.commit.message.strip().replace("\n", " "):
-            continue
-        elif "POSHI" in commit.commit.message.strip().replace("\n", " "):
-            continue
-        elif "ISSD" in commit.commit.message.strip().replace("\n", " "):
-            continue
-        elif "artifact:ignore" in commit.commit.message.strip().replace("\n", " "):
-            continue
+        if commit.sha != base:
+            if "LRQA" in commit.commit.message.strip().replace("\n", " "):
+                continue
+            elif "LRAC" in commit.commit.message.strip().replace("\n", " "):
+                continue
+            elif "LRP" in commit.commit.message.strip().replace("\n", " "):
+                continue
+            elif "LRCI" in commit.commit.message.strip().replace("\n", " "):
+                continue
+            elif "POSHI" in commit.commit.message.strip().replace("\n", " "):
+                continue
+            elif "ISSD" in commit.commit.message.strip().replace("\n", " "):
+                continue
+            elif "artifact:ignore" in commit.commit.message.strip().replace("\n", " "):
+                continue
 
-        list = commit.commit.message.strip().replace("\n", " ").split(" ", 1)
+            list = commit.commit.message.strip().replace("\n", " ").split(" ", 1)
 
-        if len(list) == 1:
-            list.append("NaN")
+            if len(list) == 1:
+                list.append("NaN")
 
-        df.loc[len(df)] = list
+            df.loc[len(df)] = list
+        else:
+            if "LRQA" in commit.commit.message.strip().replace("\n", " "):
+                break
+            elif "LRAC" in commit.commit.message.strip().replace("\n", " "):
+                break
+            elif "LRP" in commit.commit.message.strip().replace("\n", " "):
+                break
+            elif "LRCI" in commit.commit.message.strip().replace("\n", " "):
+                break
+            elif "POSHI" in commit.commit.message.strip().replace("\n", " "):
+                break
+            elif "ISSD" in commit.commit.message.strip().replace("\n", " "):
+                break
+            elif "artifact:ignore" in commit.commit.message.strip().replace("\n", " "):
+                break
 
-        if commit.sha == base:
+            list = commit.commit.message.strip().replace("\n", " ").split(" ", 1)
+
+            if len(list) == 1:
+                list.append("NaN")
+
+            df.loc[len(df)] = list
+
             break
 
     df2 = df.loc[~df.Ticket_Number.str.match("^[A-Z]+-[0-9]+.+")]
