@@ -33,7 +33,7 @@ class ScriptApp(App):
         yield Header()
         yield Label("Enter the repo name: ")
         yield Input(id="repo-name", value="liferay/liferay-portal")
-        yield Label("Enter the last success sha: ")
+        yield Label("Enter the last pass sha: ")
         yield Input(id="base")
         yield Label("Enter the first failure sha: ")
         yield Input(id="head")
