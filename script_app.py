@@ -374,8 +374,11 @@ class ScriptApp(App):
             self.query_one("#affects-versions").value = "Master"
             self.query_one("#assign-to-me-2").value = False
             self.query_one("#bug-type").value = None
+            self.query_one("#components").value = None
             self.query_one("#issue-type").value = None
             self.query_one("#issue-label").value = ""
+            self.query_one("#summary").value = ""
+            self.query_one("#issue-description").clear()
             self.query_one("#project-key-2").value = None
             self.query_one("#button-7").disabled = False
             self.query_one("#product-team").remove_class("visible")
