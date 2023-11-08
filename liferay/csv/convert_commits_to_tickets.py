@@ -71,7 +71,13 @@ def main(base, head, repo_name):
 
             break
 
-    df2 = df.loc[~df.Ticket_Number.str.match("^[A-Z]+-[0-9]+.+")]
+    df2 = df.loc[
+        ~(
+            df.Ticket_Number.str.match("^[A-Z]+-[0-9]+.+")
+            | df.Ticket_Number.str.contains("build.gradle")
+            | df.Description.str.contains("Release Apps")
+        )
+    ]
 
     df2 = df2.rename(
         columns={"Ticket_Number": "Ticket Number", "Description": "Summary"}
