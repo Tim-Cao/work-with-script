@@ -23,13 +23,19 @@ def create_branch(local_branch, local_repo):
 
 
 def delete_temp_branch(local_repo):
-    local_repo.delete_head("temp_branch", force=True)
+    try:
+        local_repo.delete_head("temp_branch", force=True)
+    except Exception:
+        pass
 
 
 def fetch_remote_branch_as_temp_branch(local_repo, pull_request):
-    local_repo.create_remote(
-        pull_request.head.user.login, url=pull_request.head.repo.ssh_url
-    )
+    try:
+        local_repo.create_remote(
+            pull_request.head.user.login, url=pull_request.head.repo.ssh_url
+        )
+    except Exception:
+        pass
 
     print("Fetching the branch...")
 
