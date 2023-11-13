@@ -49,26 +49,6 @@ def main(base, head, repo_name):
 
             df.loc[len(df)] = list
         else:
-            if "LRQA" in commit.commit.message.strip().replace("\n", " "):
-                break
-            elif "LRAC" in commit.commit.message.strip().replace("\n", " "):
-                break
-            elif "LRP" in commit.commit.message.strip().replace("\n", " "):
-                break
-            elif "LRCI" in commit.commit.message.strip().replace("\n", " "):
-                break
-            elif "POSHI" in commit.commit.message.strip().replace("\n", " "):
-                break
-            elif "artifact:ignore" in commit.commit.message.strip().replace("\n", " "):
-                break
-
-            list = commit.commit.message.strip().replace("\n", " ").split(" ", 1)
-
-            if len(list) == 1:
-                list.append("NaN")
-
-            df.loc[len(df)] = list
-
             break
 
     df2 = df.loc[
