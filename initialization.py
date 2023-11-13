@@ -6,8 +6,6 @@ root = os.path.dirname(__file__)
 
 sys.path.append(root)
 
-from liferay.util import credentials
-
 
 def install_modules():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "jproperties"])
@@ -25,7 +23,24 @@ def install_modules():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "textual"])
 
 
+def generate_credentials():
+    if os.path.exists(os.path.join(root, "credentials-ext.properties")) == False:
+        print("Creating credentials-ext.properties...")
+
+        with open(
+            os.path.join(root, "credentials.properties"), "r"
+        ) as credentials, open(
+            os.path.join(root, "credentials-ext.properties"), "w"
+        ) as credentials_ext:
+            credentials_content = credentials.readlines()
+
+            for line in range(7, len(credentials_content)):
+                credentials_ext.write(credentials_content[line])
+
+        print("credentials-ext.properties is created")
+
+
 if __name__ == "__main__":
     install_modules()
 
-    credentials.generate_credentials()
+    generate_credentials()
