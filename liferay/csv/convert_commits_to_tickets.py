@@ -105,8 +105,3 @@ def main(base, head, repo_name):
     print("Successful...")
 
     print(f"https://github.com/{repo_name}/compare/{base}...{head}")
-
-    try:
-        subprocess.check_call(["code", "-rg", os.path.join(root, "root_cause.csv")])
-    except Exception as e:
-        print(str(e))
