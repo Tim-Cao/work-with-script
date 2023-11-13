@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import webbrowser
 
 from git.exc import GitCommandError
 from jira.exceptions import JIRAError
@@ -45,6 +46,10 @@ Delete text to the left of the cursor
 - **SHIFT + INSERT**
 
 Paste text from the clipboard
+
+&nbsp;
+
+[Go to Documentation](https://github.com/Tim-Cao/work-with-script#work-with-script)
 """
 
 
@@ -508,6 +513,9 @@ class ScriptApp(App):
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
+
+    def on_markdown_link_clicked(self, event: Markdown.LinkClicked) -> None:
+        webbrowser.open(event.href)
 
     def on_select_changed(self, event: Select.Changed) -> None:
         if event.select.id == "description-type":
