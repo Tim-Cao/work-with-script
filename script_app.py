@@ -12,6 +12,8 @@ from textual.containers import *
 from textual.reactive import reactive
 from textual.widgets import *
 
+from liferay.csv import convert_commits_to_tickets
+
 root = os.path.dirname(__file__)
 
 sys.path.append(root)
@@ -105,6 +107,7 @@ class ScriptApp(App):
                 ListItem(Nav_Item("Write Description"), id="nav-5"),
                 ListItem(Nav_Item("Trigger Gauntlet"), id="nav-6"),
                 ListItem(Nav_Item("Create Issue"), id="nav-7"),
+                ListItem(Nav_Item("RCA"), id="nav-8"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
@@ -273,6 +276,15 @@ class ScriptApp(App):
                     yield Input(id="issue-label")
                     yield Static()
                     yield Submit(id="button-7")
+                with VerticalScroll(id="nav-8"):
+                    yield Label("Enter the repo name: ")
+                    yield Input(id="repo-name", value="liferay/liferay-portal")
+                    yield Label("Enter the last pass sha: ")
+                    yield Input(id="base")
+                    yield Label("Enter the first failure sha: ")
+                    yield Input(id="head")
+                    yield Static()
+                    yield Button("Submit", variant="primary", id="button-8")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
@@ -406,6 +418,24 @@ class ScriptApp(App):
             self.query_one("#button-7").disabled = False
 
     @work(exclusive=True, thread=True)
+    def conversion(self) -> None:
+        baseSHA = self.query_one("#base").value
+        headSHA = self.query_one("#head").value
+        repo_name = self.query_one("#repo-name").value
+
+        self.query_one("#button-8").disabled = True
+
+        self.query_one(RichLog).clear()
+        self.query_one(RichLog).begin_capture_print()
+
+        convert_commits_to_tickets.main(baseSHA, headSHA, repo_name)
+
+        self.query_one("#button-8").disabled = False
+        self.query_one("#base").value = ""
+        self.query_one("#head").value = ""
+        self.query_one("#repo-name").value = "liferay/liferay-portal"
+
+    @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
         failure_pull_request_number = self.query_one(
             "#failure-pull-request-number"
@@ -510,6 +540,8 @@ class ScriptApp(App):
             self.trigger_gauntlet()
         elif event.button.id == "button-7":
             self.create_issue()
+        elif event.button.id == "button-8":
+            self.conversion()
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         self.query_one(ContentSwitcher).current = event.item.id
