@@ -68,6 +68,10 @@
 
 	1. If you don't install vscode. Please open it manually.
 
+## Sync the Jira project components
+
+1. Execute `ctrl + s` shortcuts in app
+
 ## See more shortcuts
 
 1. Execute `ctrl + b` shortcuts in app
@@ -119,3 +123,11 @@
 	![Trigger_Gauntlet](https://github.com/Tim-Cao/work-with-script/assets/52661397/1c6cae50-005e-4463-aecb-9fe295513284)
 
 	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`, `LEGACY_REPO_PATH`, `GITHUB_USER_NAME`, `GITHUB_TOKEN`
+
+1. Create a Jira issue
+
+	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`
+
+1. Run RCA
+
+	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`, `GITHUB_USER_NAME`, `GITHUB_TOKEN`
