@@ -1,5 +1,4 @@
 import os
-import subprocess
 import sys
 
 import pandas as pd
@@ -100,8 +99,10 @@ def main(base, head, repo_name):
 
     df3 = pd.concat([df1, df2])
 
+    print("Generating the root_cause.csv...")
+
     df3.to_csv(os.path.join(root, "root_cause.csv"), index=False)
 
-    print("Successful...")
+    print("Successful")
 
     print(f"https://github.com/{repo_name}/compare/{base}...{head}")
