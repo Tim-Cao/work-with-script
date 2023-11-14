@@ -65,4 +65,4 @@ def main():
 
     sync_project_components(jira_connection, "LRAC")
 
-    print("Successfully...")
+    print("Successful")
