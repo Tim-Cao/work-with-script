@@ -126,8 +126,12 @@
 
 1. Create a Jira issue
 
+	![create_issue](https://github.com/Tim-Cao/work-with-script/assets/52661397/fd6b019d-779d-4e90-9f7a-d2ef8ec274ca)
+
 	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`
 
 1. Run RCA
+
+	![rca](https://github.com/Tim-Cao/work-with-script/assets/52661397/1caed777-1fe8-45cd-b7f6-e992f96d55a1)
 
 	Required properties: `JIRA_USER_NAME`, `JIRA_TOKEN`, `GITHUB_USER_NAME`, `GITHUB_TOKEN`
