@@ -99,7 +99,7 @@ def main(base, head, repo_name):
 
     df3 = pd.concat([df1, df2])
 
-    print("Generating the root_cause.csv...")
+    print("Generating the root_cause.csv under root directory of work-with-script...")
 
     df3.to_csv(os.path.join(root, "root_cause.csv"), index=False)
 
