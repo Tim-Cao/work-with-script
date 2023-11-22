@@ -93,7 +93,7 @@ def generate_comment(type):
             + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "R":
-        return "(!) Reproduced on:\n" + "Tomcat 9.0.82 + MySQL. Portal master GIT ID: ."
+        return "(!) Reproduced on:\n" + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: ."
     elif type == "RU":
         return (
             "(!) Reproduced on:\n"
