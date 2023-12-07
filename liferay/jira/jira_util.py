@@ -57,48 +57,48 @@ def generate_comment(type):
         return (
             "{color:#36b37e}*PASSED*{color} Manual Testing following the steps in the description.\n\n"
             + "Fixed on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "FID":
         return (
             "{color:#ff5630}*FAILED*{color} Manual Testing following the steps in the description.\n\n"
             + "Failed on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "NID":
         return (
             "{color:#36b37e}*No Longer Reproducible*{color} through Manual Testing following the steps in the description.\n\n"
             + "No Longer Reproducible on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "PF":
         return (
             "{color:#36b37e}*PASSED*{color} Manual Testing using the following steps:\n"
             + "# \n# \n# \n\n"
             + "Fixed on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "FF":
         return (
             "{color:#ff5630}*FAILED*{color} Manual Testing using the following steps:\n"
             + "# \n# \n# \n\n"
             + "Failed on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "NF":
         return (
             "{color:#36b37e}*No Longer Reproducible*{color} through Manual Testing using the following steps:\n"
             + "# \n# \n# \n\n"
             + "No Longer Reproducible on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "R":
-        return "(!) Reproduced on:\n" + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: ."
+        return "(!) Reproduced on:\n" + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: ."
     elif type == "RU":
         return (
             "(!) Reproduced on:\n"
             + "Upgrade From: 7.4.13-DXP-U60.\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: ."
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: ."
         )
     elif type == "TV":
         return (
@@ -106,7 +106,7 @@ def generate_comment(type):
             + "*Case 2:* Passed.\n"
             + "*Case 3:* Passed.\n\n"
             + "*Tested on:*\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: ."
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: ."
         )
 
 
@@ -118,7 +118,7 @@ def generate_description(type):
             + "(/) *Expected Results:*\n\n\n"
             + "(x) *Actual Results:*\n\n\n"
             + "(!) Reproduced on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
         )
     elif type == "Regression Bug":
         return (
@@ -127,9 +127,9 @@ def generate_description(type):
             + "(/) *Expected Results:*\n\n\n"
             + "(x) *Actual Results:*\n\n\n"
             + "(!) Reproduced on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
             + "(/) Cannot be Reproduced on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal 7.4.13-DXP-U100."
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal 7.4.13-DXP-U100."
         )
     elif type == "STR":
         return (
@@ -138,9 +138,9 @@ def generate_description(type):
             + "(/) *Expected Results:*\n\n\n"
             + "(x) *Actual Results:*\n\n\n"
             + "(!) Reproduced on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal master GIT ID: .\n\n"
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal master GIT ID: .\n\n"
             + "(/) Cannot be Reproduced on:\n"
-            + "Tomcat 9.0.82 + MySQL 5.7. Portal 7.4.13-DXP-U100."
+            + "Tomcat 9.0.83 + MySQL 5.7. Portal 7.4.13-DXP-U100."
         )
     elif type == "TC":
         return (
