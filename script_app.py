@@ -428,12 +428,21 @@ class ScriptApp(App):
         self.query_one(RichLog).clear()
         self.query_one(RichLog).begin_capture_print()
 
-        convert_commits_to_tickets.main(baseSHA, headSHA, repo_name)
+        try:
+            convert_commits_to_tickets.main(baseSHA, headSHA, repo_name)
 
-        self.query_one("#button-8").disabled = False
-        self.query_one("#base").value = ""
-        self.query_one("#head").value = ""
-        self.query_one("#repo-name").value = "liferay/liferay-portal"
+            self.query_one("#base").value = ""
+            self.query_one("#head").value = ""
+            self.query_one("#repo-name").value = "liferay/liferay-portal"
+
+        except JIRAError:
+            print("Please check your credentials in credentials-ext.properties")
+        except TypeError:
+            print(
+                f"Please check if the {baseSHA} and{os.linesep}the {headSHA} are in the same repository!"
+            )
+        finally:
+            self.query_one("#button-8").disabled = False
 
     @work(exclusive=True, thread=True)
     def forward_failure_pull_request(self) -> None:
