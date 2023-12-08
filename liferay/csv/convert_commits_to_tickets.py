@@ -26,6 +26,9 @@ def main(base, head, repo_name):
 
     commits = repo.get_commits(head)
 
+    if repo.compare(base, head).total_commits == 1:
+        raise TypeError
+
     for commit in commits:
         if commit.sha != base:
             if "LRQA" in commit.commit.message.strip().replace("\n", " "):
