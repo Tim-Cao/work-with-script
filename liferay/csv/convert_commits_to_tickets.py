@@ -33,8 +33,6 @@ def main(base, head, repo_name):
         if commit.sha != base:
             if "LRQA" in commit.commit.message.strip().replace("\n", " "):
                 continue
-            elif "LRAC" in commit.commit.message.strip().replace("\n", " "):
-                continue
             elif "LRP" in commit.commit.message.strip().replace("\n", " "):
                 continue
             elif "LRCI" in commit.commit.message.strip().replace("\n", " "):
