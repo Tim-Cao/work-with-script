@@ -390,13 +390,13 @@ class ScriptApp(App):
 
             self.query_one("#affects-versions").value = "Master"
             self.query_one("#assign-to-me-2").value = False
-            self.query_one("#bug-type").value = None
-            self.query_one("#components").value = None
-            self.query_one("#issue-type").value = None
+            self.query_one("#bug-type").clear()
+            self.query_one("#components").clear()
+            self.query_one("#issue-type").clear()
             self.query_one("#issue-label").value = ""
             self.query_one("#summary").value = ""
             self.query_one("#issue-description").clear()
-            self.query_one("#project-key-2").value = None
+            self.query_one("#project-key-2").clear()
             self.query_one("#button-7").disabled = False
             self.query_one("#product-team").remove_class("visible")
             self.query_one("#product-team-label").remove_class("visible")
@@ -503,7 +503,7 @@ class ScriptApp(App):
 
             self.query_one("#button-4").disabled = False
             self.query_one("#jira-ticket-number-4").value = ""
-            self.query_one("#comments-type").value = None
+            self.query_one("#comments-type").clear()
             self.query_one("#comments").remove_class("visible")
             self.query_one("#comments-label").remove_class("visible")
         except JIRAError:
@@ -526,7 +526,7 @@ class ScriptApp(App):
 
             self.query_one("#button-5").disabled = False
             self.query_one("#jira-ticket-number-5").value = ""
-            self.query_one("#description-type").value = None
+            self.query_one("#description-type").clear()
             self.query_one("#description").remove_class("visible")
             self.query_one("#description-label").remove_class("visible")
         except JIRAError:
@@ -569,9 +569,11 @@ class ScriptApp(App):
             except:
                 pass
 
-            self.query_one("#description").set_class(event.value != None, "visible")
+            self.query_one("#description").set_class(
+                event.value != Select.BLANK, "visible"
+            )
             self.query_one("#description-label").set_class(
-                event.value != None, "visible"
+                event.value != Select.BLANK, "visible"
             )
 
         elif event.select.id == "comments-type":
@@ -582,8 +584,12 @@ class ScriptApp(App):
             except:
                 pass
 
-            self.query_one("#comments").set_class(event.value != None, "visible")
-            self.query_one("#comments-label").set_class(event.value != None, "visible")
+            self.query_one("#comments").set_class(
+                event.value != Select.BLANK, "visible"
+            )
+            self.query_one("#comments-label").set_class(
+                event.value != Select.BLANK, "visible"
+            )
 
         elif event.select.id == "issue-type":
             try:
@@ -593,13 +599,15 @@ class ScriptApp(App):
             except:
                 pass
 
-            self.query_one("#summary-label").set_class(event.value != None, "visible")
-            self.query_one("#summary").set_class(event.value != None, "visible")
+            self.query_one("#summary-label").set_class(
+                event.value != Select.BLANK, "visible"
+            )
+            self.query_one("#summary").set_class(event.value != Select.BLANK, "visible")
             self.query_one("#issue-description-label").set_class(
-                event.value != None, "visible"
+                event.value != Select.BLANK, "visible"
             )
             self.query_one("#issue-description").set_class(
-                event.value != None, "visible"
+                event.value != Select.BLANK, "visible"
             )
 
             self.query_one("#bug-type").set_class(event.value == "Bug", "visible")
@@ -625,16 +633,18 @@ class ScriptApp(App):
             except:
                 pass
 
-            self.query_one("#summary").set_class(event.value != None, "visible")
-            self.query_one("#summary-label").set_class(event.value != None, "visible")
+            self.query_one("#summary").set_class(event.value != Select.BLANK, "visible")
+            self.query_one("#summary-label").set_class(
+                event.value != Select.BLANK, "visible"
+            )
             self.query_one("#issue-description-label").set_class(
-                event.value != None, "visible"
+                event.value != Select.BLANK, "visible"
             )
             self.query_one("#issue-description").set_class(
-                event.value != None, "visible"
+                event.value != Select.BLANK, "visible"
             )
         elif event.select.id == "product-team":
-            if self.query_one("#product-team").value == None:
+            if self.query_one("#product-team").value == Select.BLANK:
                 self.query_one("#summary").value = ""
                 self.query_one("#issue-description").clear()
             else:
@@ -645,22 +655,24 @@ class ScriptApp(App):
                     get_properties(self.query_one("#product-team").value, "DESCRIPTION")
                 )
         elif event.select.id == "project-key-2":
-            if self.query_one("#project-key-2").value != None:
+            if self.query_one("#project-key-2").value != Select.BLANK:
                 components = get_components(
                     f'{self.query_one("#project-key-2").value}_COMPONENTS'
                 )
 
                 self.query_one("#components").set_options((eval(components)))
 
-                self.query_one("#components").set_class(event.value != None, "visible")
+                self.query_one("#components").set_class(
+                    event.value != Select.BLANK, "visible"
+                )
                 self.query_one("#components-label").set_class(
-                    event.value != None, "visible"
+                    event.value != Select.BLANK, "visible"
                 )
             else:
-                self.query_one("#product-team").value = None
+                self.query_one("#product-team").clear()
                 self.query_one("#summary").value = ""
-                self.query_one("#components").value = None
-                self.query_one("#issue-type").value = None
+                self.query_one("#components").clear()
+                self.query_one("#issue-type").clear()
                 self.query_one("#issue-description").clear()
 
                 self.query_one("#components").remove_class("visible")
