@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import webbrowser
+from typing import Optional
 
 from git.exc import GitCommandError
 from jira.exceptions import JIRAError
@@ -70,7 +71,7 @@ class Nav_Item(Static):
 
 
 class Submit(Button):
-    def __init__(self, id: str | None = None, disabled: bool = False) -> None:
+    def __init__(self, id: Optional[str] = None, disabled: bool = False) -> None:
         super().__init__(
             label="Submit",
             variant="primary",
@@ -398,18 +399,36 @@ class ScriptApp(App):
             self.query_one("#issue-description").clear()
             self.query_one("#project-key-2").clear()
             self.query_one("#button-7").disabled = False
-            self.query_one("#product-team").remove_class("visible")
-            self.query_one("#product-team-label").remove_class("visible")
-            self.query_one("#summary").remove_class("visible")
-            self.query_one("#summary-label").remove_class("visible")
-            self.query_one("#issue-type").remove_class("visible")
-            self.query_one("#issue-type-label").remove_class("visible")
-            self.query_one("#issue-description").remove_class("visible")
-            self.query_one("#issue-description-label").remove_class("visible")
-            self.query_one("#components").remove_class("visible")
-            self.query_one("#components-label").remove_class("visible")
-            self.query_one("#affects-versions").remove_class("visible")
-            self.query_one("#affects-versions-label").remove_class("visible")
+            self.call_from_thread(
+                self.query_one("#product-team").remove_class, "visible"
+            )
+            self.call_from_thread(
+                self.query_one("#product-team-label").remove_class, "visible"
+            )
+            self.call_from_thread(self.query_one("#summary").remove_class, "visible")
+            self.call_from_thread(
+                self.query_one("#summary-label").remove_class, "visible"
+            )
+            self.call_from_thread(self.query_one("#issue-type").remove_class, "visible")
+            self.call_from_thread(
+                self.query_one("#issue-type-label").remove_class, "visible"
+            )
+            self.call_from_thread(
+                self.query_one("#issue-description").remove_class, "visible"
+            )
+            self.call_from_thread(
+                self.query_one("#issue-description-label").remove_class, "visible"
+            )
+            self.call_from_thread(self.query_one("#components").remove_class, "visible")
+            self.call_from_thread(
+                self.query_one("#components-label").remove_class, "visible"
+            )
+            self.call_from_thread(
+                self.query_one("#affects-versions").remove_class, "visible"
+            )
+            self.call_from_thread(
+                self.query_one("#affects-versions-label").remove_class, "visible"
+            )
         except JIRAError:
             print("Please sync Jira project components")
         finally:
@@ -502,8 +521,10 @@ class ScriptApp(App):
             self.query_one("#button-4").disabled = False
             self.query_one("#jira-ticket-number-4").value = ""
             self.query_one("#comments-type").clear()
-            self.query_one("#comments").remove_class("visible")
-            self.query_one("#comments-label").remove_class("visible")
+            self.call_from_thread(self.query_one("#comments").remove_class, "visible")
+            self.call_from_thread(
+                self.query_one("#comments-label").remove_class, "visible"
+            )
         except JIRAError:
             print("Please check your credentials in credentials-ext.properties")
         finally:
@@ -525,8 +546,12 @@ class ScriptApp(App):
             self.query_one("#button-5").disabled = False
             self.query_one("#jira-ticket-number-5").value = ""
             self.query_one("#description-type").clear()
-            self.query_one("#description").remove_class("visible")
-            self.query_one("#description-label").remove_class("visible")
+            self.call_from_thread(
+                self.query_one("#description").remove_class, "visible"
+            )
+            self.call_from_thread(
+                self.query_one("#description-label").remove_class, "visible"
+            )
         except JIRAError:
             print("Please check your credentials in credentials-ext.properties")
         finally:
