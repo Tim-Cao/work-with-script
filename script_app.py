@@ -308,11 +308,11 @@ class ScriptApp(App):
         sidebar = self.query_one(Sidebar)
         self.set_focus(None)
         if sidebar.has_class("-hidden"):
-            sidebar.remove_class("-hidden")
+            self.call_from_thread(sidebar.remove_class, "-hidden")
         else:
             if sidebar.query("*:focus"):
                 self.screen.set_focus(None)
-            sidebar.add_class("-hidden")
+            self.call_from_thread(sidebar.add_class, "-hidden")
 
     @work(exclusive=True, thread=True)
     def create_pr_and_forward(self) -> None:
