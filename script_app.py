@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import webbrowser
-from typing import Optional
 
 from git.exc import GitCommandError
 from jira.exceptions import JIRAError
@@ -32,52 +31,9 @@ from liferay.jira import jira_components_sync
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
-
-DETAILS = """
-- **CTRL + O**
-
-Open the `credentials-ext.properties`
-
-- **CTRL + S**
-
-Sync the Jira project components
-
-- **CTRL + U**
-
-Delete text to the left of the cursor
-
-- **SHIFT + INSERT**
-
-Paste text from the clipboard
-
-&nbsp;
-
-[Go to Documentation](https://github.com/Tim-Cao/work-with-script#work-with-script)
-"""
-
-
-class Sidebar(Container):
-    def compose(self) -> ComposeResult:
-        yield Sidebar_Title("Shortcuts Details")
-        yield Container(Markdown(DETAILS))
-
-
-class Sidebar_Title(Static):
-    pass
-
-
-class Nav_Item(Static):
-    pass
-
-
-class Submit(Button):
-    def __init__(self, id: Optional[str] = None, disabled: bool = False) -> None:
-        super().__init__(
-            label="Submit",
-            variant="primary",
-            id=id,
-            disabled=disabled,
-        )
+from widgets.nav_item import *
+from widgets.sidebar import *
+from widgets.submit import *
 
 
 class ScriptApp(App):
@@ -101,14 +57,14 @@ class ScriptApp(App):
         yield Header()
         with Horizontal(id="main-content"):
             yield ListView(
-                ListItem(Nav_Item("Forward Failure PR"), id="nav-1"),
-                ListItem(Nav_Item("Create PR and Forward"), id="nav-2"),
-                ListItem(Nav_Item("Create TF Ticket"), id="nav-3"),
-                ListItem(Nav_Item("Write Comments"), id="nav-4"),
-                ListItem(Nav_Item("Write Description"), id="nav-5"),
-                ListItem(Nav_Item("Trigger Gauntlet"), id="nav-6"),
-                ListItem(Nav_Item("Create Issue"), id="nav-7"),
-                ListItem(Nav_Item("RCA"), id="nav-8"),
+                ListItem(NavItem("Forward Failure PR"), id="nav-1"),
+                ListItem(NavItem("Create PR and Forward"), id="nav-2"),
+                ListItem(NavItem("Create TF Ticket"), id="nav-3"),
+                ListItem(NavItem("Write Comments"), id="nav-4"),
+                ListItem(NavItem("Write Description"), id="nav-5"),
+                ListItem(NavItem("Trigger Gauntlet"), id="nav-6"),
+                ListItem(NavItem("Create Issue"), id="nav-7"),
+                ListItem(NavItem("RCA"), id="nav-8"),
             )
             with ContentSwitcher(initial="nav-1"):
                 with VerticalScroll(id="nav-1"):
