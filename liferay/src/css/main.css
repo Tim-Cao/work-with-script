@@ -115,7 +115,7 @@ TextArea {
     height: 2fr;
 }
 
-Nav_Item {
+NavItem {
     width: 30;
     text-align: center;
     padding-right: 2;
