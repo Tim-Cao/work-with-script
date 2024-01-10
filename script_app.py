@@ -75,14 +75,12 @@ class ScriptApp(App):
                         "Enter the failure pull request number: ",
                         "failure-pull-request-number",
                     )
-                    yield Static()
                     yield Submit("button-1")
                 with Form("nav-2"):
                     yield TextField("Enter the local branch name: ", "local-branch")
                     yield TextField(
                         "Enter the Jira ticket number: ", "jira-ticket-number-2"
                     )
-                    yield Static()
                     yield Submit("button-2")
                 with Form("nav-3"):
                     PROJECT_KEY = [
@@ -97,7 +95,6 @@ class ScriptApp(App):
                     yield Select(PROJECT_KEY, id="project-key-1", value="LPS")
                     yield ToggleSwitch("assign-to-me-1")
                     yield TextField("Add label (Optional)", "add-label")
-                    yield Static()
                     yield Submit("button-3")
                 with Form("nav-4"):
                     COMMENTS_TYPE = [
@@ -135,7 +132,6 @@ class ScriptApp(App):
                         id="comments-label",
                     )
                     yield TextArea(classes="unselected", id="comments")
-                    yield Static()
                     yield Submit("button-4")
                 with Form("nav-5"):
                     DESCRIPTION_TYPE = [
@@ -154,7 +150,6 @@ class ScriptApp(App):
                         id="description-label",
                     )
                     yield TextArea(classes="unselected", id="description")
-                    yield Static()
                     yield Submit("button-5")
                 with Form("nav-6"):
                     yield Label("Enter the legacy repo path: ")
@@ -164,7 +159,6 @@ class ScriptApp(App):
                     )
                     yield Label("Enter the target branch: ")
                     yield Input(id="target-branch", value="7.3.x")
-                    yield Static()
                     yield Submit("button-6")
                 with Form("nav-7"):
                     PROJECT_KEY = [
@@ -221,14 +215,12 @@ class ScriptApp(App):
                     yield TextArea(id="issue-description", classes="unselected")
                     yield ToggleSwitch("assign-to-me-2")
                     yield TextField("Add label (Optional)", "issue-label")
-                    yield Static()
                     yield Submit("button-7")
                 with Form("nav-8"):
                     yield Label("Enter the repo name: ")
                     yield Input(id="repo-name", value="liferay/liferay-portal")
                     yield TextField("Enter the last pass sha: ", "base")
                     yield TextField("Enter the first failure sha: ", "head")
-                    yield Static()
                     yield Submit("button-8")
         yield Output(highlight=True, markup=True)
         yield Footer()
