@@ -591,12 +591,12 @@ class ScriptApp(App):
             )
             self.query_one("#bug-type").set_class(event.value == "Bug", "visible")
             self.query_one("#bug-type-label").set_class(event.value == "Bug", "visible")
-            self.query_one("#product-team").set_class(
-                event.value == "Testing", "visible"
-            )
-            self.query_one("#product-team-label").set_class(
-                event.value == "Testing", "visible"
-            )
+            # self.query_one("#product-team").set_class(
+            #     event.value == "Testing", "visible"
+            # )
+            # self.query_one("#product-team-label").set_class(
+            #     event.value == "Testing", "visible"
+            # )
             self.query_one("#affects-versions").set_class(
                 event.value == "Bug", "visible"
             )
