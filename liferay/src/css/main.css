@@ -10,11 +10,11 @@ Label {
     margin-left: 1;
 }
 
-ListView {
+Menubar {
     width: 30;
 }
 
-ListItem {
+MenuItem {
     box-sizing: content-box;
     content-align: center middle;
     color: $text;
@@ -27,7 +27,7 @@ ListItem {
     padding-bottom: 1;
 }
 
-ListView>ListItem.--highlight {
+Menubar>MenuItem.--highlight {
     background: $accent;
     text-style: bold;
 }
@@ -115,7 +115,7 @@ TextArea {
     height: 2fr;
 }
 
-NavItem {
+Text {
     width: 30;
     text-align: center;
     padding-right: 2;
