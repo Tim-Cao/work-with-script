@@ -121,7 +121,15 @@ Text {
     padding-right: 2;
 }
 
-#switch-container {
+TextField {
+    height: auto;
+}
+
+ToggleSwitch {
+    height: auto;
+}
+
+ToggleSwitch Horizontal {
     margin-left: 1;
     height: auto;
 }
