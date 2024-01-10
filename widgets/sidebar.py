@@ -37,9 +37,9 @@ class Sidebar(Container):
     CSS_PATH = root + "/liferay/src/css/main.css"
 
     def compose(self) -> ComposeResult:
-        yield Sidebar_Title("Shortcuts Details")
+        yield SidebarTitle("Shortcuts Details")
         yield Container(Markdown(DETAILS))
 
 
-class Sidebar_Title(Static):
+class SidebarTitle(Static):
     pass
