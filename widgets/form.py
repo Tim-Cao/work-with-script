@@ -13,6 +13,4 @@ class Form(VerticalScroll):
     CSS_PATH = root + "/liferay/src/css/main.css"
 
     def __init__(self, id: Optional[str] = None) -> None:
-        super().__init__(
-            id=id,
-        )
+        super().__init__(id=id)

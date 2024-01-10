@@ -12,10 +12,5 @@ sys.path.append(root)
 class Submit(Button):
     CSS_PATH = root + "/liferay/src/css/main.css"
 
-    def __init__(self, id: Optional[str] = None, disabled: bool = False) -> None:
-        super().__init__(
-            label="Submit",
-            variant="primary",
-            id=id,
-            disabled=disabled,
-        )
+    def __init__(self, id: Optional[str] = None) -> None:
+        super().__init__("Submit", "primary", id=id)
