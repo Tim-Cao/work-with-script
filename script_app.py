@@ -31,10 +31,12 @@ from liferay.jira import jira_components_sync
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
+from widgets.form import *
+from widgets.menubar import *
 from widgets.sidebar import *
 from widgets.submit import *
-from widgets.menubar import *
-from widgets.form import *
+from widgets.text_field import *
+from widgets.toggle_switch import *
 
 
 class ScriptApp(App):
@@ -69,15 +71,17 @@ class ScriptApp(App):
             )
             with ContentSwitcher(initial="nav-1"):
                 with Form("nav-1"):
-                    yield Label("Enter the failure pull request number: ")
-                    yield Input(id="failure-pull-request-number")
+                    yield TextField(
+                        "Enter the failure pull request number: ",
+                        "failure-pull-request-number",
+                    )
                     yield Static()
                     yield Submit("button-1")
                 with Form("nav-2"):
-                    yield Label("Enter the local branch name: ")
-                    yield Input(id="local-branch")
-                    yield Label("Enter the Jira ticket number: ")
-                    yield Input(id="jira-ticket-number-2")
+                    yield TextField("Enter the local branch name: ", "local-branch")
+                    yield TextField(
+                        "Enter the Jira ticket number: ", "jira-ticket-number-2"
+                    )
                     yield Static()
                     yield Submit("button-2")
                 with Form("nav-3"):
@@ -88,20 +92,11 @@ class ScriptApp(App):
                         ("COMMERCE", "COMMERCE"),
                     ]
 
-                    yield Label("Enter the case result id: ")
-                    yield Input(id="case-result-id")
+                    yield TextField("Enter the case result id: ", "case-result-id")
                     yield Label("Select the project key: ")
                     yield Select(PROJECT_KEY, id="project-key-1", value="LPS")
-                    yield Static()
-                    with Horizontal(id="switch-container"):
-                        yield Switch(id="assign-to-me", value=False)
-                        yield Static(
-                            "Assign to me (Optional)",
-                            id="assign-to-me-label",
-                            classes="assign-to-me",
-                        )
-                    yield Label("Add label (Optional)")
-                    yield Input(id="add-label")
+                    yield ToggleSwitch("assign-to-me-1")
+                    yield TextField("Add label (Optional)", "add-label")
                     yield Static()
                     yield Submit("button-3")
                 with Form("nav-4"):
@@ -129,8 +124,9 @@ class ScriptApp(App):
                         ("Test Validation", "TV"),
                     ]
 
-                    yield Label("Enter the Jira ticket number: ")
-                    yield Input(id="jira-ticket-number-4")
+                    yield TextField(
+                        "Enter the Jira ticket number: ", "jira-ticket-number-4"
+                    )
                     yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
                     yield Label(
@@ -147,8 +143,9 @@ class ScriptApp(App):
                         ("Test Cases", "TC"),
                     ]
 
-                    yield Label("Enter the Jira ticket number: ")
-                    yield Input(id="jira-ticket-number-5")
+                    yield TextField(
+                        "Enter the Jira ticket number: ", "jira-ticket-number-5"
+                    )
                     yield Label("Select the description type: ")
                     yield Select(DESCRIPTION_TYPE, id="description-type")
                     yield Label(
@@ -222,25 +219,15 @@ class ScriptApp(App):
                         classes="unselected",
                     )
                     yield TextArea(id="issue-description", classes="unselected")
-                    yield Static()
-                    with Horizontal(id="switch-container"):
-                        yield Switch(id="assign-to-me-2", value=False)
-                        yield Static(
-                            "Assign to me (Optional)",
-                            id="assign-to-me-label-2",
-                            classes="assign-to-me",
-                        )
-                    yield Label("Add label (Optional)")
-                    yield Input(id="issue-label")
+                    yield ToggleSwitch("assign-to-me-2")
+                    yield TextField("Add label (Optional)", "issue-label")
                     yield Static()
                     yield Submit("button-7")
                 with Form("nav-8"):
                     yield Label("Enter the repo name: ")
                     yield Input(id="repo-name", value="liferay/liferay-portal")
-                    yield Label("Enter the last pass sha: ")
-                    yield Input(id="base")
-                    yield Label("Enter the first failure sha: ")
-                    yield Input(id="head")
+                    yield TextField("Enter the last pass sha: ", "base")
+                    yield TextField("Enter the first failure sha: ", "head")
                     yield Static()
                     yield Submit("button-8")
         yield Output(highlight=True, markup=True)
@@ -294,7 +281,7 @@ class ScriptApp(App):
 
     @work(exclusive=True, thread=True)
     def create_test_fix_ticket(self) -> None:
-        assigned = self.query_one("#assign-to-me").value
+        assigned = self.query_one("#assign-to-me-1").value
         case_result_id = self.query_one("#case-result-id").value
         label = self.query_one("#add-label").value
         project_key = self.query_one("#project-key-1").value
@@ -308,7 +295,7 @@ class ScriptApp(App):
             create_test_fix_ticket.main(assigned, case_result_id, label, project_key)
 
             self.query_one("#button-3").disabled = False
-            self.query_one("#assign-to-me").value = False
+            self.query_one("#assign-to-me-1").value = False
             self.query_one("#case-result-id").value = ""
             self.query_one("#add-label").value = ""
             self.query_one("#project-key-1").value = "LPS"
