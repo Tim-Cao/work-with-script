@@ -36,6 +36,7 @@ from widgets.menubar import *
 from widgets.sidebar import *
 from widgets.submit import *
 from widgets.text_field import *
+from widgets.textarea_field import *
 from widgets.toggle_switch import *
 
 
@@ -126,12 +127,9 @@ class ScriptApp(App):
                     )
                     yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
-                    yield Label(
-                        "Enter the comments: ",
-                        classes="unselected",
-                        id="comments-label",
+                    yield TextAreaField(
+                        "Enter the comments: ", "comments", "unselected"
                     )
-                    yield TextArea(classes="unselected", id="comments")
                     yield Submit("button-4")
                 with Form("nav-5"):
                     DESCRIPTION_TYPE = [
@@ -144,21 +142,19 @@ class ScriptApp(App):
                     )
                     yield Label("Select the description type: ")
                     yield Select(DESCRIPTION_TYPE, id="description-type")
-                    yield Label(
-                        "Enter the description: ",
-                        classes="unselected",
-                        id="description-label",
+                    yield TextAreaField(
+                        "Enter the description: ", "description", "unselected"
                     )
-                    yield TextArea(classes="unselected", id="description")
                     yield Submit("button-5")
                 with Form("nav-6"):
-                    yield Label("Enter the legacy repo path: ")
-                    yield Input(
-                        id="legacy-repo-path",
+                    yield TextField(
+                        "Enter the legacy repo path: ",
+                        "legacy-repo-path",
                         value=credentials.get_credentials("LEGACY_REPO_PATH"),
                     )
-                    yield Label("Enter the target branch: ")
-                    yield Input(id="target-branch", value="7.3.x")
+                    yield TextField(
+                        "Enter the target branch: ", "target-branch", value="7.3.x"
+                    )
                     yield Submit("button-6")
                 with Form("nav-7"):
                     PROJECT_KEY = [
@@ -193,32 +189,29 @@ class ScriptApp(App):
                         "Product Team:", id="product-team-label", classes="unselected"
                     )
                     yield Select(PRODUCT_TEAM, id="product-team", classes="unselected")
-                    yield Label("Summary:", id="summary-label", classes="unselected")
-                    yield Input(id="summary", classes="unselected")
+                    yield TextField("Summary:", "summary", "unselected")
                     yield Label(
                         "Components:", id="components-label", classes="unselected"
                     )
                     yield Select([], id="components", classes="unselected")
-                    yield Label(
+                    yield TextField(
                         "Affects versions:",
-                        id="affects-versions-label",
-                        classes="unselected",
+                        "affects-versions",
+                        "unselected",
+                        value="Master",
                     )
-                    yield Input(
-                        id="affects-versions", classes="unselected", value="Master"
+                    yield TextAreaField(
+                        "Description:", "issue-description", "unselected"
                     )
-                    yield Label(
-                        "Description:",
-                        id="issue-description-label",
-                        classes="unselected",
-                    )
-                    yield TextArea(id="issue-description", classes="unselected")
                     yield ToggleSwitch("assign-to-me-2")
                     yield TextField("Add label (Optional)", "issue-label")
                     yield Submit("button-7")
                 with Form("nav-8"):
-                    yield Label("Enter the repo name: ")
-                    yield Input(id="repo-name", value="liferay/liferay-portal")
+                    yield TextField(
+                        "Enter the repo name: ",
+                        "repo-name",
+                        value="liferay/liferay-portal",
+                    )
                     yield TextField("Enter the last pass sha: ", "base")
                     yield TextField("Enter the first failure sha: ", "head")
                     yield Submit("button-8")

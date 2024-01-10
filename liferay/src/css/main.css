@@ -94,6 +94,10 @@ Switch.-on>.switch--slider {
     color: white;
 }
 
+TextAreaField {
+    height: auto;
+}
+
 TextArea {
     height: 20;
 }
