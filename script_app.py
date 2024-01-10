@@ -31,9 +31,10 @@ from liferay.jira import jira_components_sync
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
 from liferay.util import credentials
-from widgets.nav_item import *
 from widgets.sidebar import *
 from widgets.submit import *
+from widgets.menubar import *
+from widgets.form import *
 
 
 class ScriptApp(App):
@@ -56,30 +57,30 @@ class ScriptApp(App):
         yield Sidebar(classes="-hidden")
         yield Header()
         with Horizontal(id="main-content"):
-            yield ListView(
-                ListItem(NavItem("Forward Failure PR"), id="nav-1"),
-                ListItem(NavItem("Create PR and Forward"), id="nav-2"),
-                ListItem(NavItem("Create TF Ticket"), id="nav-3"),
-                ListItem(NavItem("Write Comments"), id="nav-4"),
-                ListItem(NavItem("Write Description"), id="nav-5"),
-                ListItem(NavItem("Trigger Gauntlet"), id="nav-6"),
-                ListItem(NavItem("Create Issue"), id="nav-7"),
-                ListItem(NavItem("RCA"), id="nav-8"),
+            yield Menubar(
+                MenuItem("Forward Failure PR", "nav-1"),
+                MenuItem("Create PR and Forward", "nav-2"),
+                MenuItem("Create TF Ticket", "nav-3"),
+                MenuItem("Write Comments", "nav-4"),
+                MenuItem("Write Description", "nav-5"),
+                MenuItem("Trigger Gauntlet", "nav-6"),
+                MenuItem("Create Issue", "nav-7"),
+                MenuItem("RCA", "nav-8"),
             )
             with ContentSwitcher(initial="nav-1"):
-                with VerticalScroll(id="nav-1"):
+                with Form("nav-1"):
                     yield Label("Enter the failure pull request number: ")
                     yield Input(id="failure-pull-request-number")
                     yield Static()
-                    yield Submit(id="button-1")
-                with VerticalScroll(id="nav-2"):
+                    yield Submit("button-1")
+                with Form("nav-2"):
                     yield Label("Enter the local branch name: ")
                     yield Input(id="local-branch")
                     yield Label("Enter the Jira ticket number: ")
                     yield Input(id="jira-ticket-number-2")
                     yield Static()
-                    yield Submit(id="button-2")
-                with VerticalScroll(id="nav-3"):
+                    yield Submit("button-2")
+                with Form("nav-3"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
                         ("LRQA", "LRQA"),
@@ -102,8 +103,8 @@ class ScriptApp(App):
                     yield Label("Add label (Optional)")
                     yield Input(id="add-label")
                     yield Static()
-                    yield Submit(id="button-3")
-                with VerticalScroll(id="nav-4"):
+                    yield Submit("button-3")
+                with Form("nav-4"):
                     COMMENTS_TYPE = [
                         (
                             "PASSED Manual Testing following the steps in the description.",
@@ -139,8 +140,8 @@ class ScriptApp(App):
                     )
                     yield TextArea(classes="unselected", id="comments")
                     yield Static()
-                    yield Submit(id="button-4")
-                with VerticalScroll(id="nav-5"):
+                    yield Submit("button-4")
+                with Form("nav-5"):
                     DESCRIPTION_TYPE = [
                         ("Steps to reproduce", "STR"),
                         ("Test Cases", "TC"),
@@ -157,8 +158,8 @@ class ScriptApp(App):
                     )
                     yield TextArea(classes="unselected", id="description")
                     yield Static()
-                    yield Submit(id="button-5")
-                with VerticalScroll(id="nav-6"):
+                    yield Submit("button-5")
+                with Form("nav-6"):
                     yield Label("Enter the legacy repo path: ")
                     yield Input(
                         id="legacy-repo-path",
@@ -167,8 +168,8 @@ class ScriptApp(App):
                     yield Label("Enter the target branch: ")
                     yield Input(id="target-branch", value="7.3.x")
                     yield Static()
-                    yield Submit(id="button-6")
-                with VerticalScroll(id="nav-7"):
+                    yield Submit("button-6")
+                with Form("nav-7"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
                         ("LRQA", "LRQA"),
@@ -232,8 +233,8 @@ class ScriptApp(App):
                     yield Label("Add label (Optional)")
                     yield Input(id="issue-label")
                     yield Static()
-                    yield Submit(id="button-7")
-                with VerticalScroll(id="nav-8"):
+                    yield Submit("button-7")
+                with Form("nav-8"):
                     yield Label("Enter the repo name: ")
                     yield Input(id="repo-name", value="liferay/liferay-portal")
                     yield Label("Enter the last pass sha: ")
@@ -241,7 +242,7 @@ class ScriptApp(App):
                     yield Label("Enter the first failure sha: ")
                     yield Input(id="head")
                     yield Static()
-                    yield Button("Submit", variant="primary", id="button-8")
+                    yield Submit("button-8")
         yield Output(highlight=True, markup=True)
         yield Footer()
 
