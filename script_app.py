@@ -589,7 +589,6 @@ class ScriptApp(App):
             self.query_one("#issue-description").set_class(
                 event.value != Select.BLANK, "visible"
             )
-
             self.query_one("#bug-type").set_class(event.value == "Bug", "visible")
             self.query_one("#bug-type-label").set_class(event.value == "Bug", "visible")
             self.query_one("#product-team").set_class(
@@ -635,43 +634,6 @@ class ScriptApp(App):
                     get_properties(self.query_one("#product-team").value, "DESCRIPTION")
                 )
         elif event.select.id == "project-key-2":
-            self.query_one("#components").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#components-label").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-
-            self.query_one("#product-team").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#product-team-label").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#affects-versions").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#affects-versions-label").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#bug-type").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#bug-type-label").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#summary").set_class(event.value != Select.BLANK, "visible")
-            self.query_one("#summary-label").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-
-            self.query_one("#issue-description").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-            self.query_one("#issue-description-label").set_class(
-                event.value != Select.BLANK, "visible"
-            )
-
             if self.query_one("#project-key-2").value != Select.BLANK:
                 components = get_components(
                     f'{self.query_one("#project-key-2").value}_COMPONENTS'
@@ -685,6 +647,20 @@ class ScriptApp(App):
                 self.query_one("#components").clear()
                 self.query_one("#issue-type").clear()
                 self.query_one("#issue-description").clear()
+                self.query_one("#assign-to-me-2").value = False
+                self.query_one("#issue-label").value = ""
+                self.query_one("#components").remove_class("visible")
+                self.query_one("#components-label").remove_class("visible")
+                self.query_one("#product-team").remove_class("visible")
+                self.query_one("#product-team-label").remove_class("visible")
+                self.query_one("#affects-versions").remove_class("visible")
+                self.query_one("#affects-versions-label").remove_class("visible")
+                self.query_one("#bug-type").remove_class("visible")
+                self.query_one("#bug-type-label").remove_class("visible")
+                self.query_one("#summary").remove_class("visible")
+                self.query_one("#summary-label").remove_class("visible")
+                self.query_one("#issue-description").remove_class("visible")
+                self.query_one("#issue-description-label").remove_class("visible")
 
 
 class Output(RichLog):
