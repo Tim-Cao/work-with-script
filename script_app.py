@@ -12,8 +12,6 @@ from textual.containers import *
 from textual.reactive import reactive
 from textual.widgets import *
 
-from liferay.csv import convert_commits_to_tickets
-
 root = os.path.dirname(__file__)
 
 sys.path.append(root)
@@ -27,6 +25,7 @@ from liferay.apps import (
     write_comments,
     write_description,
 )
+from liferay.csv import convert_commits_to_tickets
 from liferay.jira import jira_components_sync
 from liferay.jira.jira_constants import *
 from liferay.jira.jira_util import *
