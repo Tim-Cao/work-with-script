@@ -33,8 +33,7 @@ def add_test_fix_ticket(
             + case_result_id
             + "]",
             "components": [{"name": component}],
-            "issuetype": {"name": "Testing"},
-            "customfield_10383": {"value": "Analysis"},
+            "issuetype": {"name": "Task"},
         }
     elif project_key == "LRQA":
         issue_dict = {
@@ -66,7 +65,7 @@ def add_test_fix_ticket(
             + case_result_id
             + "]",
             "components": [{"name": component}],
-            "issuetype": {"name": "Testing"},
+            "issuetype": {"name": "Task"},
         }
     elif project_key == "COMMERCE":
         issue_dict = {
@@ -81,7 +80,7 @@ def add_test_fix_ticket(
             + "/home/-/testray/case_results/"
             + case_result_id
             + "]",
-            "issuetype": {"name": "Testing"},
+            "issuetype": {"name": "Task"},
         }
 
     return jira_connection.create_issue(fields=issue_dict)

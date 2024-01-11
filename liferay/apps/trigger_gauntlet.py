@@ -36,10 +36,10 @@ def create_gauntlet_ticket(target_branch):
     today = date.today()
 
     issue_dict = {
-        "project": {"key": "LRQA"},
+        "project": {"key": "LPS"},
         "summary": f"{target_branch} Gauntlet {today} Daily",
-        "components": [{"name": "Gauntlet Testing"}],
-        "issuetype": {"name": "Gauntlet Testing"},
+        "components": [{"name": "Testing"}],
+        "issuetype": {"name": "Task"},
     }
 
     print("Creating the Jira ticket...")
