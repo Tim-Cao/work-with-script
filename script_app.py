@@ -170,7 +170,6 @@ class ScriptApp(App):
                     ISSUE_TYPE = [
                         ("Bug", "Bug"),
                         ("Task", "Task"),
-                        ("Testing", "Testing"),
                     ]
 
                     BUG_TYPE = [
