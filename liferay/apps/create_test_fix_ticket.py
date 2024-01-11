@@ -35,22 +35,6 @@ def add_test_fix_ticket(
             "components": [{"name": component}],
             "issuetype": {"name": "Task"},
         }
-    elif project_key == "LRQA":
-        issue_dict = {
-            "project": {"key": "LRQA"},
-            "summary": "Investigate failure in " + case_name,
-            "description": "*Error Message*\n\n{code:java}"
-            + case_error
-            + "{code}\n\n*Affect Tests*\n["
-            + case_name
-            + "|"
-            + TESTRAY_INSTANCE
-            + "/home/-/testray/case_results/"
-            + case_result_id
-            + "]",
-            "components": [{"name": component}],
-            "issuetype": {"name": "Test Analysis"},
-        }
     elif project_key == "LRAC":
         issue_dict = {
             "project": {"key": "LRAC"},
@@ -133,10 +117,6 @@ def get_relevant_jira_component(case_result, jira_connection, project_key):
     if len(components) == 0:
         if project_key == "LPS":
             components = ["Testing > Portal"]
-
-        elif project_key == "LRQA":
-            components = ["Portal"]
-
         elif project_key == "LRAC":
             components = ["Test Infrastructure"]
 

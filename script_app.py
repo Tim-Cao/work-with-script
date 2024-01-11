@@ -85,7 +85,6 @@ class ScriptApp(App):
                 with Form("nav-3"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
-                        ("LRQA", "LRQA"),
                         ("LRAC", "LRAC"),
                         ("COMMERCE", "COMMERCE"),
                     ]
@@ -158,7 +157,6 @@ class ScriptApp(App):
                 with Form("nav-7"):
                     PROJECT_KEY = [
                         ("LPS", "LPS"),
-                        ("LRQA", "LRQA"),
                         ("LRAC", "LRAC"),
                         ("COMMERCE", "COMMERCE"),
                     ]
