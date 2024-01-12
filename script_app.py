@@ -340,6 +340,10 @@ class ScriptApp(App):
             self.call_from_thread(
                 self.query_one("#issue-type-label").remove_class, "visible"
             )
+            self.call_from_thread(self.query_one("#bug-type").remove_class, "visible")
+            self.call_from_thread(
+                self.query_one("#bug-type-label").remove_class, "visible"
+            )
             self.call_from_thread(
                 self.query_one("#issue-description").remove_class, "visible"
             )
