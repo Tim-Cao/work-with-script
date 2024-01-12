@@ -561,6 +561,12 @@ class ScriptApp(App):
             )
             self.query_one("#bug-type").set_class(event.value == "Bug", "visible")
             self.query_one("#bug-type-label").set_class(event.value == "Bug", "visible")
+            self.query_one("#components-label").set_class(
+                event.value != Select.BLANK, "visible"
+            )
+            self.query_one("#components").set_class(
+                event.value != Select.BLANK, "visible"
+            )
             # self.query_one("#product-team").set_class(
             #     event.value == "Testing", "visible"
             # )
@@ -584,6 +590,12 @@ class ScriptApp(App):
 
             self.query_one("#summary").set_class(event.value != Select.BLANK, "visible")
             self.query_one("#summary-label").set_class(
+                event.value != Select.BLANK, "visible"
+            )
+            self.query_one("#components-label").set_class(
+                event.value != Select.BLANK, "visible"
+            )
+            self.query_one("#components").set_class(
                 event.value != Select.BLANK, "visible"
             )
             self.query_one("#issue-description-label").set_class(
