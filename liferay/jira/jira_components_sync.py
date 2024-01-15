@@ -57,12 +57,8 @@ def main():
         "w",
     )
 
-    sync_project_components(jira_connection, "COMMERCE")
-
-    sync_project_components(jira_connection, "LPS")
+    sync_project_components(jira_connection, "LPD")
 
     sync_project_components(jira_connection, "LRQA")
-
-    sync_project_components(jira_connection, "LRAC")
 
     print(f"\033[1;32mSuccessful\033[0m")
