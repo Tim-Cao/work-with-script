@@ -85,15 +85,13 @@ class ScriptApp(App):
                     yield Submit("button-2")
                 with Form("nav-3"):
                     PROJECT_KEY = [
-                        ("LPS", "LPS"),
+                        ("LPD", "LPD"),
                         ("LRQA", "LRQA"),
-                        ("LRAC", "LRAC"),
-                        ("COMMERCE", "COMMERCE"),
                     ]
 
                     yield TextField("Enter the case result id: ", "case-result-id")
                     yield Label("Select the project key: ")
-                    yield Select(PROJECT_KEY, id="project-key-1", value="LPS")
+                    yield Select(PROJECT_KEY, id="project-key-1", value="LPD")
                     yield ToggleSwitch("assign-to-me-1")
                     yield TextField("Add label (Optional)", "add-label")
                     yield Submit("button-3")
@@ -158,10 +156,8 @@ class ScriptApp(App):
                     yield Submit("button-6")
                 with Form("nav-7"):
                     PROJECT_KEY = [
-                        ("LPS", "LPS"),
+                        ("LPD", "LPD"),
                         ("LRQA", "LRQA"),
-                        ("LRAC", "LRAC"),
-                        ("COMMERCE", "COMMERCE"),
                     ]
 
                     PRODUCT_TEAM = [
@@ -171,6 +167,7 @@ class ScriptApp(App):
                     ISSUE_TYPE = [
                         ("Bug", "Bug"),
                         ("Task", "Task"),
+                        ("Testing", "Testing"),
                     ]
 
                     BUG_TYPE = [
@@ -284,7 +281,7 @@ class ScriptApp(App):
             self.query_one("#assign-to-me-1").value = False
             self.query_one("#case-result-id").value = ""
             self.query_one("#add-label").value = ""
-            self.query_one("#project-key-1").value = "LPS"
+            self.query_one("#project-key-1").value = "LPD"
         except (AssertionError, JIRAError, json.decoder.JSONDecodeError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
