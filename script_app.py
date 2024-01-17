@@ -213,7 +213,7 @@ class ScriptApp(App):
                     yield TextField("Enter the last pass sha: ", "base")
                     yield TextField("Enter the first failure sha: ", "head")
                     yield Submit("button-8")
-        yield Output(highlight=True, markup=True)
+        yield Output(markup=True)
         yield Footer()
 
     @work(exclusive=True, thread=True)
