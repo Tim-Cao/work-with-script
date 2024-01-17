@@ -257,7 +257,7 @@ class ScriptApp(App):
             self.query_one("#button-2").disabled = False
             self.query_one("#local-branch").value = ""
             self.query_one("#jira-ticket-number-2").value = ""
-        except (JIRAError, GitCommandError):
+        except (AssertionError, JIRAError, GitCommandError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
@@ -284,7 +284,7 @@ class ScriptApp(App):
             self.query_one("#case-result-id").value = ""
             self.query_one("#add-label").value = ""
             self.query_one("#project-key-1").value = "LPS"
-        except (JIRAError, json.decoder.JSONDecodeError):
+        except (AssertionError, JIRAError, json.decoder.JSONDecodeError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
@@ -387,7 +387,7 @@ class ScriptApp(App):
             self.query_one("#head").value = ""
             self.query_one("#repo-name").value = "liferay/liferay-portal"
 
-        except JIRAError:
+        except (AssertionError, JIRAError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
@@ -414,7 +414,7 @@ class ScriptApp(App):
 
             self.query_one("#failure-pull-request-number").value = ""
 
-        except GitCommandError:
+        except (AssertionError, GitCommandError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
@@ -439,7 +439,7 @@ class ScriptApp(App):
                 "LEGACY_REPO_PATH"
             )
             self.query_one("#target-branch").value = "7.3.x"
-        except (JIRAError, GitCommandError):
+        except (AssertionError, JIRAError, GitCommandError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
@@ -466,7 +466,7 @@ class ScriptApp(App):
             self.call_from_thread(
                 self.query_one("#comments-label").remove_class, "visible"
             )
-        except JIRAError:
+        except (AssertionError, JIRAError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
@@ -495,7 +495,7 @@ class ScriptApp(App):
             self.call_from_thread(
                 self.query_one("#description-label").remove_class, "visible"
             )
-        except JIRAError:
+        except (AssertionError, JIRAError):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
