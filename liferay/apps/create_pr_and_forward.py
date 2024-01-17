@@ -19,15 +19,18 @@ def create_pr_to_team(github_connection, jira_ticket_number, local_branch):
 
     head = f'{get_credentials("GITHUB_USER_NAME")}:{local_branch}'
 
-    body = (
-        JIRA_INSTANCE
-        + "/browse/"
-        + jira_ticket_number
-        + "\n"
-        + "\n"
-        + "@"
-        + get_credentials("GITHUB_REVIEWER_NAME")
-    )
+    if not get_credentials("GITHUB_REVIEWER_NAME"):
+        body = JIRA_INSTANCE + "/browse/" + jira_ticket_number
+    else:
+        body = (
+            JIRA_INSTANCE
+            + "/browse/"
+            + jira_ticket_number
+            + "\n"
+            + "\n"
+            + "@"
+            + get_credentials("GITHUB_REVIEWER_NAME")
+        )
 
     team_repo = get_remote_repo(github_connection, get_credentials("TEAM_REPO_NAME"))
 
