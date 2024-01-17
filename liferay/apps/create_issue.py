@@ -70,6 +70,6 @@ def main(
 
     add_label(issue, label)
 
-    print("Successful")
+    print(f"\033[1;32mSuccessful\033[0m")
 
     print(f"{JIRA_INSTANCE}/browse/{issue.key}")

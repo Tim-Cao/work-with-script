@@ -15,6 +15,6 @@ def main(comments, ticket_number):
 
     comment_id = jira_connection.add_comment(ticket_number, comments)
 
-    print("Successful")
+    print(f"\033[1;32mSuccessful\033[0m")
 
     print(f"{JIRA_INSTANCE}/browse/{ticket_number}?focusedCommentId={comment_id}")

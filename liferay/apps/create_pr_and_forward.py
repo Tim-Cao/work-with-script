@@ -58,6 +58,6 @@ def main(local_branch, jira_ticket_number):
 
     forward_pull_request(pr)
 
-    print("Successful")
+    print(f"\033[1;32mSuccessful\033[0m")
 
     print(pr.html_url)
