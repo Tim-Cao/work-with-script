@@ -104,6 +104,6 @@ def main(base, head, repo_name):
 
     df3.to_csv(os.path.join(root, "root_cause.csv"), index=False)
 
-    print("Successful")
+    print(f"\033[1;32mSuccessful\033[0m")
 
     print(f"https://github.com/{repo_name}/compare/{base}...{head}")

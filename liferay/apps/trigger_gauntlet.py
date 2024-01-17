@@ -104,7 +104,7 @@ def main(legacy_repo_path, target_branch):
 
     paste_pr_to_ticket(gauntlet_ticket, pr)
 
-    print("Successful")
+    print(f"\033[1;32mSuccessful\033[0m")
 
     print(f"{JIRA_INSTANCE}/browse/{gauntlet_ticket.key}")
 

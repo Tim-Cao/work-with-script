@@ -258,7 +258,9 @@ class ScriptApp(App):
             self.query_one("#local-branch").value = ""
             self.query_one("#jira-ticket-number-2").value = ""
         except (JIRAError, GitCommandError):
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         finally:
             self.query_one("#button-2").disabled = False
 
@@ -283,7 +285,9 @@ class ScriptApp(App):
             self.query_one("#add-label").value = ""
             self.query_one("#project-key-1").value = "LPS"
         except (JIRAError, json.decoder.JSONDecodeError):
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         finally:
             self.query_one("#button-3").disabled = False
 
@@ -361,7 +365,7 @@ class ScriptApp(App):
                 self.query_one("#affects-versions-label").remove_class, "visible"
             )
         except JIRAError:
-            print("Please sync Jira project components")
+            print(f"\033[1;31mPlease sync Jira project components\033[0m")
         finally:
             self.query_one("#button-7").disabled = False
 
@@ -384,10 +388,12 @@ class ScriptApp(App):
             self.query_one("#repo-name").value = "liferay/liferay-portal"
 
         except JIRAError:
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         except TypeError:
             print(
-                f"Please check if the {baseSHA} and{os.linesep}the {headSHA} are in the same repository!"
+                f"\033[1;31mPlease check if the {baseSHA} and\033[0m{os.linesep}\033[1;31mthe {headSHA} are in the same repository!\033[0m"
             )
         finally:
             self.query_one("#button-8").disabled = False
@@ -409,7 +415,9 @@ class ScriptApp(App):
             self.query_one("#failure-pull-request-number").value = ""
 
         except GitCommandError:
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         finally:
             self.query_one("#button-1").disabled = False
 
@@ -432,7 +440,9 @@ class ScriptApp(App):
             )
             self.query_one("#target-branch").value = "7.3.x"
         except (JIRAError, GitCommandError):
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         finally:
             self.query_one("#button-6").disabled = False
 
@@ -457,7 +467,9 @@ class ScriptApp(App):
                 self.query_one("#comments-label").remove_class, "visible"
             )
         except JIRAError:
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         finally:
             self.query_one("#button-4").disabled = False
 
@@ -484,7 +496,9 @@ class ScriptApp(App):
                 self.query_one("#description-label").remove_class, "visible"
             )
         except JIRAError:
-            print("Please check your credentials in credentials-ext.properties")
+            print(
+                f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
+            )
         finally:
             self.query_one("#button-5").disabled = False
 
