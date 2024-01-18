@@ -14,7 +14,13 @@ sys.path.append(root)
 class Output(RichLog):
     CSS_PATH = root + "/liferay/src/css/main.css"
 
+    def __init__(self) -> None:
+        super().__init__(highlight=True, markup=True)
+
     @on(events.Print)
     def on_print(self, event: events.Print) -> None:
         if event.text.strip():
-            self.write(Text.from_ansi(event.text))
+            if "\033[" in event.text:
+                self.write(Text.from_ansi(event.text))
+            else:
+                self.write(event.text)
