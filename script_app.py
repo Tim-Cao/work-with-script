@@ -32,6 +32,7 @@ from liferay.jira.jira_util import *
 from liferay.util import credentials
 from widgets.form import *
 from widgets.menubar import *
+from widgets.output import *
 from widgets.sidebar import *
 from widgets.submit import *
 from widgets.text_field import *
@@ -213,7 +214,7 @@ class ScriptApp(App):
                     yield TextField("Enter the last pass sha: ", "base")
                     yield TextField("Enter the first failure sha: ", "head")
                     yield Submit("button-8")
-        yield Output(markup=True)
+        yield Output(highlight=True, markup=True)
         yield Footer()
 
     @work(exclusive=True, thread=True)
@@ -661,13 +662,6 @@ class ScriptApp(App):
                 self.query_one("#summary-label").remove_class("visible")
                 self.query_one("#issue-description").remove_class("visible")
                 self.query_one("#issue-description-label").remove_class("visible")
-
-
-class Output(RichLog):
-    @on(events.Print)
-    def on_print(self, event: events.Print) -> None:
-        if event.text.strip():
-            self.write(event.text)
 
 
 app = ScriptApp()
