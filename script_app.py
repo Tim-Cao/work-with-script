@@ -541,6 +541,8 @@ class ScriptApp(App):
         webbrowser.open(event.href)
 
     def on_select_changed(self, event: Select.Changed) -> None:
+        self.query_one(RichLog).begin_capture_print()
+
         if event.select.id == "description-type":
             try:
                 description = generate_description(
@@ -649,12 +651,14 @@ class ScriptApp(App):
                 )
         elif event.select.id == "project-key-2":
             if self.query_one("#project-key-2").value != Select.BLANK:
-                components = get_components(
-                    f'{self.query_one("#project-key-2").value}_COMPONENTS'
-                )
+                try:
+                    components = get_components(
+                        f'{self.query_one("#project-key-2").value}_COMPONENTS'
+                    )
 
-                self.query_one("#components").set_options((eval(components)))
-
+                    self.query_one("#components").set_options((eval(components)))
+                except TypeError:
+                    print(f"\033[1;31mPlease sync Jira project components\033[0m")
             else:
                 self.query_one("#product-team").clear()
                 self.query_one("#summary").value = ""
