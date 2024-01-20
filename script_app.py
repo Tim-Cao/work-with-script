@@ -5,8 +5,8 @@ import webbrowser
 
 from git.exc import GitCommandError
 from jira.exceptions import JIRAError
-from textual import on, work
-from textual.app import App, ComposeResult, events
+from textual import work
+from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import *
 from textual.reactive import reactive
@@ -42,12 +42,13 @@ from widgets.toggle_switch import *
 
 class ScriptApp(App):
     BINDINGS = [
-        Binding("ctrl+c", "quit", "Quit"),
+        Binding("ctrl+q", "quit", "Quit"),
         Binding("ctrl+b", "toggle_sidebar", "More Shortcuts"),
         Binding("shift+insert", "paste", show=False),
         Binding("ctrl+u", "delete_left_all", show=False),
         Binding("ctrl+o", "open_credentials", show=False),
         Binding("ctrl+s", "sync_components", show=False),
+        Binding("ctrl+c", "do_not_quit"),
     ]
 
     CSS_PATH = root + "/liferay/src/css/main.css"
@@ -125,7 +126,7 @@ class ScriptApp(App):
                     )
                     yield Label("Select the comments type: ")
                     yield Select(COMMENTS_TYPE, id="comments-type")
-                    yield TextAreaField(
+                    yield TextAreaGroup(
                         "Enter the comments: ", "comments", "unselected"
                     )
                     yield Submit("button-4")
@@ -140,7 +141,7 @@ class ScriptApp(App):
                     )
                     yield Label("Select the description type: ")
                     yield Select(DESCRIPTION_TYPE, id="description-type")
-                    yield TextAreaField(
+                    yield TextAreaGroup(
                         "Enter the description: ", "description", "unselected"
                     )
                     yield Submit("button-5")
@@ -196,7 +197,7 @@ class ScriptApp(App):
                         "unselected",
                         value="Master",
                     )
-                    yield TextAreaField(
+                    yield TextAreaGroup(
                         "Description:", "issue-description", "unselected"
                     )
                     yield ToggleSwitch("assign-to-me-2")
@@ -213,6 +214,10 @@ class ScriptApp(App):
                     yield Submit("button-8")
         yield Output()
         yield Footer()
+
+    @work(exclusive=True, thread=True)
+    def action_do_not_quit(self) -> None:
+        pass
 
     @work(exclusive=True, thread=True)
     def action_open_credentials(self) -> None:

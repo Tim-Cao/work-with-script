@@ -11,6 +11,10 @@ sys.path.append(root)
 
 
 DETAILS = """
+- **CTRL + C**
+
+Copy selected text to the clipboard in TextArea
+
 - **CTRL + O**
 
 Open the `credentials-ext.properties`
@@ -22,6 +26,10 @@ Sync the Jira project components
 - **CTRL + U**
 
 Delete text to the left of the cursor
+
+- **CTRL + V**
+
+Paste text from the clipboard in TextArea
 
 - **SHIFT + INSERT**
 
