@@ -42,13 +42,11 @@ from widgets.toggle_switch import *
 
 class ScriptApp(App):
     BINDINGS = [
-        Binding("ctrl+q", "quit", "Quit"),
         Binding("ctrl+b", "toggle_sidebar", "More Shortcuts"),
-        Binding("shift+insert", "paste", show=False),
-        Binding("ctrl+u", "delete_left_all", show=False),
+        Binding("ctrl+c", "do_not_quit"),
         Binding("ctrl+o", "open_credentials", show=False),
         Binding("ctrl+s", "sync_components", show=False),
-        Binding("ctrl+c", "do_not_quit"),
+        Binding("escape", "quit", "Quit"),
     ]
 
     CSS_PATH = root + "/liferay/src/css/main.css"
