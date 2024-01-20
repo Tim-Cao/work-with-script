@@ -259,6 +259,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-2").disabled = False
 
@@ -286,6 +288,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-3").disabled = False
 
@@ -364,6 +368,8 @@ class ScriptApp(App):
             )
         except JIRAError:
             print(f"\033[1;31mPlease sync Jira project components\033[0m")
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-7").disabled = False
 
@@ -393,6 +399,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check if the {baseSHA} and\033[0m{os.linesep}\033[1;31mthe {headSHA} are in the same repository!\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-8").disabled = False
 
@@ -416,6 +424,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-1").disabled = False
 
@@ -441,6 +451,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-6").disabled = False
 
@@ -468,6 +480,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-4").disabled = False
 
@@ -497,6 +511,8 @@ class ScriptApp(App):
             print(
                 f"\033[1;31mPlease check your credentials in credentials-ext.properties\033[0m"
             )
+        except Exception as e:
+            print(e)
         finally:
             self.query_one("#button-5").disabled = False
 
