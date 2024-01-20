@@ -367,7 +367,9 @@ class ScriptApp(App):
                 self.query_one("#affects-versions-label").remove_class, "visible"
             )
         except JIRAError:
-            print(f"\033[1;31mPlease sync Jira project components\033[0m")
+            print(
+                f"\033[1;31mPlease sync Jira project components via \033[1;3;33mCtrl + S\033[0m"
+            )
         except Exception as e:
             print(e)
         finally:
@@ -658,7 +660,9 @@ class ScriptApp(App):
 
                     self.query_one("#components").set_options((eval(components)))
                 except TypeError:
-                    print(f"\033[1;31mPlease sync Jira project components\033[0m")
+                    print(
+                        f"\033[1;31mPlease sync Jira project components via \033[1;3;33mCtrl + S\033[0m"
+                    )
             else:
                 self.query_one("#product-team").clear()
                 self.query_one("#summary").value = ""
