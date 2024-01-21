@@ -4,4 +4,5 @@ jproperties>=2.1.1
 jsonpath-ng>=1.6.0
 pandas>=2.1.4
 PyGithub>=2.1.1
+pyperclip>=1.8.2
 textual>=0.46.0

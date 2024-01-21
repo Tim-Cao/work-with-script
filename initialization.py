@@ -8,19 +8,17 @@ sys.path.append(root)
 
 
 def install_modules():
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "jproperties"])
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "jira"])
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "jsonpath-ng"])
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "PyGithub"])
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "GitPython"])
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "textual"])
+    for package in [
+        "jproperties",
+        "pandas",
+        "jira",
+        "jsonpath-ng",
+        "PyGithub",
+        "pyperclip",
+        "GitPython",
+        "textual",
+    ]:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
 def generate_credentials():
@@ -41,31 +39,19 @@ def generate_credentials():
 
 
 def upgrade_modules():
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "--upgrade", "jproperties"]
-    )
-
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "--upgrade", "pandas"]
-    )
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", "jira"])
-
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "--upgrade", "jsonpath-ng"]
-    )
-
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "--upgrade", "PyGithub"]
-    )
-
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "--upgrade", "GitPython"]
-    )
-
-    subprocess.check_call(
-        [sys.executable, "-m", "pip", "install", "--upgrade", "textual"]
-    )
+    for package in [
+        "jproperties",
+        "pandas",
+        "jira",
+        "jsonpath-ng",
+        "PyGithub",
+        "pyperclip",
+        "GitPython",
+        "textual",
+    ]:
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "--upgrade", package]
+        )
 
 
 if __name__ == "__main__":
