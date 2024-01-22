@@ -18,6 +18,7 @@ class TextAreaField(TextArea):
     BINDINGS = [
         Binding("ctrl+c", "copy_to_clipboard", show=False),
         Binding("ctrl+v", "paste_from_clipboard", show=False),
+        Binding("escape", "quit", "Quit"),
     ]
 
     @work(exclusive=True, thread=True)
