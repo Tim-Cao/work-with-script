@@ -66,7 +66,9 @@ def create_testing_branch(local_repo, target_branch):
 def make_changes_for_gauntlet_test(commit_message, file_name, repo):
     print("Making changes for gauntlet test...")
 
-    open(file_name, "w").close()
+    with open(file_name, "w"):
+        pass
+
     repo.index.add([file_name])
     repo.index.commit(commit_message)
 
