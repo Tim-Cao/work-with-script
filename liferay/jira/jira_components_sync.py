@@ -50,12 +50,13 @@ def main():
     if not os.path.exists(os.path.join(os.path.dirname(__file__), "dependencies/")):
         os.mkdir(os.path.join(os.path.dirname(__file__), "dependencies/"))
 
-    open(
+    with open(
         os.path.join(
             os.path.dirname(__file__), "dependencies/jira_components.properties"
         ),
         "w",
-    )
+    ):
+        pass
 
     sync_project_components(jira_connection, "LPD")
 
